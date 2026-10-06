@@ -1,0 +1,738 @@
+/* One Day, One Photo — plain CSS, warm cream + terracotta design language */
+
+:root {
+  --cream: #faf7f1;
+  --cream-dark: #f3ede1;
+  --terracotta: #c96a35;
+  --terracotta-dark: #b3552e;
+  --terracotta-deep: #7e3517;
+  --ink: #3d2f26;
+  --ink-soft: #6b5d51;
+  --card: #fffdf9;
+  --shadow: 0 4px 18px rgba(126, 53, 23, 0.1);
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .serif {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.app {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 16px 64px;
+}
+
+/* ---------- Header ---------- */
+.header {
+  text-align: center;
+  padding: 36px 12px 12px;
+}
+
+.header h1 {
+  font-size: 2.4rem;
+  color: var(--terracotta-deep);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.header .tagline {
+  color: var(--ink-soft);
+  font-style: italic;
+  font-size: 1.02rem;
+}
+
+.streak-banner {
+  margin: 20px auto 8px;
+  max-width: 520px;
+  background: linear-gradient(135deg, var(--terracotta) 0%, var(--terracotta-dark) 100%);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.streak-flame {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.streak-text {
+  text-align: left;
+}
+
+.streak-text strong {
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 1.25rem;
+}
+
+.streak-text span {
+  font-size: 0.92rem;
+  opacity: 0.92;
+}
+
+/* ---------- Tabs ---------- */
+.tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0 24px;
+}
+
+.tabs button {
+  font-family: Georgia, serif;
+  font-size: 1.05rem;
+  padding: 10px 26px;
+  border: 2px solid var(--terracotta);
+  background: transparent;
+  color: var(--terracotta-dark);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.tabs button.active {
+  background: var(--terracotta);
+  color: #fff;
+}
+
+/* ---------- Calendar ---------- */
+.cal-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.cal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.cal-nav h2 {
+  color: var(--terracotta-deep);
+  font-size: 1.5rem;
+}
+
+.cal-nav button {
+  background: var(--cream-dark);
+  border: none;
+  color: var(--terracotta-deep);
+  font-size: 1.15rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.cal-dow {
+  text-align: center;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  padding: 6px 0;
+}
+
+.cal-day {
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 12px;
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 0.95rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  padding: 0;
+}
+
+.cal-day.empty {
+  visibility: hidden;
+  cursor: default;
+}
+
+.cal-day.today {
+  outline: 2px solid var(--terracotta);
+  outline-offset: -2px;
+  font-weight: 700;
+}
+
+.cal-day .thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cal-day .num {
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  font-size: 0.8rem;
+  text-shadow: 0 1px 3px rgba(255, 253, 249, 0.9);
+}
+
+.cal-day .num.on-photo {
+  background: rgba(255, 253, 249, 0.92);
+  border-radius: 8px;
+  padding: 1px 7px;
+  text-shadow: none;
+  font-weight: 700;
+  color: var(--terracotta-deep);
+}
+
+.cal-hint {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  margin-top: 14px;
+  font-style: italic;
+}
+
+/* ---------- Feed ---------- */
+.feed {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.feed-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.feed-card img {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  display: block;
+  background: var(--cream-dark);
+}
+
+.feed-body {
+  padding: 16px 20px 20px;
+}
+
+.feed-date {
+  font-family: Georgia, serif;
+  font-size: 0.92rem;
+  color: var(--terracotta-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.feed-caption {
+  font-size: 1.08rem;
+  margin-bottom: 10px;
+}
+
+.feed-actions button {
+  background: none;
+  border: 1px solid var(--terracotta);
+  color: var(--terracotta-dark);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-right: 8px;
+  transition: all 0.15s ease;
+}
+
+.feed-actions button.danger {
+  border-color: #a8512f;
+  color: #a8512f;
+}
+
+.empty-state {
+  text-align: center;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 48px 24px;
+}
+
+.empty-state .big {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.empty-state h3 {
+  color: var(--terracotta-deep);
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+.empty-state p {
+  color: var(--ink-soft);
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* ---------- Modal ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(61, 47, 38, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 50;
+}
+
+.modal {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 40px rgba(61, 47, 38, 0.3);
+  width: 100%;
+  max-width: 480px;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.modal h2 {
+  color: var(--terracotta-deep);
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.modal .modal-sub {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  margin-bottom: 16px;
+}
+
+.field {
+  margin-bottom: 14px;
+}
+
+.field label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: var(--terracotta-deep);
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #e5dcc9;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: #fff;
+  color: var(--ink);
+  transition: border-color 0.15s ease;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--terracotta);
+}
+
+.preview {
+  margin-bottom: 14px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--cream-dark);
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-soft);
+  font-style: italic;
+  font-size: 0.92rem;
+  text-align: center;
+  padding: 12px;
+}
+
+.preview img {
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  flex: 1;
+  min-width: 110px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--terracotta);
+  color: #fff;
+}
+
+.btn-ghost {
+  background: var(--cream-dark);
+  color: var(--ink-soft);
+}
+
+.btn-danger {
+  background: none;
+  color: #a8512f;
+  border: 2px solid #a8512f;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 40px;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 520px) {
+  .header {
+    padding: 24px 8px 8px;
+  }
+
+  .header h1 {
+    font-size: 1.9rem;
+  }
+
+  .cal-card {
+    padding: 12px;
+  }
+
+  /* 7 day columns stay visible + tappable at 375px: tighter gaps buy bigger cells */
+  .cal-grid {
+    gap: 4px;
+  }
+
+  .cal-day {
+    border-radius: 8px;
+    font-size: 0.82rem;
+    min-height: 44px;
+  }
+
+  .cal-dow {
+    font-size: 0.68rem;
+  }
+
+  .cal-day .num {
+    top: 2px;
+    left: 5px;
+    font-size: 0.72rem;
+  }
+
+  .cal-nav h2 {
+    font-size: 1.25rem;
+  }
+
+  .cal-nav button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .tabs button {
+    min-height: 44px;
+    padding: 10px 22px;
+    font-size: 1rem;
+  }
+
+  /* thumb-friendly feed actions */
+  .feed-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .feed-actions button {
+    min-height: 44px;
+    padding: 10px 20px;
+    margin-right: 0;
+  }
+
+  .feed-body {
+    padding: 14px 16px 16px;
+  }
+
+  .modal {
+    padding: 20px 16px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .streak-banner {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .streak-flame {
+    font-size: 1.8rem;
+  }
+
+  .field input,
+  .field textarea {
+    font-size: 16px; /* stops iOS auto-zoom on focus */
+  }
+}
+
+/* ---------- Family key prompt + action errors ---------- */
+.key-error {
+  color: #a8512f;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: -4px 0 12px;
+}
+
+.key-note {
+  background: var(--cream-dark);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--terracotta-deep);
+  font-size: 0.92rem;
+  margin-bottom: 14px;
+}
+
+.action-error {
+  max-width: 520px;
+  margin: 0 auto 18px;
+  background: var(--card);
+  border: 2px solid #a8512f;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 12px 16px;
+  color: var(--terracotta-deep);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.action-error button {
+  background: none;
+  border: none;
+  color: var(--terracotta-dark);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-left: 6px;
+}
+
+/* ============================================================
+   INTERACTIVE POLISH — soft terracotta glow
+   (Shared design language across the five family apps.)
+   - All hover-driven effects live inside @media (hover: hover)
+     so touch devices never get stuck hover states.
+   - Touch keeps :active press feedback outside the media query.
+   - prefers-reduced-motion disables all of it.
+   - The streak-banner shimmer is decorative ambient animation:
+     gated behind (min-width: 721px) AND (hover: hover) together,
+     so phones get the clean fast version.
+   ============================================================ */
+:root {
+  --glow-soft: rgba(201, 106, 53, 0.16);   /* soft halo ring */
+  --glow: rgba(201, 106, 53, 0.3);        /* glow halo on primary buttons */
+  --glow-focus: rgba(201, 106, 53, 0.22); /* warm focus ring */
+  --polish: 0.2s ease;                    /* consistent transition timing */
+}
+
+/* smooth, consistent transitions on the interactive pieces */
+.tabs button,
+.cal-nav button,
+.cal-day,
+.feed-card,
+.feed-actions button,
+.btn {
+  transition: background var(--polish), color var(--polish),
+    border-color var(--polish), box-shadow var(--polish), transform var(--polish);
+}
+
+/* current tab: clear active state with a subtle persistent glow */
+.tabs button.active {
+  background: var(--terracotta);
+  color: #fff;
+  box-shadow: 0 0 0 3px var(--glow-soft);
+}
+
+@media (hover: hover) {
+  /* nav tabs */
+  .tabs button:hover {
+    background: rgba(201, 106, 53, 0.12);
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  /* calendar prev/next icon buttons: soft glow */
+  .cal-nav button:hover {
+    background: #e9dfcc;
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  /* calendar day cells */
+  .cal-day:hover:not(.empty) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow), 0 0 0 3px var(--glow-soft);
+  }
+
+  /* feed action buttons */
+  .feed-actions button:hover {
+    background: var(--terracotta);
+    color: #fff;
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  .feed-actions button.danger:hover {
+    background: #a8512f;
+    color: #fff;
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  /* primary buttons (save): glow halo + slight lift */
+  .btn-primary:hover {
+    background: var(--terracotta-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px var(--glow);
+  }
+
+  .btn-ghost:hover {
+    background: #e9dfcc;
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  .btn-danger:hover {
+    background: #a8512f;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  /* photo entries: very subtle hover lift + soft shadow deepening */
+  .feed-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(126, 53, 23, 0.14);
+  }
+}
+
+/* gentle ambient shimmer on the streak banner — desktop + hover only */
+@media (hover: hover) and (min-width: 721px) {
+  .streak-banner {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .streak-banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.2) 50%,
+      transparent 60%
+    );
+    transform: translateX(-100%);
+    animation: streak-shimmer 5.5s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes streak-shimmer {
+    0%, 55% { transform: translateX(-100%); }
+    90%, 100% { transform: translateX(100%); }
+  }
+}
+
+/* warm focus ring glow for keyboard users (works on touch too) */
+.tabs button:focus-visible,
+.cal-nav button:focus-visible,
+.cal-day:focus-visible,
+.feed-actions button:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--terracotta);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--glow-focus);
+}
+
+/* form inputs: warm focus ring glow */
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--terracotta);
+  box-shadow: 0 0 0 3px var(--glow-focus);
+}
+
+/* touch press feedback (brief scale; needs no hover) */
+.btn:active,
+.tabs button:active,
+.feed-actions button:active,
+.cal-nav button:active,
+.cal-day:active:not(.empty) {
+  transform: scale(0.97);
+}
+
+/* motion-sensitive users: kill transitions/animations entirely */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

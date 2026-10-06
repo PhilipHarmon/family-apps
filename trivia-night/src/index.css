@@ -1,0 +1,587 @@
+/* Family Trivia Night — shared design language
+   warm cream #faf7f1, terracotta #c96a35 / #b3552e / #7e3517,
+   Georgia serif headings, system sans body. */
+
+:root {
+  --cream: #faf7f1;
+  --cream-deep: #f3ecdf;
+  --terra: #c96a35;
+  --terra-dark: #b3552e;
+  --terra-deep: #7e3517;
+  --ink: #3b2f28;
+  --ink-soft: #6f5f54;
+  --card: #fffdf9;
+  --gold: #e8a33d;
+  --green: #5d8a4a;
+  --shadow: 0 10px 30px rgba(126, 53, 23, 0.12);
+  --shadow-sm: 0 4px 14px rgba(126, 53, 23, 0.10);
+  --radius: 18px;
+}
+
+* { box-sizing: border-box; }
+
+html { overflow-x: hidden; }
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .serif {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--terra-deep);
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+}
+
+.app {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.header h1 {
+  font-size: clamp(2rem, 6vw, 3rem);
+  margin-bottom: 0.15em;
+}
+.header .subtitle {
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+}
+.header .bunting {
+  font-size: 1.6rem;
+  letter-spacing: 0.4em;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  margin-bottom: 20px;
+  border: 1px solid #f0e6d6;
+}
+
+.card h2 { font-size: 1.5rem; }
+.card h3 { font-size: 1.15rem; }
+
+button, .btn {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.btn-primary {
+  background: var(--terra);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(201, 106, 53, 0.35);
+}
+.btn-primary:active { transform: translateY(1px); }
+.btn-primary:disabled { background: #d9c9b8; box-shadow: none; cursor: not-allowed; transform: none; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--terra-deep);
+  border: 2px solid var(--terra);
+  padding: 10px 20px;
+}
+.btn-small { padding: 8px 16px; font-size: 0.9rem; }
+
+input[type="text"], input[type="number"], select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 2px solid #e5d8c4;
+  background: #fff;
+  color: var(--ink);
+  width: 100%;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--terra);
+  box-shadow: 0 0 0 3px rgba(201, 106, 53, 0.18);
+}
+label { font-weight: 600; display: block; margin: 14px 0 6px; color: var(--terra-deep); }
+
+/* ---- Setup screen ---- */
+.player-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+.player-row input { flex: 1; }
+.remove-btn {
+  background: #f3e2d3;
+  color: var(--terra-deep);
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  line-height: 1;
+  flex: none;
+}
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+.mix-card {
+  border: 2px solid #e5d8c4;
+  border-radius: 14px;
+  padding: 14px;
+  cursor: pointer;
+  background: #fff;
+  transition: border-color 0.15s, background 0.15s;
+}
+.mix-card.selected {
+  border-color: var(--terra);
+  background: #fdf3e8;
+  box-shadow: var(--shadow-sm);
+}
+.mix-card strong { display: block; color: var(--terra-deep); margin-bottom: 4px; }
+.mix-card small { color: var(--ink-soft); }
+
+.rounds-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.round-chip {
+  border: 2px solid #e5d8c4;
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 20px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.round-chip.selected {
+  border-color: var(--terra);
+  background: var(--terra);
+  color: #fff;
+}
+
+.start-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+.question-count-note { color: var(--ink-soft); font-size: 0.95rem; }
+
+.hall-of-fame { margin-top: 8px; }
+.hall-of-fame ul { list-style: none; padding: 0; margin: 10px 0 0; }
+.hall-of-fame li {
+  background: #fdf3e8;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+/* ---- Game screen ---- */
+.game-layout {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 720px) {
+  .game-layout { grid-template-columns: 1fr; }
+}
+
+.scoreboard h3 { margin-bottom: 12px; }
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  background: var(--cream-deep);
+}
+.score-row.leader { background: #fdf3e8; border: 2px solid var(--gold); font-weight: 700; }
+.score-row .pts {
+  background: var(--terra);
+  color: #fff;
+  border-radius: 999px;
+  padding: 2px 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.progress { color: var(--ink-soft); font-size: 0.9rem; margin-bottom: 12px; }
+
+.question-card { text-align: center; }
+.tier-badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 6px 18px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: #fff;
+}
+.tier-easy   { background: var(--green); }
+.tier-medium { background: var(--terra); }
+.tier-hard   { background: var(--terra-deep); }
+.tier-tagline { color: var(--ink-soft); font-style: italic; margin-bottom: 18px; display: block; }
+
+.question-text {
+  font-family: Georgia, serif;
+  font-size: clamp(1.35rem, 4vw, 1.9rem);
+  color: var(--ink);
+  margin: 10px 0 24px;
+}
+.answer-box {
+  background: #fdf3e8;
+  border: 2px dashed var(--terra);
+  border-radius: 14px;
+  padding: 18px;
+  margin: 0 0 20px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--terra-deep);
+}
+.answer-label {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.award-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.award-btn {
+  background: #fff;
+  border: 2px solid var(--terra);
+  color: var(--terra-deep);
+  border-radius: 14px;
+  padding: 12px 8px;
+  font-weight: 700;
+}
+.nobody-btn {
+  background: transparent;
+  border: 2px dashed #cbb89f;
+  color: var(--ink-soft);
+  border-radius: 14px;
+  padding: 12px 8px;
+  font-weight: 600;
+}
+.who-got-it { margin-top: 20px; }
+.who-got-it h3 { margin-bottom: 10px; }
+
+.points-line {
+  display: inline-block;
+  background: var(--cream-deep);
+  border-radius: 999px;
+  padding: 4px 16px;
+  font-weight: 700;
+  color: var(--terra-deep);
+  margin-bottom: 14px;
+}
+
+/* ---- Results ---- */
+.results { text-align: center; }
+.trophy { font-size: 4rem; display: block; margin-bottom: 8px; }
+.winner-name {
+  font-family: Georgia, serif;
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
+  color: var(--terra-dark);
+  margin: 8px 0;
+}
+.final-standings { text-align: left; max-width: 420px; margin: 24px auto; }
+.celebrate { color: var(--ink-soft); font-style: italic; margin-top: 16px; }
+.button-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+
+/* ---- Add your own ---- */
+.custom-list { list-style: none; padding: 0; margin: 16px 0 0; }
+.custom-list li {
+  background: var(--cream-deep);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+.custom-list .q-meta { font-size: 0.85rem; color: var(--ink-soft); }
+.delete-link {
+  background: none;
+  border: none;
+  color: var(--terra-dark);
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 0.9rem;
+  flex: none;
+}
+.hint { font-size: 0.9rem; color: var(--ink-soft); margin-top: 8px; }
+
+/* ---- Family key prompt (blocking view, shown until a key is saved) ---- */
+.key-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 32px 16px;
+}
+.key-card {
+  max-width: 460px;
+  width: 100%;
+  text-align: center;
+}
+.key-card .key-emoji {
+  font-size: 2.6rem;
+  display: block;
+  margin-bottom: 8px;
+}
+.key-card h2 { font-size: 1.7rem; }
+.key-card form { text-align: left; margin-top: 8px; }
+.key-card .btn-primary { width: 100%; }
+
+.footer {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  margin-top: 40px;
+}
+
+/* ---- Responsive pass (375px baseline) ---- */
+@media (max-width: 640px) {
+  .app {
+    padding: 20px 12px 56px;
+  }
+
+  .card {
+    padding: 20px 16px;
+  }
+
+  /* thumb-friendly tap targets */
+  .round-chip {
+    min-height: 44px;
+    padding: 10px 22px;
+  }
+
+  .btn-small {
+    min-height: 44px;
+    padding: 10px 20px;
+  }
+
+  .remove-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .delete-link {
+    padding: 10px 12px;
+    min-height: 44px;
+  }
+
+  .award-btn,
+  .nobody-btn {
+    min-height: 48px;
+    overflow-wrap: break-word;
+  }
+
+  .question-text {
+    overflow-wrap: break-word;
+  }
+
+  .answer-box {
+    overflow-wrap: break-word;
+  }
+
+  .option-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .mix-card {
+    padding: 12px;
+  }
+
+  .start-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .start-bar .btn-primary {
+    width: 100%;
+    min-height: 52px;
+  }
+
+  input[type="text"], input[type="number"], select, textarea {
+    font-size: 16px; /* stops iOS auto-zoom on focus */
+  }
+
+  .custom-list li {
+    flex-wrap: wrap;
+  }
+
+  .header .bunting {
+    letter-spacing: 0.25em;
+  }
+}
+
+@media (max-width: 400px) {
+  .option-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .award-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ============================================================
+   INTERACTIVE POLISH — soft terracotta glow
+   (Shared design language across the five family apps.)
+   - All hover-driven effects live inside @media (hover: hover)
+     so touch devices never get stuck hover states.
+   - Touch keeps :active press feedback outside the media query.
+   - prefers-reduced-motion disables all of it.
+   ============================================================ */
+:root {
+  --glow-soft: rgba(201, 106, 53, 0.16);   /* soft halo ring */
+  --glow: rgba(201, 106, 53, 0.3);        /* glow halo on primary buttons */
+  --glow-focus: rgba(201, 106, 53, 0.22); /* warm focus ring */
+  --polish: 0.2s ease;                    /* consistent transition timing */
+}
+
+/* smooth, consistent transitions on the interactive pieces */
+.btn-primary,
+.btn-ghost,
+.remove-btn,
+.mix-card,
+.round-chip,
+.award-btn,
+.nobody-btn,
+.delete-link,
+.question-card {
+  transition: background var(--polish), color var(--polish),
+    border-color var(--polish), box-shadow var(--polish), transform var(--polish);
+}
+
+/* selected states: clear, with a subtle persistent glow */
+.mix-card.selected {
+  border-color: var(--terra);
+  background: #fdf3e8;
+  box-shadow: 0 0 0 3px var(--glow-soft), var(--shadow-sm);
+}
+
+.round-chip.selected {
+  border-color: var(--terra);
+  background: var(--terra);
+  color: #fff;
+  box-shadow: 0 0 0 3px var(--glow-soft);
+}
+
+@media (hover: hover) {
+  /* primary buttons ("Start game"): glow halo + slight lift */
+  .btn-primary:hover {
+    background: var(--terra-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(201, 106, 53, 0.35),
+      0 0 0 3px var(--glow-soft), 0 8px 22px var(--glow);
+  }
+
+  .btn-ghost:hover {
+    background: #f7e9da;
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  /* icon buttons (remove-player x): soft glow */
+  .remove-btn:hover {
+    background: #eacbb0;
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  /* option / mix cards + round chips */
+  .mix-card:hover {
+    border-color: var(--terra);
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  .round-chip:hover {
+    border-color: var(--terra);
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  /* award buttons: a little extra moment — glow halo as they fill */
+  .award-btn:hover {
+    background: var(--terra);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px var(--glow-soft), 0 6px 18px var(--glow);
+  }
+
+  .nobody-btn:hover {
+    border-color: var(--terra);
+    color: var(--terra-deep);
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  .delete-link:hover {
+    text-decoration: underline;
+    color: var(--terra-deep);
+  }
+
+  /* question cards: very subtle hover lift + soft shadow deepening */
+  .question-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(126, 53, 23, 0.16);
+  }
+}
+
+/* warm focus ring glow for keyboard users (works on touch too) */
+button:focus-visible,
+.btn:focus-visible,
+.delete-link:focus-visible {
+  outline: 2px solid var(--terra);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--glow-focus);
+}
+
+/* text inputs already carry a warm focus ring (border-color + box-shadow) */
+
+/* touch press feedback (brief scale; needs no hover) */
+.btn-primary:active,
+.btn-ghost:active,
+.award-btn:active,
+.nobody-btn:active {
+  transform: scale(0.97);
+}
+
+/* motion-sensitive users: kill transitions/animations entirely */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

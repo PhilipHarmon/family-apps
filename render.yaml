@@ -1,0 +1,76 @@
+services:
+  # Shared backend API for all five family apps.
+  - type: web
+    name: family-api
+    runtime: node
+    rootDir: family-api
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: FAMILY_KEY
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+
+  # Static front-ends (each is a Vite + React app using the shared API).
+  - type: web
+    name: dinner-menu
+    env: static
+    rootDir: dinner-menu
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://family-api.onrender.com
+      - key: VITE_FAMILY_KEY
+        sync: false
+
+  - type: web
+    name: mixtape
+    env: static
+    rootDir: mixtape
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://family-api.onrender.com
+      - key: VITE_FAMILY_KEY
+        sync: false
+
+  - type: web
+    name: trivia-night
+    env: static
+    rootDir: trivia-night
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://family-api.onrender.com
+      - key: VITE_FAMILY_KEY
+        sync: false
+
+  - type: web
+    name: photo-journal
+    env: static
+    rootDir: photo-journal
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://family-api.onrender.com
+      - key: VITE_FAMILY_KEY
+        sync: false
+
+  - type: web
+    name: movie-night
+    env: static
+    rootDir: movie-night
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://family-api.onrender.com
+      - key: VITE_FAMILY_KEY
+        sync: false

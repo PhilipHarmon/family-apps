@@ -1,0 +1,842 @@
+/* ============ Mixtape — design system ============ */
+:root {
+  --cream: #faf7f1;
+  --cream-deep: #f3ecdd;
+  --ink: #3a2c22;
+  --ink-soft: #6b5a4b;
+  --terra: #c96a35;
+  --terra-deep: #b3552e;
+  --terra-dark: #7e3517;
+  --gold: #d9a419;
+  --gold-deep: #a8760f;
+  --shell: #26262e;
+  --shell-deep: #17171d;
+  --label-paper: #f7f0dd;
+  --radius: 16px;
+  --shadow: 0 10px 30px rgba(126, 53, 23, 0.14);
+  --shadow-soft: 0 4px 14px rgba(126, 53, 23, 0.10);
+}
+
+* { box-sizing: border-box; }
+
+html { overflow-x: hidden; }
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .serif {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--terra-dark);
+  line-height: 1.2;
+}
+
+.app {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+}
+
+header.top {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+header.top h1 {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  margin: 0 0 6px;
+  letter-spacing: 0.5px;
+}
+
+header.top p.tagline {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  font-style: italic;
+  font-family: Georgia, serif;
+}
+
+/* ============ Buttons / inputs ============ */
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 22px;
+  background: var(--terra);
+  color: #fff;
+  font-weight: 600;
+  transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+  box-shadow: var(--shadow-soft);
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--terra-dark);
+  border: 2px solid var(--terra);
+  box-shadow: none;
+}
+button.danger {
+  background: transparent;
+  color: #a33b2a;
+  border: 2px solid #d98a7a;
+  box-shadow: none;
+  padding: 7px 16px;
+  font-size: 0.9rem;
+}
+button.small { padding: 6px 14px; font-size: 0.88rem; }
+
+input[type="text"],
+input[type="password"] {
+  font: inherit;
+  padding: 10px 14px;
+  border: 2px solid #e4d9c4;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  width: 100%;
+}
+input[type="text"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--terra);
+  box-shadow: 0 0 0 3px rgba(201, 106, 53, 0.18);
+}
+
+/* ============ Library ============ */
+.library-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.tape-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.tape-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 6px solid var(--terra);
+  transition: transform 0.15s ease;
+}
+.tape-card h3 { margin: 0; font-size: 1.35rem; }
+
+.tape-card .meta {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+.tape-card .card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.empty-library {
+  text-align: center;
+  padding: 48px 20px;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  color: var(--ink-soft);
+}
+.empty-library h2 { margin-top: 0; }
+
+/* ============ Editor ============ */
+.editor { display: flex; flex-direction: column; gap: 24px; }
+
+.editor-title-row {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.editor-title-row label {
+  display: block;
+  font-family: Georgia, serif;
+  font-weight: bold;
+  color: var(--terra-dark);
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+.sides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 640px) { .sides { grid-template-columns: 1fr; } }
+
+.side-panel {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.side-panel h3 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.side-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--terra);
+  color: #fff;
+  font-family: Georgia, serif;
+  font-weight: bold;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.side-panel .rule-note {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin: 0;
+}
+
+.track-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: var(--cream);
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+.track-row .num {
+  font-family: Georgia, serif;
+  font-weight: bold;
+  color: var(--terra);
+  min-width: 22px;
+}
+
+.track-row .track-info { flex: 1; min-width: 0; }
+.track-row .track-info .t { font-weight: 600; }
+.track-row .track-info .a { color: var(--ink-soft); font-size: 0.88rem; }
+
+.track-row button {
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  background: transparent;
+  color: #a33b2a;
+  border: 1.5px solid #d98a7a;
+  box-shadow: none;
+}
+.track-row.is-closer {
+  background: linear-gradient(135deg, #fdf3d7, #f9e7ae);
+  border: 2px solid var(--gold);
+}
+
+.add-track {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 2px dashed #e4d9c4;
+}
+
+.add-track .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 480px) { .add-track .two-col { grid-template-columns: 1fr; } }
+
+.editor-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ============ Viewer ============ */
+.viewer { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+
+.viewer h2 { margin: 0; font-size: clamp(1.8rem, 4vw, 2.5rem); text-align: center; }
+
+.viewer .flavor {
+  color: var(--ink-soft);
+  font-style: italic;
+  font-family: Georgia, serif;
+  margin: 0;
+  text-align: center;
+}
+
+.side-flip {
+  display: flex;
+  gap: 0;
+  background: #fff;
+  border: 2px solid var(--terra);
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.side-flip button {
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  color: var(--terra-dark);
+  padding: 10px 28px;
+}
+.side-flip button.active {
+  background: var(--terra);
+  color: #fff;
+}
+.full-tracklist {
+  width: 100%;
+  max-width: 560px;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.full-tracklist h3 {
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.full-tracklist ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.full-tracklist li {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 10px 14px;
+  background: var(--cream);
+  border-radius: 10px;
+}
+
+.full-tracklist li .n {
+  font-family: Georgia, serif;
+  font-weight: bold;
+  color: var(--terra);
+  min-width: 24px;
+}
+
+.full-tracklist li .info { flex: 1; }
+.full-tracklist li .info .t { font-weight: 600; }
+.full-tracklist li .info .a { color: var(--ink-soft); font-size: 0.9rem; }
+
+.full-tracklist li.closer {
+  background: linear-gradient(135deg, #fdf3d7, #f9e7ae);
+  border: 2px solid var(--gold);
+  position: relative;
+}
+
+.closer-tag {
+  display: inline-block;
+  background: var(--gold);
+  color: #4d3600;
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 3px 10px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.closer-copy {
+  max-width: 560px;
+  text-align: center;
+  background: linear-gradient(135deg, #fdf3d7, #fbeec3);
+  border: 2px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 18px 24px;
+  box-shadow: var(--shadow-soft);
+  font-family: Georgia, serif;
+  font-style: italic;
+  color: #6b4d08;
+}
+
+.viewer-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ============ Cassette (pure CSS centerpiece) ============ */
+.cassette-stage {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.cassette {
+  /* 100% of the padded container (not 94vw) so it never overflows on phones */
+  width: min(580px, 100%);
+  aspect-ratio: 1.586;
+  background: linear-gradient(150deg, #33333d 0%, var(--shell) 40%, var(--shell-deep) 100%);
+  border-radius: 18px;
+  box-shadow:
+    0 24px 50px rgba(23, 23, 29, 0.35),
+    0 4px 10px rgba(126, 53, 23, 0.15),
+    inset 0 2px 3px rgba(255, 255, 255, 0.12),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.4);
+  position: relative;
+  transform: rotate(-2deg);
+  transition: transform 0.4s ease;
+}
+.cassette .screw {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #8a8a95, #4a4a55 70%);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.6);
+}
+.cassette .screw::after {
+  content: "";
+  position: absolute;
+  left: 2px; right: 2px; top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: #2a2a32;
+  transform: rotate(38deg);
+}
+.screw.tl { top: 10px; left: 12px; }
+.screw.tr { top: 10px; right: 12px; }
+.screw.bl { bottom: 10px; left: 12px; }
+.screw.br { bottom: 10px; right: 12px; }
+
+.cassette-label {
+  position: absolute;
+  inset: 34px 30px 52px;
+  background: var(--label-paper);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 2px rgba(201, 106, 53, 0.25), inset 0 2px 8px rgba(0,0,0,0.08);
+  padding: 14px 18px 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.label-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.label-title {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-weight: bold;
+  font-size: clamp(1.05rem, 3.4vw, 1.5rem);
+  color: var(--terra-dark);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.label-side {
+  font-family: Georgia, serif;
+  font-weight: bold;
+  font-size: 0.85rem;
+  background: var(--terra);
+  color: #fff;
+  border-radius: 8px;
+  padding: 3px 12px;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+}
+
+.label-stripes {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--terra) 0 33%, var(--gold) 33% 66%, var(--terra-deep) 66% 100%);
+  margin-bottom: 10px;
+  opacity: 0.85;
+}
+
+.reel-window {
+  position: relative;
+  height: 34%;
+  min-height: 64px;
+  background: linear-gradient(180deg, #efe6d0, #e6d9bd);
+  border-radius: 8px;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.25);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.tape-path {
+  position: absolute;
+  top: 50%;
+  left: 8%;
+  right: 8%;
+  height: 10px;
+  margin-top: -5px;
+  background: #4a2f1d;
+  border-radius: 5px;
+  box-shadow: inset 0 2px 3px rgba(0,0,0,0.5);
+}
+
+.reel {
+  position: absolute;
+  top: 50%;
+  width: 19%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  background:
+    radial-gradient(circle, var(--terra) 0 16%, #fff 16% 22%, transparent 22%),
+    repeating-conic-gradient(#fdfbf5 0deg 24deg, #cfc8b4 24deg 30deg);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.35), inset 0 0 0 3px #e8e0cd;
+  animation: reel-spin 7s linear infinite;
+}
+.reel::after {
+  content: "";
+  position: absolute;
+  inset: 34%;
+  border-radius: 50%;
+  background:
+    conic-gradient(var(--terra-dark) 0 60deg, #fff 60deg 120deg, var(--terra-dark) 120deg 180deg, #fff 180deg 240deg, var(--terra-dark) 240deg 300deg, #fff 300deg 360deg);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,0.15);
+}
+.reel.left { left: 9%; }
+.reel.right { right: 9%; animation-duration: 9s; animation-direction: reverse; }
+
+@keyframes reel-spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+.label-tracks {
+  flex: 1;
+  overflow: hidden;
+  font-size: clamp(0.62rem, 2vw, 0.78rem);
+  line-height: 1.65;
+  color: var(--ink);
+  column-gap: 24px;
+}
+.label-tracks.two-col { columns: 2; }
+
+.label-tracks .lt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.label-tracks .lt .n { color: var(--terra); font-weight: bold; margin-right: 4px; }
+.label-tracks .lt .a { color: var(--ink-soft); }
+.label-tracks .lt.closer-line { color: var(--gold-deep); font-weight: bold; }
+
+.label-closer-chip {
+  align-self: center;
+  margin-top: 4px;
+  background: linear-gradient(135deg, var(--gold), #c98f0e);
+  color: #fff8e1;
+  font-weight: 800;
+  font-size: clamp(0.6rem, 2vw, 0.75rem);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 4px 16px;
+  box-shadow: 0 2px 6px rgba(168, 118, 15, 0.45);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+}
+
+.cassette-bottom {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  transform: translateX(-50%);
+  width: 44%;
+  height: 30px;
+  background: linear-gradient(180deg, #101014, #23232b);
+  clip-path: polygon(6% 0, 94% 0, 100% 100%, 0 100%);
+  border-radius: 0 0 8px 8px;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.08);
+}
+.cassette-bottom::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  transform: translateX(-50%);
+  width: 34%;
+  height: 12px;
+  background: #0a0a0d;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 3px #000;
+}
+
+/* ============ Footer ============ */
+footer.foot {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  font-style: italic;
+  font-family: Georgia, serif;
+  margin-top: 40px;
+}
+
+/* ============ Family key prompt (blocking overlay) ============ */
+.key-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(58, 44, 34, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.key-card {
+  background: #fff;
+  border-radius: var(--radius);
+  border-top: 6px solid var(--terra);
+  box-shadow: var(--shadow);
+  padding: 32px 30px;
+  max-width: 430px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+}
+
+.key-card h2 { margin: 0; }
+.key-card p { margin: 0; color: var(--ink-soft); }
+.key-card p strong { color: var(--ink); }
+
+.key-card .key-error {
+  color: #a33b2a;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+/* ============ Responsive pass (375px baseline) ============ */
+@media (max-width: 640px) {
+  .app {
+    padding: 20px 14px 56px;
+  }
+
+  /* thumb-friendly tap targets */
+  button:not(.small):not(.side-flip button) {
+    min-height: 44px;
+  }
+
+  button.small {
+    min-height: 44px;
+    padding: 10px 18px;
+    font-size: 0.95rem;
+  }
+
+  .track-row {
+    padding: 10px 12px;
+  }
+
+  .track-row button {
+    min-height: 44px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .track-row .track-info {
+    overflow-wrap: break-word;
+  }
+
+  .editor-title-row,
+  .side-panel,
+  .full-tracklist {
+    padding: 18px 16px;
+  }
+
+  .tape-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tape-card .card-actions {
+    flex-wrap: wrap;
+  }
+
+  .tape-card .card-actions button {
+    flex: 1 1 auto;
+  }
+
+  .editor-actions,
+  .viewer-actions {
+    width: 100%;
+  }
+
+  .editor-actions button,
+  .viewer-actions button {
+    flex: 1 1 100%;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    font-size: 16px; /* stops iOS auto-zoom on focus */
+  }
+
+  .key-card {
+    padding: 26px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* give the cassette label more room once the shell gets small */
+  .cassette-label {
+    inset: 22px 18px 38px;
+    padding: 10px 14px 8px;
+  }
+
+  .cassette .screw { width: 11px; height: 11px; }
+  .screw.tl { top: 7px; left: 9px; }
+  .screw.tr { top: 7px; right: 9px; }
+  .screw.bl { bottom: 7px; left: 9px; }
+  .screw.br { bottom: 7px; right: 9px; }
+
+  .label-top { gap: 8px; margin-bottom: 6px; }
+  .label-stripes { margin-bottom: 8px; }
+
+  .side-flip button {
+    padding: 10px 20px;
+  }
+}
+
+/* ============================================================
+   INTERACTIVE POLISH — soft terracotta glow
+   (Shared design language across the five family apps.)
+   - All hover-driven effects live inside @media (hover: hover)
+     so touch devices never get stuck hover states.
+   - Touch keeps :active press feedback outside the media query.
+   - prefers-reduced-motion disables all of it.
+   ============================================================ */
+:root {
+  --glow-soft: rgba(201, 106, 53, 0.16);   /* soft halo ring */
+  --glow: rgba(201, 106, 53, 0.3);        /* glow halo on buttons */
+  --glow-focus: rgba(201, 106, 53, 0.22); /* warm focus ring */
+  --polish: 0.2s ease;                    /* consistent transition timing */
+}
+
+/* smooth, consistent transitions on the interactive pieces */
+button,
+.tape-card,
+.track-row button,
+.cassette {
+  transition: background var(--polish), color var(--polish),
+    border-color var(--polish), box-shadow var(--polish),
+    transform var(--polish), filter var(--polish);
+}
+
+/* cassette straightens a touch faster for a snappier feel (was 0.4s) */
+.cassette {
+  transition-duration: 0.25s;
+}
+
+/* selected side: clear active state with a subtle persistent glow */
+.side-flip button.active {
+  background: var(--terra);
+  color: #fff;
+  box-shadow: 0 0 0 3px var(--glow-soft);
+}
+
+@media (hover: hover) {
+  /* buttons: glow halo + slight lift */
+  button:hover {
+    background: var(--terra-deep);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-soft), 0 6px 18px var(--glow);
+  }
+
+  button.ghost:hover {
+    background: rgba(201, 106, 53, 0.12);
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  button.danger:hover {
+    background: rgba(217, 138, 122, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  /* segmented side-flip control: no lift (keeps the pill tidy), just glow */
+  .side-flip button:hover {
+    transform: none;
+    background: rgba(201, 106, 53, 0.12);
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  .track-row button:hover {
+    background: rgba(217, 138, 122, 0.15);
+    box-shadow: 0 0 0 3px var(--glow-soft);
+  }
+
+  /* tape cards: very subtle hover lift + soft shadow deepening */
+  .tape-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow), 0 14px 32px rgba(126, 53, 23, 0.14),
+      0 0 0 3px var(--glow-soft);
+  }
+
+  /* cassette centerpiece: soft terracotta halo as it straightens up */
+  .cassette:hover {
+    transform: rotate(0deg) scale(1.01);
+    filter: drop-shadow(0 12px 30px rgba(201, 106, 53, 0.45));
+  }
+}
+
+/* warm focus ring glow for keyboard users (works on touch too) */
+button:focus-visible {
+  outline: 2px solid var(--terra);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--glow-focus);
+}
+
+/* text inputs already carry a warm focus ring (border-color + box-shadow) */
+/* touch press feedback is already defined: button:active -> translateY(0) */
+
+/* motion-sensitive users: kill transitions/animations entirely */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
