@@ -1,3 +1,6 @@
+import { isDemoMode } from './demoMode.js';
+import { handleDemoRequest } from './demoData.js';
+
 /* Shared family API client.
  *
  * Base URL comes from VITE_API_URL (no trailing slash), e.g.
@@ -47,6 +50,7 @@ export class ApiError extends Error {
 }
 
 async function request(method, path, body) {
+  if (isDemoMode()) return handleDemoRequest(method, path, body);
   const key = getFamilyKey();
   let res;
   try {

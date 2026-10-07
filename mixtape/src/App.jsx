@@ -9,6 +9,7 @@ import {
   saveFamilyKey,
   normalizeTape,
 } from "./api.js";
+import { isDemoMode } from "./demoMode.js";
 
 const MIN_PER_TRACK = 3.4; // flavor math for "runtime-ish" text
 
@@ -265,6 +266,7 @@ function Viewer({ tape, onBack, onDelete }) {
 
 /* ================= App ================= */
 export default function App() {
+  const demoMode = isDemoMode();
   const [familyKey, setFamilyKey] = useState(() => getFamilyKey());
   const [keyError, setKeyError] = useState(null);
   const [tapes, setTapes] = useState([]);
@@ -313,8 +315,8 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (familyKey) loadTapes();
-  }, [familyKey, loadTapes]);
+    if (familyKey || demoMode) loadTapes();
+  }, [familyKey, demoMode, loadTapes]);
 
   const handleKeySave = (key) => {
     saveFamilyKey(key);
@@ -348,7 +350,45 @@ export default function App() {
 
   return (
     <div className="app">
-      {!familyKey && (
+      {demoMode && (
+        <div
+          style={{
+            background: "linear-gradient(90deg, #f2c57c 0%, #e59a5f 100%)",
+            color: "#3d2410",
+            padding: "7px 14px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "12px",
+            fontSize: "13px",
+            fontWeight: 600,
+            letterSpacing: "0.3px",
+            borderBottom: "3px double rgba(61,36,16,0.4)",
+            flexWrap: "wrap",
+          }}
+        >
+          <span>📼 Demo preview — sample data, saved in this browser only.</span>
+          <button
+            onClick={() => {
+              localStorage.removeItem("demoData:mixtape");
+              window.location.reload();
+            }}
+            style={{
+              background: "#3d2410",
+              color: "#f7e8d0",
+              border: "none",
+              borderRadius: "999px",
+              padding: "4px 12px",
+              fontSize: "12px",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            Reset demo
+          </button>
+        </div>
+      )}
+      {!familyKey && !demoMode && (
         <FamilyKeyPrompt onSave={handleKeySave} error={keyError} />
       )}
 
@@ -357,14 +397,14 @@ export default function App() {
         <p className="tagline">Dub it. Flip it. Never skip the closer.</p>
       </header>
 
-      {familyKey && status === "loading" && (
+      {(familyKey || demoMode) && status === "loading" && (
         <div className="empty-library">
           <h2>🎧 Tuning the deck…</h2>
           <p>Grabbing everyone's tapes from the family shelf.</p>
         </div>
       )}
 
-      {familyKey && status === "error" && (
+      {(familyKey || demoMode) && status === "error" && (
         <div className="empty-library">
           <h2>📼 The tape deck jammed</h2>
           <p>{error}</p>
@@ -372,7 +412,7 @@ export default function App() {
         </div>
       )}
 
-      {familyKey && status === "ready" && view.name === "library" && (
+      {(familyKey || demoMode) && status === "ready" && view.name === "library" && (
         <Library
           tapes={tapes}
           onNew={() => setView({ name: "editor" })}
@@ -381,14 +421,14 @@ export default function App() {
         />
       )}
 
-      {familyKey && status === "ready" && view.name === "editor" && (
+      {(familyKey || demoMode) && status === "ready" && view.name === "editor" && (
         <Editor
           onSave={saveNewTape}
           onCancel={() => setView({ name: "library" })}
         />
       )}
 
-      {familyKey && status === "ready" && view.name === "viewer" &&
+      {(familyKey || demoMode) && status === "ready" && view.name === "viewer" &&
         (() => {
           const tape = tapes.find((t) => t.id === view.id);
           if (!tape) return <p>That tape seems to have demagnetized. <button className="ghost" onClick={() => setView({ name: "library" })}>Back to the shelf</button></p>;

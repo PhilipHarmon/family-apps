@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import { get, post, put, del, getFamilyKey, setFamilyKey, onAuthFailure } from "./api.js";
 import FamilyKeyPrompt from "./FamilyKeyPrompt.jsx";
+import { isDemoMode } from "./demoMode.js";
 
 /* ---------- seed data ---------- */
 const SEED = [
@@ -164,6 +165,7 @@ function RateDialog({ movie, onDone, onCancel }) {
 
 /* ---------- main app ---------- */
 export default function App() {
+  const demoMode = isDemoMode();
   const [movies, setMovies] = useState([]);
   const [kidOnly, setKidOnly] = useState(false);
   const [picking, setPicking] = useState(false);
@@ -196,7 +198,7 @@ export default function App() {
       setPicking(false);
       setStatus("need-key");
     });
-    if (getFamilyKey()) {
+    if (getFamilyKey() || demoMode) {
       boot();
     } else {
       setStatus("need-key");
@@ -277,7 +279,7 @@ export default function App() {
     boot();
   };
 
-  if (status === "need-key") {
+  if (status === "need-key" && !demoMode) {
     return (
       <div className="page">
         <header className="hero">
@@ -319,6 +321,41 @@ export default function App() {
 
   return (
     <div className="page">
+      {demoMode && (
+        <div
+          style={{
+            background: "linear-gradient(90deg, #7c2d12, #b45309)",
+            color: "#fff7ed",
+            padding: "0.5rem 1rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "0.75rem",
+            fontSize: "0.85rem",
+            fontWeight: 500,
+            letterSpacing: "0.01em",
+            flexWrap: "wrap",
+          }}
+        >
+          <span>🎬 Demo preview — sample data, saved in this browser only.</span>
+          <button
+            type="button"
+            onClick={() => { localStorage.removeItem("demoData:movie-night"); window.location.reload(); }}
+            style={{
+              background: "rgba(255,255,255,0.15)",
+              color: "#fff7ed",
+              border: "1px solid rgba(255,255,255,0.45)",
+              borderRadius: "999px",
+              padding: "0.2rem 0.8rem",
+              fontSize: "0.8rem",
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            Reset demo
+          </button>
+        </div>
+      )}
       <header className="hero">
         <div className="hero-inner">
           <p className="hero-emoji">🍿</p>

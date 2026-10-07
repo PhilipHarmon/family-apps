@@ -1,3 +1,6 @@
+import { isDemoMode } from "./demoMode.js";
+import { handleDemoRequest } from "./demoData.js";
+
 /* Shared family API client — movie night talks to the family backend.
    Base URL comes from VITE_API_URL (no trailing slash); every request carries
    the x-family-key header. A 401 clears the saved key and signals the app to
@@ -42,6 +45,12 @@ function handleUnauthorized() {
 }
 
 async function request(path, options = {}) {
+  if (isDemoMode()) {
+    const method = (options.method || 'GET').toUpperCase();
+    let demoBody;
+    try { demoBody = options.body ? JSON.parse(options.body) : undefined; } catch { demoBody = undefined; }
+    return handleDemoRequest(method, path, demoBody);
+  }
   let res;
   try {
     res = await fetch(`${BASE}${path}`, {

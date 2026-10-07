@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { api, getFamilyKey, FAMILY_KEY_STORAGE } from './api.js'
 import FamilyKeyPrompt from './FamilyKeyPrompt.jsx'
+import { isDemoMode } from './demoMode.js'
 
 // ---------- date helpers ----------
 const dayKey = (d) =>
@@ -80,6 +81,7 @@ function streakCopy(n) {
 
 // ---------- app ----------
 export default function App() {
+  const demoMode = isDemoMode()
   const [familyKey, setFamilyKey] = useState(() => getFamilyKey())
   const [keyRejected, setKeyRejected] = useState(false)
   const [entries, setEntries] = useState(null) // null = not loaded yet
@@ -134,8 +136,8 @@ export default function App() {
   )
 
   useEffect(() => {
-    if (familyKey) loadData(familyKey)
-  }, [familyKey, loadData])
+    if (familyKey || demoMode) loadData(familyKey)
+  }, [familyKey, demoMode, loadData])
 
   const handleKeySave = (key) => {
     try {
@@ -196,7 +198,39 @@ export default function App() {
 
   return (
     <div className="app">
-      {!familyKey && (
+      {demoMode && (
+        <div
+          style={{
+            background: '#f3ede1',
+            borderBottom: '1px solid #e5dcc9',
+            color: '#3d2f26',
+            padding: '8px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+            fontSize: '13px',
+          }}
+        >
+          <span>📸 Demo preview — sample data, saved in this browser only.</span>
+          <button
+            onClick={() => { localStorage.removeItem('demoData:photo-journal'); window.location.reload(); }}
+            style={{
+              background: '#a8512f',
+              color: '#fffdf9',
+              border: 'none',
+              borderRadius: '999px',
+              padding: '4px 12px',
+              fontSize: '12px',
+              cursor: 'pointer',
+            }}
+          >
+            Reset demo
+          </button>
+        </div>
+      )}
+
+      {!familyKey && !demoMode && (
         <FamilyKeyPrompt
           onSave={handleKeySave}
           rejectedNote={keyRejected ? 'The last key didn\'t work — double-check it and try again.' : null}
@@ -223,7 +257,7 @@ export default function App() {
         </p>
       )}
 
-      {familyKey && loadState === 'loading' && (
+      {(familyKey || demoMode) && loadState === 'loading' && (
         <div className="empty-state">
           <div className="big">📷</div>
           <h3>Gathering everyone&apos;s snapshots…</h3>
@@ -231,7 +265,7 @@ export default function App() {
         </div>
       )}
 
-      {familyKey && loadState === 'error' && (
+      {(familyKey || demoMode) && loadState === 'error' && (
         <div className="empty-state">
           <div className="big">📡</div>
           <h3>Hmm, the journal wouldn&apos;t load</h3>

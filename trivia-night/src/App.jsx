@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { TIERS } from './questions.js';
 import { get, post } from './api.js';
 import FamilyKeyPrompt from './FamilyKeyPrompt.jsx';
+import { isDemoMode } from './demoMode.js';
 
 // Tier values are identical to the API contract: 'easy' | 'medium' | 'hard'
 // ('easy' = Briar Easy 1pt, 'medium' = Wyatt & Pepper Medium 2pts, 'hard' = Grown-Up Hard 3pts).
@@ -62,6 +63,7 @@ function mapGame(g) {
 }
 
 export default function App() {
+  const demoMode = isDemoMode();
   const [dataState, setDataState] = useState('loading'); // loading | ready | error | need-key
   const [loadError, setLoadError] = useState('');
   const [questions, setQuestions] = useState([]);
@@ -86,6 +88,12 @@ export default function App() {
   const [newTier, setNewTier] = useState('medium');
   const [savingQ, setSavingQ] = useState(false);
   const [addError, setAddError] = useState('');
+
+  // Bulk question-pack import state
+  const [packText, setPackText] = useState('');
+  const [importing, setImporting] = useState(false);
+  const [importError, setImportError] = useState('');
+  const [importResult, setImportResult] = useState('');
 
   async function loadData() {
     setDataState('loading');
@@ -225,11 +233,41 @@ export default function App() {
     }
   }
 
+  async function importPack() {
+    setImporting(true);
+    setImportError('');
+    setImportResult('');
+    try {
+      let parsed;
+      try {
+        parsed = JSON.parse(packText);
+      } catch {
+        throw new Error('That isn\u2019t valid JSON — copy the pack exactly as provided.');
+      }
+      const arr = Array.isArray(parsed) ? parsed : parsed.questions;
+      if (!Array.isArray(arr) || arr.length === 0) {
+        throw new Error('No questions found in that JSON.');
+      }
+      const res = await post('/questions/bulk', { questions: arr });
+      const n = res?.imported ?? 0;
+      const skipped = res?.skipped ?? 0;
+      setImportResult(
+        `Imported ${n} question${n === 1 ? '' : 's'}${skipped ? ` (${skipped} duplicate${skipped === 1 ? '' : 's'} skipped)` : ''} — they\u2019re in the bank now!`,
+      );
+      setPackText('');
+      await loadData();
+    } catch (err) {
+      setImportError(err?.message || 'Couldn\u2019t import that pack. Try again.');
+    } finally {
+      setImporting(false);
+    }
+  }
+
   const current = deck[qIndex];
   const standings = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   const leaders = standings.length > 0 ? standings.filter(([, s]) => s === standings[0][1]).map(([n]) => n) : [];
 
-  if (dataState === 'need-key') {
+  if (dataState === 'need-key' && !demoMode) {
     return (
       <div className="app">
         <header className="header">
@@ -285,6 +323,37 @@ export default function App() {
 
   return (
     <div className="app">
+      {demoMode && (
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #f9d976, #f39f5a)',
+            color: '#5b3a1a',
+            padding: '8px 16px',
+            textAlign: 'center',
+            fontSize: '14px',
+            fontWeight: 600,
+            borderBottom: '2px solid rgba(91, 58, 26, 0.15)',
+          }}
+        >
+          🎪 Demo preview — sample data, saved in this browser only.{' '}
+          <button
+            onClick={() => { localStorage.removeItem('demoData:trivia-night'); window.location.reload(); }}
+            style={{
+              marginLeft: '8px',
+              padding: '3px 12px',
+              borderRadius: '999px',
+              border: '1px solid #5b3a1a',
+              background: 'rgba(255, 255, 255, 0.55)',
+              color: '#5b3a1a',
+              fontSize: '13px',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            Reset demo
+          </button>
+        </div>
+      )}
       <header className="header">
         <span className="bunting" aria-hidden="true">🎉🧠🎉</span>
         <h1>Family Trivia Night</h1>
@@ -418,6 +487,36 @@ export default function App() {
               </>
             )}
           </section>
+
+          {!demoMode && (
+            <section className="card">
+              <h2>📦 Import a question pack</h2>
+              <p className="hint" style={{ marginTop: 0 }}>
+                Got a JSON question pack? Paste it below to add every question to the bank at once.
+                Each entry needs <code>text</code>, <code>answer</code>, and a <code>tier</code> (easy, medium, or hard).
+              </p>
+              <label htmlFor="pack-json">Question pack (JSON)</label>
+              <textarea
+                id="pack-json"
+                rows={6}
+                value={packText}
+                onChange={(e) => setPackText(e.target.value)}
+                placeholder='[{"text": "What...", "answer": "...", "tier": "hard", "topic": "80s-music"}]'
+              />
+              {importError && <p className="hint" style={{ color: '#b3552e' }}>{importError}</p>}
+              {importResult && <p className="hint" style={{ color: '#2e7d32' }}>{importResult}</p>}
+              <div style={{ marginTop: 16 }}>
+                <button
+                  type="button"
+                  className="btn-primary"
+                  disabled={!packText.trim() || importing}
+                  onClick={importPack}
+                >
+                  {importing ? '⏳ Importing…' : '📦 Import questions'}
+                </button>
+              </div>
+            </section>
+          )}
 
           {history.length > 0 && (
             <section className="card hall-of-fame">

@@ -2,6 +2,9 @@
 // Base URL: ${import.meta.env.VITE_API_URL}/api (VITE_API_URL has no trailing slash,
 // e.g. https://family-api.onrender.com; locally http://localhost:5000)
 
+import { isDemoMode } from './demoMode.js';
+import { handleDemoRequest } from './demoData.js';
+
 const BASE_URL = `${(import.meta.env.VITE_API_URL || '').replace(/\/+$/, '')}/api`
 
 export const FAMILY_KEY_STORAGE = 'familyKey'
@@ -29,6 +32,13 @@ function withKey(key, init = {}) {
 }
 
 async function request(path, key, init = {}) {
+  if (isDemoMode()) {
+    const method = (init.method || 'GET').toUpperCase();
+    let demoBody;
+    try { demoBody = init.body ? JSON.parse(init.body) : undefined; } catch { demoBody = undefined; }
+    return handleDemoRequest(method, path, demoBody);
+  }
+
   const res = await fetch(`${BASE_URL}${path}`, withKey(key, init))
 
   if (res.status === 401) {

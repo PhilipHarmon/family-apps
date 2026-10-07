@@ -1,3 +1,6 @@
+import { isDemoMode } from './demoMode.js';
+import { handleDemoRequest } from './demoData.js';
+
 // Shared API client for the family apps.
 // Base: `${import.meta.env.VITE_API_URL}/api` (no trailing slash on VITE_API_URL).
 // Every request carries `x-family-key`. A 401 clears the stored key and signals
@@ -10,6 +13,14 @@ function getKey() {
 }
 
 async function request(path, { method = 'GET', body } = {}) {
+  if (isDemoMode()) {
+    let demoBody = body;
+    if (typeof demoBody === 'string') {
+      try { demoBody = JSON.parse(demoBody); } catch { demoBody = undefined; }
+    }
+    return handleDemoRequest(method, path, demoBody);
+  }
+
   const headers = { 'Content-Type': 'application/json' };
   const key = getKey();
   if (key) headers['x-family-key'] = key;

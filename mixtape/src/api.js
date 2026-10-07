@@ -12,6 +12,9 @@
 
 const BASE = `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api`;
 
+import { isDemoMode } from './demoMode.js';
+import { handleDemoRequest } from './demoData.js';
+
 export const FAMILY_KEY_STORAGE = "familyKey";
 
 export function getFamilyKey() {
@@ -49,6 +52,7 @@ function currentKey() {
 }
 
 async function request(method, path, body) {
+  if (isDemoMode()) return handleDemoRequest(method, path, body);
   let res;
   try {
     res = await fetch(`${BASE}${path}`, {

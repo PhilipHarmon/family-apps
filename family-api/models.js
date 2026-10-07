@@ -9,6 +9,8 @@ const Recipe = mongoose.model(
       ingredients: { type: [String], default: [] },
       steps: { type: [String], default: [] },
       tip: { type: String, default: '' },
+      favorite: { type: Boolean, default: false },
+      notes: { type: String, default: '' },
     },
     { timestamps: true },
   ),

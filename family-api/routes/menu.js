@@ -35,6 +35,21 @@ router.post('/recipes/seed', async (_req, res, next) => {
   }
 });
 
+router.put('/recipes/:id', async (req, res, next) => {
+  try {
+    const allowed = ['name', 'time', 'ingredients', 'steps', 'tip', 'favorite', 'notes'];
+    const updates = {};
+    for (const key of allowed) {
+      if (req.body && req.body[key] !== undefined) updates[key] = req.body[key];
+    }
+    const recipe = await Recipe.findByIdAndUpdate(req.params.id, updates, { new: true });
+    if (!recipe) return res.status(404).json({ error: 'Recipe not found' });
+    res.json(recipe);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // --- Week plan (single shared doc) ---
 const EMPTY_DAYS = { mon: null, tue: null, wed: null, thu: null, fri: null, sat: null, sun: null };
 

@@ -39,6 +39,52 @@ router.post('/questions/seed', async (_req, res, next) => {
   }
 });
 
+// Bulk import: POST { questions: [{ text, answer, tier, topic }] }.
+// Skips entries that already exist with identical text (case-insensitive).
+router.post('/questions/bulk', async (req, res, next) => {
+  try {
+    const list = (req.body && req.body.questions) || [];
+    if (!Array.isArray(list) || list.length === 0) {
+      return res.status(400).json({ error: 'Provide a non-empty "questions" array.' });
+    }
+    const validTiers = ['easy', 'medium', 'hard'];
+    const cleaned = list
+      .filter(
+        (q) =>
+          q &&
+          typeof q.text === 'string' &&
+          q.text.trim() &&
+          typeof q.answer === 'string' &&
+          q.answer.trim() &&
+          validTiers.includes(q.tier),
+      )
+      .map((q) => ({
+        text: q.text.trim(),
+        answer: q.answer.trim(),
+        tier: q.tier,
+        topic: typeof q.topic === 'string' && q.topic.trim() ? q.topic.trim() : 'Imported Pack',
+      }));
+    if (cleaned.length === 0) {
+      return res.status(400).json({ error: 'No valid questions found. Each needs text, answer, and a tier (easy/medium/hard).' });
+    }
+    const existing = await Question.find(
+      { text: { $in: cleaned.map((q) => new RegExp(`^${q.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i')) } },
+      { text: 1 },
+    ).lean();
+    const seen = new Set(existing.map((q) => q.text.toLowerCase()));
+    const fresh = cleaned.filter((q) => {
+      const key = q.text.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    const docs = fresh.length ? await Question.insertMany(fresh) : [];
+    res.status(201).json({ imported: docs.length, skipped: cleaned.length - fresh.length });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // --- Games ---
 router.get('/games', async (_req, res, next) => {
   try {

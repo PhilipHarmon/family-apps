@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { SEED_RECIPES } from './data/recipes.js';
 import { get, post, put, getFamilyKey, setFamilyKey } from './api.js';
+import { isDemoMode } from './demoMode.js';
 import FamilyKeyPrompt from './FamilyKeyPrompt.jsx';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -35,8 +36,9 @@ function fromApiDays(days) {
   return assignments;
 }
 
-/* Server recipes are {_id,name,time,ingredients[],steps[],tip}; overlay
- * local display metadata (emoji, tagline, tips) so the UI stays the same. */
+/* Server recipes are {_id,name,time,ingredients[],steps[],tip,favorite,notes};
+ * overlay local display metadata (emoji, tagline, tips) so the UI stays
+ * the same. */
 function mergeRecipe(apiRecipe) {
   const local = SEED_RECIPES.find((r) => r.id === apiRecipe._id);
   return {
@@ -49,7 +51,28 @@ function mergeRecipe(apiRecipe) {
     ingredients: apiRecipe.ingredients || [],
     steps: apiRecipe.steps || [],
     tips: apiRecipe.tip ? [apiRecipe.tip] : ((local && local.tips) || []),
+    favorite: !!apiRecipe.favorite,
+    notes: apiRecipe.notes || '',
   };
+}
+
+/* ---------- star toggle (favorites) ---------- */
+function StarButton({ favorite, onToggle }) {
+  return (
+    <button
+      type="button"
+      className={`star-btn${favorite ? ' active' : ''}`}
+      onClick={(e) => {
+        e.stopPropagation();
+        onToggle();
+      }}
+      aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
+      aria-pressed={!!favorite}
+      title={favorite ? '★ Favorited — tap to remove' : '☆ Tap to favorite'}
+    >
+      {favorite ? '★' : '☆'}
+    </button>
+  );
 }
 
 /* ---------- modal ---------- */
@@ -78,10 +101,30 @@ function Modal({ title, sub, onClose, children }) {
   );
 }
 
-/* ---------- full recipe view ---------- */
-function RecipeModal({ recipe, onClose }) {
+/* ---------- full recipe view (favorites + notes) ---------- */
+function RecipeModal({ recipe, onClose, onToggleFavorite, onSaveNotes }) {
+  const [notesDraft, setNotesDraft] = useState(recipe.notes || '');
+  const [notesState, setNotesState] = useState('idle'); // idle | saving | saved | error
+
+  const saveNotes = async () => {
+    setNotesState('saving');
+    try {
+      await onSaveNotes(recipe.id, notesDraft);
+      setNotesState('saved');
+      window.setTimeout(() => setNotesState((s) => (s === 'saved' ? 'idle' : s)), 2500);
+    } catch {
+      setNotesState('error');
+    }
+  };
+
   return (
     <Modal title={`${recipe.emoji} ${recipe.name}`} sub={recipe.time} onClose={onClose}>
+      <div className="favorite-row">
+        <StarButton favorite={recipe.favorite} onToggle={() => onToggleFavorite(recipe.id)} />
+        <span className="favorite-label">
+          {recipe.favorite ? '★ A house favorite' : 'Tap the star to make this a house favorite'}
+        </span>
+      </div>
       <h4>Ingredients</h4>
       <ul className="ingredients-list">
         {recipe.ingredients.map((ing) => (
@@ -104,6 +147,33 @@ function RecipeModal({ recipe, onClose }) {
           ))}
         </>
       )}
+      <h4>📝 Our notes</h4>
+      {recipe.notes ? (
+        <div className="notes-display">{recipe.notes}</div>
+      ) : (
+        <p className="empty-state" style={{ margin: '0 0 0.5rem' }}>
+          No notes yet — jot down tweaks for next time below.
+        </p>
+      )}
+      <div className="field">
+        <textarea
+          value={notesDraft}
+          onChange={(e) => setNotesDraft(e.target.value)}
+          placeholder="Changes we'd make next time…"
+          aria-label="Recipe notes"
+        />
+      </div>
+      <div className="notes-actions">
+        <button
+          className="btn btn-primary btn-small"
+          onClick={saveNotes}
+          disabled={notesState === 'saving'}
+        >
+          {notesState === 'saving' ? 'Saving…' : 'Save notes'}
+        </button>
+        {notesState === 'saved' && <span className="notes-saved">✓ Saved</span>}
+        {notesState === 'error' && <span className="notes-error">Couldn't save — try again.</span>}
+      </div>
     </Modal>
   );
 }
@@ -222,8 +292,66 @@ function RenameModal({ day, assignment, onSave, onClose }) {
   );
 }
 
+/* ---------- import a week from Fred's Sunday menu JSON ---------- */
+function ImportModal({ onClose, onImport }) {
+  const [text, setText] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const [result, setResult] = useState('');
+
+  const runImport = async () => {
+    setError('');
+    setResult('');
+    if (!text.trim()) {
+      setError("Paste the JSON block from Fred's Sunday menu message first.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const summary = await onImport(text);
+      setResult(summary);
+    } catch (err) {
+      setError(err && err.message ? err.message : 'Something went wrong during import.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <Modal
+      title="📥 Import week"
+      sub="Paste the JSON block from Fred's Sunday menu message."
+      onClose={onClose}
+    >
+      <div className="field">
+        <label>Menu JSON</label>
+        <textarea
+          className="import-textarea"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder={'{"recipes": [...], "week": {"sun": "...", "mon": "..."}}'}
+          spellCheck={false}
+          aria-label="Menu JSON to import"
+        />
+      </div>
+      {error && <div className="import-error">{error}</div>}
+      {result && <div className="import-result">✓ {result}</div>}
+      <div className="notes-actions">
+        <button className="btn btn-primary" onClick={runImport} disabled={busy}>
+          {busy ? 'Importing…' : 'Import'}
+        </button>
+      </div>
+      <p className="empty-state" style={{ marginTop: '0.5rem' }}>
+        Recipes that match your library by name are reused; new ones are added.
+        Names that don't match become one-off custom meals.
+      </p>
+    </Modal>
+  );
+}
+
 /* ---------- main app ---------- */
 export default function App() {
+  const demoMode = isDemoMode();
   const [familyKey, setFamilyKeyState] = useState(() => getFamilyKey());
   const [promptError, setPromptError] = useState('');
   const [status, setStatus] = useState('loading'); // loading | ready | error
@@ -240,6 +368,7 @@ export default function App() {
   const [assignDay, setAssignDay] = useState(null);
   const [recipeModalId, setRecipeModalId] = useState(null);
   const [renameDay, setRenameDay] = useState(null);
+  const [importOpen, setImportOpen] = useState(false);
 
   const assignmentsRef = useRef(assignments);
   assignmentsRef.current = assignments;
@@ -260,7 +389,7 @@ export default function App() {
 
   /* ----- initial load: recipes (auto-seed if empty) + week plan ----- */
   useEffect(() => {
-    if (!familyKey) return;
+    if (!familyKey && !demoMode) return;
     let cancelled = false;
     setStatus('loading');
     setLoadError('');
@@ -315,6 +444,121 @@ export default function App() {
   const recipeById = (id) => recipes.find((r) => r.id === id);
   const recipeModal = recipeModalId ? recipeById(recipeModalId) : null;
 
+  /* Favorites float to the top of the library, then alphabetical. */
+  const sortedRecipes = useMemo(
+    () =>
+      [...recipes].sort(
+        (a, b) => (b.favorite ? 1 : 0) - (a.favorite ? 1 : 0) || a.name.localeCompare(b.name)
+      ),
+    [recipes]
+  );
+
+  const toggleFavorite = async (id) => {
+    const recipe = recipeById(id);
+    if (!recipe) return;
+    const next = !recipe.favorite;
+    setRecipes((rs) => rs.map((r) => (r.id === id ? { ...r, favorite: next } : r)));
+    try {
+      const updated = await put(`/recipes/${id}`, { favorite: next });
+      setRecipes((rs) => rs.map((r) => (r.id === id ? mergeRecipe(updated) : r)));
+    } catch (err) {
+      if (err && err.unauthorized) {
+        handleUnauthorized();
+        return;
+      }
+      setRecipes((rs) => rs.map((r) => (r.id === id ? { ...r, favorite: !next } : r)));
+    }
+  };
+
+  const saveRecipeNotes = async (id, notes) => {
+    try {
+      const updated = await put(`/recipes/${id}`, { notes });
+      setRecipes((rs) => rs.map((r) => (r.id === id ? mergeRecipe(updated) : r)));
+    } catch (err) {
+      if (err && err.unauthorized) handleUnauthorized();
+      throw err;
+    }
+  };
+
+  /* ----- import a week from Fred's Sunday menu JSON ----- */
+  const importWeekData = async (text) => {
+    let parsed;
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      throw new Error(
+        "That doesn't look like valid JSON — paste the whole block from Fred's message, braces and all."
+      );
+    }
+    const incoming = Array.isArray(parsed.recipes) ? parsed.recipes : [];
+    const incomingWeek = parsed.week && typeof parsed.week === 'object' ? parsed.week : {};
+
+    try {
+      const norm = (s) => String(s || '').trim().toLowerCase();
+      const byName = new Map();
+      recipes.forEach((r) => {
+        const key = norm(r.name);
+        if (key && !byName.has(key)) byName.set(key, r);
+      });
+
+      let added = 0;
+      let matched = 0;
+      for (const rec of incoming) {
+        if (!rec || !rec.name || !String(rec.name).trim()) continue;
+        const key = norm(rec.name);
+        const existing = byName.get(key);
+        if (existing) {
+          matched += 1;
+          continue;
+        }
+        const created = await post('/recipes', {
+          name: String(rec.name).trim(),
+          time: rec.time || '',
+          ingredients: Array.isArray(rec.ingredients) ? rec.ingredients : [],
+          steps: Array.isArray(rec.steps) ? rec.steps : [],
+          tip: rec.tip || '',
+        });
+        const merged = mergeRecipe(created);
+        byName.set(key, merged);
+        added += 1;
+        setRecipes((rs) => [...rs, merged]);
+      }
+
+      const WEEK_IMPORT_MAP = {
+        sun: 'Sunday',
+        mon: 'Monday',
+        tue: 'Tuesday',
+        wed: 'Wednesday',
+        thu: 'Thursday',
+        fri: 'Friday',
+        sat: 'Saturday',
+      };
+      const next = { ...assignmentsRef.current };
+      let planned = 0;
+      Object.entries(WEEK_IMPORT_MAP).forEach(([wk, dayName]) => {
+        const name = incomingWeek[wk];
+        if (!name || !String(name).trim()) return;
+        const recipe = byName.get(norm(name));
+        next[dayName] = recipe
+          ? { kind: 'recipe', recipeId: recipe.id }
+          : { kind: 'custom', name: String(name).trim(), note: '' };
+        planned += 1;
+      });
+
+      setAssignments(next);
+      await put('/week', { days: toApiDays(next) });
+
+      const bits = [];
+      if (added) bits.push(`${added} new recipe${added === 1 ? '' : 's'} added`);
+      if (matched) bits.push(`${matched} matched your library`);
+      bits.push(`week plan set (${planned} of 7 days)`);
+      return bits.join(' · ') + '.';
+    } catch (err) {
+      if (err && err.unauthorized) handleUnauthorized();
+      throw err;
+    }
+  };
+
   const assignMeal = (day, assignment) => setAssignments((a) => ({ ...a, [day]: assignment }));
   const removeMeal = (day) =>
     setAssignments((a) => {
@@ -363,24 +607,63 @@ export default function App() {
   };
 
   /* ---------- key prompt / loading / error screens ---------- */
-  if (!familyKey) {
+  if (!familyKey && !demoMode) {
     return <FamilyKeyPrompt error={promptError} onSave={saveKey} />;
   }
 
+  const demoBanner = demoMode ? (
+    <div
+      style={{
+        background: 'linear-gradient(90deg, #f6d186, #f0a868)',
+        color: '#5a3a1a',
+        padding: '0.5rem 1rem',
+        fontSize: '0.9rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '0.75rem',
+        flexWrap: 'wrap',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+      }}
+    >
+      <span role="img" aria-label="demo">
+        🍳
+      </span>
+      <span>
+        <strong>Demo preview</strong> — sample data, saved in this browser only.
+      </span>
+      <button
+        className="btn btn-ghost btn-small"
+        style={{ borderColor: '#5a3a1a', color: '#5a3a1a' }}
+        onClick={() => {
+          localStorage.removeItem('demoData:dinner-menu');
+          window.location.reload();
+        }}
+      >
+        Reset demo
+      </button>
+    </div>
+  ) : null;
+
   if (status === 'loading') {
     return (
-      <div className="center-screen">
+      <>
+        {demoBanner}
+        <div className="center-screen">
         <div className="center-card">
           <h1>🍳 Warming up the kitchen…</h1>
           <p>Fetching this week's dinners from the family server.</p>
         </div>
-      </div>
+        </div>
+      </>
     );
   }
 
   if (status === 'error') {
     return (
-      <div className="center-screen">
+      <>
+        {demoBanner}
+        <div className="center-screen">
         <div className="center-card">
           <h1>😞 Couldn't reach the family server</h1>
           <p>{loadError}</p>
@@ -389,11 +672,13 @@ export default function App() {
           </button>
         </div>
       </div>
+      </>
     );
   }
 
   return (
     <>
+      {demoBanner}
       <header className="header">
         <h1>🍽️ What's for Dinner?</h1>
         <p>Your friendly weekly dinner planner — no more 6 PM panic.</p>
@@ -430,6 +715,9 @@ export default function App() {
                 <span className="recipe-time" style={{ alignSelf: 'center' }}>
                   {plannedCount} of 7 planned
                 </span>
+                <button className="btn btn-ghost btn-small" onClick={() => setImportOpen(true)}>
+                  📥 Import week
+                </button>
                 {plannedCount > 0 && (
                   <button className="btn btn-danger-ghost btn-small" onClick={clearWeek}>
                     Clear week
@@ -496,13 +784,15 @@ export default function App() {
           <>
             <div className="section-head">
               <h2>House favorites</h2>
+              <span className="recipe-time">★ favorites float to the top</span>
             </div>
-            {recipes.length === 0 ? (
+            {sortedRecipes.length === 0 ? (
               <p className="empty-state">No recipes on the server yet — the kitchen is quiet.</p>
             ) : (
               <div className="recipe-grid">
-                {recipes.map((r) => (
+                {sortedRecipes.map((r) => (
                   <div className="recipe-card" key={r.id} onClick={() => setRecipeModalId(r.id)}>
+                    <StarButton favorite={r.favorite} onToggle={() => toggleFavorite(r.id)} />
                     <div className="emoji">{r.emoji}</div>
                     <h3>{r.name}</h3>
                     <span className="recipe-time">{r.time}</span>
@@ -565,12 +855,20 @@ export default function App() {
       {assignDay && (
         <AssignModal
           day={assignDay}
-          recipes={recipes}
+          recipes={sortedRecipes}
           onAssign={(a) => assignMeal(assignDay, a)}
           onClose={() => setAssignDay(null)}
         />
       )}
-      {recipeModal && <RecipeModal recipe={recipeModal} onClose={() => setRecipeModalId(null)} />}
+      {recipeModal && (
+        <RecipeModal
+          key={recipeModal.id}
+          recipe={recipeModal}
+          onClose={() => setRecipeModalId(null)}
+          onToggleFavorite={toggleFavorite}
+          onSaveNotes={saveRecipeNotes}
+        />
+      )}
       {renameDay && assignments[renameDay] && (
         <RenameModal
           day={renameDay}
@@ -578,6 +876,9 @@ export default function App() {
           onSave={(a) => assignMeal(renameDay, a)}
           onClose={() => setRenameDay(null)}
         />
+      )}
+      {importOpen && (
+        <ImportModal onClose={() => setImportOpen(false)} onImport={importWeekData} />
       )}
     </>
   );
