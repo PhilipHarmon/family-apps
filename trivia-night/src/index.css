@@ -633,3 +633,191 @@ button:focus-visible,
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============ TV mode ============
+   Big-screen view for ?tv=CODE: dark game-show theme, huge type readable
+   from couch distance. No hover-only interactions anywhere here. */
+.tv-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: radial-gradient(1200px 800px at 50% -10%, #3a2b6e 0%, #1b1440 55%, #0d0a24 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.2vmin;
+  padding: 5vmin 6vmin;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.tv-kicker {
+  font-size: clamp(1rem, 2.6vmin, 1.6rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #e8a33d;
+}
+
+.tv-hero {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.2rem, 8vmin, 5rem);
+  font-weight: 900;
+  margin: 0;
+  color: #fff;
+  line-height: 1.15;
+}
+
+.tv-sub {
+  font-size: clamp(1.1rem, 3.2vmin, 2rem);
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0;
+  max-width: 60ch;
+}
+
+.tv-progress {
+  font-size: clamp(1rem, 3vmin, 1.7rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.tv-chips {
+  display: flex;
+  gap: 1.4vmin;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tv-chip {
+  font-size: clamp(0.95rem, 2.6vmin, 1.5rem);
+  font-weight: 700;
+  background: rgba(232, 163, 61, 0.16);
+  border: 2px solid #e8a33d;
+  color: #ffd98a;
+  border-radius: 999px;
+  padding: 0.6vmin 2.4vmin;
+}
+
+.tv-question {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 6.4vmin, 4.5rem);
+  font-weight: 900;
+  line-height: 1.2;
+  margin: 0;
+  max-width: 24ch;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.tv-answer {
+  font-size: clamp(1.4rem, 4.6vmin, 3rem);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.65);
+  border: 3px dashed rgba(255, 255, 255, 0.35);
+  border-radius: 18px;
+  padding: 2.4vmin 4vmin;
+  max-width: 60ch;
+}
+
+.tv-answer-reveal {
+  color: #0d0a24;
+  background: linear-gradient(135deg, #ffd98a, #e8a33d);
+  border: none;
+  box-shadow: 0 0 60px rgba(232, 163, 61, 0.45);
+}
+
+.tv-scores {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2vmin;
+  width: min(640px, 92vw);
+  margin-top: 1vmin;
+}
+
+.tv-score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: clamp(1.2rem, 3.6vmin, 2.2rem);
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.4vmin 3vmin;
+}
+
+.tv-score-row.tv-leader {
+  background: rgba(232, 163, 61, 0.22);
+  border: 2px solid #e8a33d;
+}
+
+.tv-pts {
+  font-variant-numeric: tabular-nums;
+  color: #ffd98a;
+}
+
+.tv-trophy {
+  font-size: clamp(3rem, 10vmin, 6rem);
+}
+
+.tv-reconnecting {
+  position: fixed;
+  top: 12px;
+  right: 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 999px;
+  padding: 6px 14px;
+}
+
+/* Host modal: the "Show on TV" room-code card on the phone. */
+.tv-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 12, 8, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 50;
+}
+
+.tv-modal {
+  background: #fffdf9;
+  color: #3b2f28;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(126, 53, 23, 0.12);
+  max-width: 520px;
+  width: 100%;
+  padding: 28px 24px;
+  text-align: center;
+}
+
+.tv-modal h2 {
+  margin-top: 0;
+}
+
+.tv-url-box {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.95rem;
+  background: #f3ecdf;
+  border: 1.5px solid #e4d9c4;
+  border-radius: 12px;
+  padding: 12px 14px;
+  word-break: break-all;
+  user-select: all;
+  margin: 12px 0 4px;
+}
+
+.tv-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: clamp(2.4rem, 12vw, 3.6rem);
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  color: #7e3517;
+  margin: 18px 0 6px;
+}

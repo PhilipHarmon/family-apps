@@ -8,6 +8,8 @@ const requireKey = require('./middleware/requireKey');
 const menuRoutes = require('./routes/menu');
 const triviaRoutes = require('./routes/trivia');
 const mediaRoutes = require('./routes/media');
+const tvRoutes = require('./routes/tv');
+const spotifyRoutes = require('./routes/spotify');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -33,11 +35,17 @@ app.use((req, _res, next) => {
 // Health check: no family key required.
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
+// TV rooms mount BEFORE the global family-key gate: GET /api/tv/rooms/:code
+// is intentionally public (the TV has no keyboard for a family key), while
+// POST/PUT/DELETE on that router carry their own requireKey.
+app.use('/api', tvRoutes);
+
 // Everything else under /api requires the shared family key.
 app.use('/api', requireKey);
 app.use('/api', menuRoutes);
 app.use('/api', triviaRoutes);
 app.use('/api', mediaRoutes);
+app.use('/api', spotifyRoutes);
 
 // 404 for unknown API routes.
 app.use('/api', (_req, res) => res.status(404).json({ error: 'Not found' }));

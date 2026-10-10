@@ -1112,3 +1112,129 @@ button.danger,
     box-shadow: none;
   }
 }
+
+/* ============ Track search (Spotify) ============ */
+.track-search {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ts-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.track-search input[type="search"] {
+  font: inherit;
+  padding: 10px 14px;
+  border: 2px solid #e4d9c4;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  width: 100%;
+}
+.track-search input[type="search"]:focus {
+  outline: none;
+  border-color: var(--terra);
+  box-shadow: 0 0 0 3px rgba(201, 106, 53, 0.18);
+}
+
+.hand-label {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  text-align: center;
+  margin: 2px 0 0;
+}
+
+.ts-results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Full-width rows, big tap targets — no hover-only behavior on phones. */
+.ts-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 60px;
+  padding: 8px 12px;
+  text-align: left;
+  background: var(--cream);
+  color: var(--ink);
+  border: 1.5px solid #e4d9c4;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.ts-row img,
+.ts-noimg {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.ts-noimg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--shell);
+  color: var(--gold);
+  font-size: 1.2rem;
+}
+
+.ts-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ts-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ts-artists {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ts-add {
+  font-weight: 700;
+  color: var(--terra);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  padding-left: 4px;
+}
+
+.ts-status,
+.ts-fallback {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+@media (hover: hover) {
+  .ts-row:hover {
+    background: var(--label-paper);
+    border-color: var(--terra);
+    transform: none;
+    box-shadow: var(--shadow-soft);
+  }
+}

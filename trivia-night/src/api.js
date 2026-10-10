@@ -8,6 +8,10 @@ import { handleDemoRequest } from './demoData.js';
 
 const BASE = `${(import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/+$/, '')}/api`;
 
+// The raw API base (no family key attached) — used by TvScreen, which polls
+// the public TV-room endpoint from a TV browser that can't enter a key.
+export const API_BASE = BASE;
+
 function getKey() {
   return localStorage.getItem('familyKey') || import.meta.env.VITE_FAMILY_KEY || '';
 }

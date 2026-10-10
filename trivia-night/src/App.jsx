@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { TIERS } from './questions.js';
-import { get, post } from './api.js';
+import { get, post, put, del } from './api.js';
 import FamilyKeyPrompt from './FamilyKeyPrompt.jsx';
+import TvScreen from './components/TvScreen.jsx';
 import { isDemoMode } from './demoMode.js';
 
 // Tier values are identical to the API contract: 'easy' | 'medium' | 'hard'
@@ -152,6 +153,27 @@ function MovieFavorites({ onPick }) {
 }
 
 export default function App() {
+  // TV mode: ?tv=CODE renders the big-screen view and nothing else. The code
+  // never changes without a page reload, so this early return is stable.
+  const tvCode = new URLSearchParams(window.location.search).get('tv');
+  if (tvCode) {
+    if (isDemoMode()) {
+      return (
+        <div className="app">
+          <header className="header">
+            <span className="bunting" aria-hidden="true">🎉🧠🎉</span>
+            <h1>Family Trivia Night</h1>
+          </header>
+          <section className="card" style={{ textAlign: 'center' }}>
+            <h2>📺 TV mode</h2>
+            <p className="hint">TV mode needs the live connection — it won't work in this demo preview.</p>
+          </section>
+        </div>
+      );
+    }
+    return <TvScreen code={tvCode.trim().toUpperCase()} />;
+  }
+
   const demoMode = isDemoMode();
   const [dataState, setDataState] = useState('loading'); // loading | ready | error | need-key
   const [loadError, setLoadError] = useState('');
@@ -184,6 +206,11 @@ export default function App() {
   const [importing, setImporting] = useState(false);
   const [importError, setImportError] = useState('');
   const [importResult, setImportResult] = useState('');
+
+  // TV sharing: the host's phone pushes game state to a room the TV polls.
+  const [tvRoomCode, setTvRoomCode] = useState(null);
+  const [tvInfoOpen, setTvInfoOpen] = useState(false);
+  const [tvCopied, setTvCopied] = useState(false);
 
   async function loadData() {
     setDataState('loading');
@@ -313,8 +340,97 @@ export default function App() {
   }
 
   function quitToSetup() {
+    // Sharing lives exactly as long as the game screen: quitting stops it.
+    if (tvRoomCode) stopTvShare();
     setScreen('setup');
   }
+
+  /* ---------------- TV sharing ----------------
+     The host's phone pushes game state into a room; the TV's browser polls
+     it. Every push is fire-and-forget — a failed sync must NEVER break the
+     game on the phone. */
+  async function pushTvState(code, statusOverride) {
+    if (!code) return;
+    try {
+      const body = {
+        status: statusOverride || 'live',
+        title: 'Family Trivia Night',
+        question: current?.question || '',
+        answer: current?.answer || '',
+        revealed,
+        tierLabel: current ? TIERS[current.tier]?.label || '' : '',
+        points: current ? TIERS[current.tier]?.points || 0 : 0,
+        qIndex,
+        qTotal: deck.length,
+        players: namedPlayers,
+        scores: Object.entries(scores).map(([name, score]) => ({ name, score })),
+      };
+      if (statusOverride === 'done') {
+        body.winners = leaders;
+        body.question = '';
+        body.answer = '';
+      }
+      await put(`/tv/rooms/${code}`, body);
+    } catch (err) {
+      console.warn('TV sync failed (game unaffected):', err?.message || err);
+    }
+  }
+
+  async function startTvShare() {
+    try {
+      const res = await post('/tv/rooms', {
+        game: 'trivia',
+        title: 'Family Trivia Night',
+        players: namedPlayers,
+      });
+      if (!res || !res.code) throw new Error('The TV room came back without a code.');
+      setTvRoomCode(res.code);
+      await pushTvState(res.code, 'live');
+      setTvInfoOpen(true);
+    } catch (err) {
+      window.alert(`Couldn't start TV sharing: ${err?.message || 'unknown hiccup'}`);
+    }
+  }
+
+  async function stopTvShare() {
+    const code = tvRoomCode;
+    setTvRoomCode(null);
+    setTvInfoOpen(false);
+    if (code) {
+      try {
+        await del(`/tv/rooms/${code}`);
+      } catch {
+        // Room already gone — nothing to clean up.
+      }
+    }
+  }
+
+  function copyTvUrl() {
+    const url = `${window.location.origin}${window.location.pathname}?tv=${tvRoomCode}`;
+    const done = () => {
+      setTvCopied(true);
+      setTimeout(() => setTvCopied(false), 2000);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done).catch(() => {});
+    }
+  }
+
+  // Keep the TV in sync while the game screen is up.
+  useEffect(() => {
+    if (!tvRoomCode || screen !== 'game') return;
+    const t = setTimeout(() => pushTvState(tvRoomCode), 400);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tvRoomCode, screen, qIndex, revealed, scores]);
+
+  // Push the final state once the results screen lands.
+  useEffect(() => {
+    if (screen === 'results' && tvRoomCode) {
+      pushTvState(tvRoomCode, 'done');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
 
   async function addCustomQuestion(e) {
     e.preventDefault();
@@ -712,6 +828,15 @@ export default function App() {
               </div>
             ))}
             <div style={{ marginTop: 16 }}>
+              {!demoMode && (
+                tvRoomCode ? (
+                  <button className="btn-ghost btn-small" onClick={() => setTvInfoOpen(true)}>📺 TV connected — show code</button>
+                ) : (
+                  <button className="btn-ghost btn-small" onClick={startTvShare}>📺 Show on TV</button>
+                )
+              )}
+            </div>
+            <div style={{ marginTop: 8 }}>
               <button className="btn-ghost btn-small" onClick={quitToSetup}>End game early</button>
             </div>
           </aside>
@@ -748,6 +873,27 @@ export default function App() {
             <button className="btn-primary" onClick={quitToSetup}>🎮 Play again</button>
           </div>
         </section>
+      )}
+
+      {tvInfoOpen && tvRoomCode && (
+        <div className="tv-modal-backdrop" onClick={() => setTvInfoOpen(false)}>
+          <div className="tv-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Show on TV">
+            <h2>📺 On the big screen</h2>
+            <p className="hint">On the TV's browser, go to this address once, then bookmark it:</p>
+            <div className="tv-url-box">{`${window.location.origin}${window.location.pathname}?tv=${tvRoomCode}`}</div>
+            <div style={{ marginTop: 10 }}>
+              <button className="btn-ghost btn-small" onClick={copyTvUrl}>
+                {tvCopied ? '✓ Copied!' : '📋 Copy address'}
+              </button>
+            </div>
+            <div className="tv-code">{tvRoomCode}</div>
+            <p className="hint">That's the room code, in case the TV asks. The game on your phone stays in charge — the TV just watches along.</p>
+            <div className="button-row">
+              <button className="btn-primary" onClick={() => setTvInfoOpen(false)}>Got it</button>
+              <button className="btn-ghost" onClick={stopTvShare}>Stop sharing</button>
+            </div>
+          </div>
+        </div>
       )}
 
       <footer className="footer">

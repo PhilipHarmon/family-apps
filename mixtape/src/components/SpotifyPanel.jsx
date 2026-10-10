@@ -32,6 +32,21 @@ export default function SpotifyPanel({ tape }) {
     try {
       const results = [];
       for (const t of tracks) {
+        if (t.spotifyId) {
+          // Picked from Spotify search when the tape was dubbed — no
+          // guessing needed, this is the exact track.
+          results.push({
+            track: t,
+            spotify: {
+              id: t.spotifyId,
+              uri: `spotify:track:${t.spotifyId}`,
+              name: t.title,
+              artist: t.artist,
+              image: null,
+            },
+          });
+          continue;
+        }
         try {
           results.push({ track: t, spotify: await searchTrack(t.title, t.artist) });
         } catch {

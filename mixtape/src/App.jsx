@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import Cassette from "./components/Cassette.jsx";
 import FamilyKeyPrompt from "./components/FamilyKeyPrompt.jsx";
 import SpotifyPanel from "./components/SpotifyPanel.jsx";
+import TrackSearch from "./components/TrackSearch.jsx";
 import {
   get,
   post,
@@ -123,13 +124,23 @@ function SideEditor({ side, tracks, onAdd, onRemove }) {
               <span className="t">{isCloser ? "★ " : ""}{t.title}</span>
               {isCloser && <span className="closer-tag">The Closer</span>}
               <br />
-              <span className="a">{t.artist}</span>
+              <span className="a">
+                {t.artist}
+                {t.spotifyUrl && (
+                  <>
+                    {" · "}
+                    <a href={t.spotifyUrl} target="_blank" rel="noreferrer">♪ Spotify</a>
+                  </>
+                )}
+              </span>
             </span>
             <button onClick={() => onRemove(i)} aria-label={`Remove ${t.title}`}>✕</button>
           </div>
         );
       })}
       <div className="add-track">
+        <TrackSearch onPick={(t) => { onAdd(t); }} />
+        <p className="hand-label">…or add it by hand</p>
         <div className="two-col">
           <input
             type="text"

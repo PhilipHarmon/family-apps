@@ -101,8 +101,20 @@ export const del = (path) => request("DELETE", path);
 
 /**
  * Map an API tape ({_id, ...}) onto the app's tape shape ({id, ...}).
- * Track shape ({title, artist}) is preserved exactly.
+ * Track shape: { title, artist, spotifyId?, spotifyUrl? }. The legacy
+ * `song` field (saved by older builds) falls back onto title so old
+ * tapes keep their track names.
  */
+function normalizeTrack(t) {
+  const src = t && typeof t === "object" ? t : {};
+  return {
+    title: src.title || src.song || "",
+    artist: src.artist || "",
+    spotifyId: src.spotifyId || null,
+    spotifyUrl: src.spotifyUrl || null,
+  };
+}
+
 export function normalizeTape(t) {
   if (!t || typeof t !== "object") return null;
   const id = t._id ?? t.id ?? null;
@@ -110,8 +122,8 @@ export function normalizeTape(t) {
   return {
     id,
     title: t.title || "Untitled Tape",
-    sideA: Array.isArray(t.sideA) ? t.sideA : [],
-    sideB: Array.isArray(t.sideB) ? t.sideB : [],
+    sideA: Array.isArray(t.sideA) ? t.sideA.map(normalizeTrack) : [],
+    sideB: Array.isArray(t.sideB) ? t.sideB.map(normalizeTrack) : [],
     createdAt: t.createdAt ?? Date.now(),
   };
 }

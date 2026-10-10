@@ -27,7 +27,7 @@ const Week = mongoose.model(
 );
 
 const TrackSchema = new mongoose.Schema(
-  { song: String, artist: String },
+  { title: String, artist: String, spotifyId: String, spotifyUrl: String },
   { _id: false },
 );
 
@@ -61,6 +61,30 @@ const Game = mongoose.model(
   }),
 );
 
+// A TV share room: the host's phone pushes game state here, the TV's browser
+// polls it (no auth — the TV has no keyboard for a family key). Rooms
+// auto-expire via the TTL index so abandoned rooms clean themselves up.
+const tvRoomSchema = new mongoose.Schema({
+  code: { type: String, required: true, unique: true },
+  game: { type: String, default: 'trivia' },
+  status: { type: String, enum: ['waiting', 'live', 'done'], default: 'waiting' },
+  title: String,
+  question: String,
+  answer: String,
+  revealed: { type: Boolean, default: false },
+  tierLabel: String,
+  points: Number,
+  qIndex: Number,
+  qTotal: Number,
+  players: [String],
+  scores: [{ name: String, score: Number, _id: false }],
+  winners: [String],
+  createdAt: { type: Date, default: Date.now },
+  expiresAt: { type: Date, default: () => new Date(Date.now() + 12 * 3600 * 1000) },
+});
+tvRoomSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+const TvRoom = mongoose.model('TvRoom', tvRoomSchema);
+
 const Photo = mongoose.model(
   'Photo',
   new mongoose.Schema({
@@ -83,4 +107,4 @@ const Movie = mongoose.model(
   }),
 );
 
-module.exports = { Recipe, Week, Tape, Question, Game, Photo, Movie };
+module.exports = { Recipe, Week, Tape, Question, Game, Photo, Movie, TvRoom };

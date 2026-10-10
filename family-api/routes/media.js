@@ -3,6 +3,21 @@ const { Tape, Photo, Movie } = require('../models');
 
 const router = express.Router();
 
+// Keep only the fields the TrackSchema owns (legacy `song` falls back onto
+// `title`); everything else is dropped before it can reach the database.
+function cleanTracks(arr) {
+  if (!Array.isArray(arr)) return [];
+  return arr.map((t) => {
+    const track = {
+      title: String((t && (t.title || t.song)) || '').slice(0, 80),
+      artist: String((t && t.artist) || '').slice(0, 80),
+    };
+    if (t && t.spotifyId) track.spotifyId = String(t.spotifyId).slice(0, 64);
+    if (t && t.spotifyUrl) track.spotifyUrl = String(t.spotifyUrl).slice(0, 300);
+    return track;
+  });
+}
+
 // --- Tapes (mixtapes) ---
 router.get('/tapes', async (_req, res, next) => {
   try {
@@ -15,7 +30,11 @@ router.get('/tapes', async (_req, res, next) => {
 router.post('/tapes', async (req, res, next) => {
   try {
     const { title, sideA, sideB } = req.body || {};
-    const tape = await Tape.create({ title, sideA, sideB });
+    const tape = await Tape.create({
+      title,
+      sideA: cleanTracks(sideA),
+      sideB: cleanTracks(sideB),
+    });
     res.status(201).json(tape);
   } catch (err) {
     next(err);
