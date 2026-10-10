@@ -839,3 +839,202 @@ main {
     border-color: var(--terra);
   }
 }
+
+/* ============================================================
+   APP BEEF-UP — big, bold, premium family-kitchen look
+   Layered shadows, chunkier controls, oversized headers.
+   All hover motion stays inside @media (hover: hover).
+   ============================================================ */
+
+/* oversized header with depth */
+.header {
+  padding: 3rem 1.5rem 2.5rem;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.12), 0 4px 18px rgba(126, 53, 23, 0.18);
+}
+
+.header h1 {
+  font-size: clamp(2.4rem, 7vw, 3.6rem);
+  letter-spacing: 1px;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.12), 0 6px 22px rgba(0, 0, 0, 0.22);
+}
+
+.header p {
+  font-size: clamp(1rem, 2.6vw, 1.2rem);
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+/* chunky buttons, 44px+ tap targets everywhere */
+.btn {
+  min-height: 44px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(126, 53, 23, 0.14);
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, var(--terra) 0%, var(--terra-dark) 100%);
+  box-shadow: 0 2px 6px rgba(126, 53, 23, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.tab {
+  min-height: 44px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(126, 53, 23, 0.08);
+}
+
+/* layered shadows on every card surface */
+.day-card,
+.recipe-card,
+.grocery-wrap,
+.custom-row,
+.center-card {
+  box-shadow: 0 1px 2px rgba(126, 53, 23, 0.07), 0 10px 28px rgba(126, 53, 23, 0.1);
+}
+
+.recipe-card .emoji {
+  font-size: 2.6rem;
+  filter: drop-shadow(0 3px 4px rgba(126, 53, 23, 0.18));
+}
+
+.recipe-card h3 {
+  font-size: 1.45rem;
+  letter-spacing: 0.2px;
+}
+
+/* bigger section headers */
+.section-head h2,
+.week-toolbar h2,
+.grocery-wrap h2 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  letter-spacing: 0.3px;
+}
+
+/* ============================================================
+   DAD MODE — "Oh shit, daddy's cooking" emergency section
+   Warmer/redder accent treatment, distinct from weekly planning.
+   ============================================================ */
+
+.dad-duty-btn {
+  margin-top: 1.25rem;
+  background: linear-gradient(180deg, #e05240 0%, #b23224 100%);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.9rem 2rem;
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  min-height: 54px;
+  box-shadow: 0 4px 0 #7e1d12, 0 12px 26px rgba(166, 42, 30, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.1s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.dad-duty-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #7e1d12, 0 6px 14px rgba(166, 42, 30, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.dad-duty-btn:focus-visible {
+  outline: 3px solid #ffd9a8;
+  outline-offset: 3px;
+}
+
+.dad-section {
+  scroll-margin-top: 1rem;
+}
+
+.dad-banner {
+  background: linear-gradient(135deg, #8f1f14 0%, #b23224 55%, #d6543a 100%);
+  color: #fff5ef;
+  border-radius: 22px;
+  padding: 2.25rem 1.75rem;
+  text-align: center;
+  margin-bottom: 1.75rem;
+  box-shadow: 0 2px 4px rgba(143, 31, 20, 0.16), 0 18px 44px rgba(143, 31, 20, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.dad-banner h2 {
+  color: #fff;
+  font-size: clamp(1.9rem, 5.5vw, 2.8rem);
+  margin: 0 0 0.6rem;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.16), 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.dad-banner p {
+  margin: 0 auto 1.4rem;
+  max-width: 36rem;
+  font-size: 1.02rem;
+  opacity: 0.95;
+  line-height: 1.6;
+}
+
+.dad-pick-btn {
+  background: linear-gradient(180deg, #ffffff 0%, #ffe9d6 100%);
+  color: #a82a1e;
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  min-height: 54px;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.22), 0 10px 22px rgba(0, 0, 0, 0.22);
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.dad-pick-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.22), 0 5px 12px rgba(0, 0, 0, 0.2);
+}
+
+.dad-pick-btn:focus-visible {
+  outline: 3px solid #ffd9a8;
+  outline-offset: 3px;
+}
+
+/* dad recipe cards: same component, redder accent */
+.dad-card {
+  border-top: 4px solid #c23a28;
+}
+
+.dad-card .view-hint {
+  color: #c23a28;
+}
+
+@media (hover: hover) {
+  .dad-duty-btn:hover {
+    filter: brightness(1.07);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 #7e1d12, 0 14px 30px rgba(166, 42, 30, 0.48),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+
+  .dad-pick-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.22), 0 12px 26px rgba(0, 0, 0, 0.24);
+  }
+
+  .dad-card:hover {
+    border-color: #c23a28;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(143, 31, 20, 0.2), 0 0 0 3px rgba(194, 58, 40, 0.14);
+  }
+}
+
+@media (max-width: 640px) {
+  .dad-banner {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .dad-duty-btn,
+  .dad-pick-btn {
+    width: 100%;
+    max-width: 26rem;
+  }
+}

@@ -97,8 +97,8 @@ router.get('/movies', async (_req, res, next) => {
 
 router.post('/movies', async (req, res, next) => {
   try {
-    const { title, suggestedBy, kidFriendly, note, watched, rating } = req.body || {};
-    const movie = await Movie.create({ title, suggestedBy, kidFriendly, note, watched, rating });
+    const { title, suggestedBy, kidFriendly, note, watched, rating, favorite } = req.body || {};
+    const movie = await Movie.create({ title, suggestedBy, kidFriendly, note, watched, rating, favorite });
     res.status(201).json(movie);
   } catch (err) {
     next(err);
@@ -107,10 +107,10 @@ router.post('/movies', async (req, res, next) => {
 
 router.put('/movies/:id', async (req, res, next) => {
   try {
-    const { title, suggestedBy, kidFriendly, note, watched, rating } = req.body || {};
+    const { title, suggestedBy, kidFriendly, note, watched, rating, favorite } = req.body || {};
     const movie = await Movie.findByIdAndUpdate(
       req.params.id,
-      { title, suggestedBy, kidFriendly, note, watched, rating },
+      { title, suggestedBy, kidFriendly, note, watched, rating, favorite },
       { new: true },
     );
     if (!movie) return res.status(404).json({ error: 'Movie not found' });

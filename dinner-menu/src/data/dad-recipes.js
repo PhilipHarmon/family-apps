@@ -1,0 +1,231 @@
+/* Emergency dad recipes: stupidly easy, super fast, kid-approved.
+ * Same shape as SEED_RECIPES so the existing recipe UI renders them. */
+
+export const DAD_RECIPES = [
+  {
+    id: 'dad-quesadillas',
+    name: 'Emergency Quesadillas',
+    time: '~10 min',
+    emoji: '🫓',
+    tagline: 'Crispy, cheesy, done before the kids can start arguing.',
+    ingredients: [
+      'Flour tortillas',
+      'Shredded cheese (whatever bag is open)',
+      'Butter or oil',
+      'Salsa and sour cream for dipping',
+    ],
+    steps: [
+      'Heat a skillet over medium heat with a little butter or oil.',
+      'Lay a tortilla flat, cover half with a shameless amount of cheese, and fold it over.',
+      'Cook 2–3 minutes per side until golden and the cheese is fully melted.',
+      'Cut into triangles (triangles taste better, science can’t explain it) and serve with salsa.',
+    ],
+    tips: [
+      'Dad tip: call them “cheese triangles” and the kids will think you invented a new food.',
+    ],
+  },
+  {
+    id: 'dad-pancakes',
+    name: 'Breakfast-for-Dinner Pancakes',
+    time: '~15 min',
+    emoji: '🥞',
+    tagline: 'Pancakes at 6 PM hit different. Nobody complains. Ever.',
+    ingredients: [
+      'Pancake mix (the just-add-water kind)',
+      'Water',
+      'Butter and syrup',
+      'Bacon or sausage (optional, freezer or fridge)',
+    ],
+    steps: [
+      'Mix the pancake batter per the box — lumps are fine, stop overthinking it.',
+      'Cook on a buttered griddle over medium heat, flipping when bubbles pop on top.',
+      'If using bacon or sausage, start it first so it’s done when the pancakes are.',
+      'Stack them high, pour the syrup, and accept your hero status.',
+    ],
+    tips: [
+      'Dad tip: make one Mickey Mouse–shaped pancake and you are legally the best parent tonight.',
+    ],
+  },
+  {
+    id: 'dad-rotisserie-rescue',
+    name: 'Rotisserie Chicken Rescue',
+    time: '~10 min',
+    emoji: '🍗',
+    tagline: 'The grocery store did 90% of the cooking. Take the credit anyway.',
+    ingredients: [
+      '1 store-bought rotisserie chicken',
+      'Microwave rice pouches',
+      'Frozen veggie steam bags',
+      'BBQ sauce or gravy (optional)',
+    ],
+    steps: [
+      'Shred the rotisserie chicken — or just put the whole bird on a platter like a king.',
+      'Microwave the rice pouches (90 seconds, you’re basically a chef).',
+      'Steam the frozen veggie bags in the microwave.',
+      'Plate it up, drizzle with BBQ sauce, and say “I made chicken and rice” with a straight face.',
+    ],
+    tips: [
+      'Dad tip: hide the rotisserie container deep in the trash before anyone sees it. Plausible deniability.',
+    ],
+  },
+  {
+    id: 'dad-spaghetti',
+    name: 'Fancy Jar-Sauce Spaghetti',
+    time: '~15 min',
+    emoji: '🍝',
+    tagline: 'Jar sauce, but make it look like you tried.',
+    ingredients: [
+      'Spaghetti',
+      'Jar of marinara sauce',
+      'Frozen meatballs (optional but encouraged)',
+      'Parmesan cheese',
+      'Garlic bread (frozen, obviously)',
+    ],
+    steps: [
+      'Boil the spaghetti in well-salted water until al dente.',
+      'Warm the jar sauce in a pot; toss in frozen meatballs if using and simmer 10 minutes.',
+      'Bake the frozen garlic bread per the box.',
+      'Twirl the pasta into nests with tongs, spoon sauce over, shower with parmesan.',
+    ],
+    tips: [
+      'Dad tip: twirl the spaghetti into little nests with tongs. Plating is 80% of “fancy.”',
+    ],
+  },
+  {
+    id: 'dad-grilled-cheese-soup',
+    name: 'Grilled Cheese + Tomato Soup',
+    time: '~15 min',
+    emoji: '🧀',
+    tagline: 'The undisputed heavyweight champion of easy dinners.',
+    ingredients: [
+      'Bread',
+      'Sliced cheese (American melts best, no shame)',
+      'Butter',
+      'Canned tomato soup',
+      'Milk or water',
+    ],
+    steps: [
+      'Butter the outside of two bread slices, sandwich the cheese between them.',
+      'Cook in a skillet over medium-low heat, 3 minutes per side, until golden and melty.',
+      'Heat the tomato soup with milk per the can.',
+      'Cut sandwiches diagonally — diagonal cuts are scientifically dippier.',
+    ],
+    tips: [
+      'Dad tip: low heat is the whole secret. Rushing a grilled cheese is how smoke alarms get involved.',
+    ],
+  },
+  {
+    id: 'dad-taco-kit',
+    name: 'Taco Kit Night',
+    time: '~15 min',
+    emoji: '🌮',
+    tagline: 'The kit does the thinking. You just brown the meat.',
+    ingredients: [
+      '1 taco dinner kit (shells, seasoning, sauce included)',
+      '1 lb ground beef or turkey',
+      'Shredded lettuce',
+      'Diced tomatoes',
+      'Shredded cheese and sour cream',
+    ],
+    steps: [
+      'Brown the meat in a skillet, breaking it up as it cooks.',
+      'Stir in the seasoning packet with a splash of water; simmer 5 minutes.',
+      'Warm the shells in the oven for 5 minutes so they don’t shatter on contact.',
+      'Set everything out buffet-style and let the kids build their own.',
+    ],
+    tips: [
+      'Dad tip: buffet-style means the kids can’t blame you for what’s in their taco. Strategic genius.',
+    ],
+  },
+  {
+    id: 'dad-frozen-pizza',
+    name: 'Upgraded Frozen Pizza',
+    time: '~15 min',
+    emoji: '🍕',
+    tagline: 'Frozen pizza, but with a glow-up nobody will question.',
+    ingredients: [
+      'Frozen pizza (the good kind, not the sad kind)',
+      'Extra shredded mozzarella',
+      'Pepperoni or whatever toppings are in the fridge',
+      'Garlic powder and Italian seasoning',
+    ],
+    steps: [
+      'Preheat the oven as hot as the box allows.',
+      'Add extra mozzarella and raid the fridge for bonus toppings.',
+      'Bake per the box, then finish with a sprinkle of garlic powder and Italian seasoning.',
+      'Let it rest 2 minutes (the hardest step), slice, and serve.',
+    ],
+    tips: [
+      'Dad tip: put it on a wooden cutting board instead of the box. Instant “artisan pizza night.”',
+    ],
+  },
+  {
+    id: 'dad-nugget-parm',
+    name: 'Chicken Nugget Parm',
+    time: '~15 min',
+    emoji: '🍗',
+    tagline: 'Chicken parm’s scrappy little brother. Kids prefer him anyway.',
+    ingredients: [
+      'Frozen chicken nuggets',
+      'Jar of marinara sauce',
+      'Shredded mozzarella',
+      'Pasta or sub rolls',
+      'Parmesan cheese',
+    ],
+    steps: [
+      'Bake the nuggets per the bag until crispy.',
+      'Spoon warm marinara over the nuggets and blanket them with mozzarella.',
+      'Broil 2–3 minutes until the cheese bubbles and browns.',
+      'Serve over pasta or piled into sub rolls, dusted with parmesan.',
+    ],
+    tips: [
+      'Dad tip: say “parmigiana” in an Italian accent when serving. The kids will roll their eyes and eat every bite.',
+    ],
+  },
+  {
+    id: 'dad-blt',
+    name: 'BLT Night',
+    time: '~15 min',
+    emoji: '🥓',
+    tagline: 'Bacon makes everything a real dinner. Those are the rules.',
+    ingredients: [
+      'Bacon',
+      'Bread or buns, toasted',
+      'Lettuce and tomato',
+      'Mayo',
+      'Chips and pickles on the side',
+    ],
+    steps: [
+      'Cook the bacon — oven at 400°F on a lined sheet pan is the low-mess move.',
+      'Toast the bread and slice the tomatoes.',
+      'Assemble: mayo, lettuce, tomato, a reckless amount of bacon.',
+      'Serve with chips and pickles. Dinner is served.',
+    ],
+    tips: [
+      'Dad tip: make two extra strips of bacon “for the cook.” Quality control is a real job.',
+    ],
+  },
+  {
+    id: 'dad-ramen',
+    name: 'Restaurant-Style Instant Ramen',
+    time: '~12 min',
+    emoji: '🍜',
+    tagline: 'Dorm-room noodles, all grown up and wearing a tie.',
+    ingredients: [
+      'Instant ramen packs (any flavor)',
+      'Eggs',
+      'Frozen stir-fry veggies or peas',
+      'Soy sauce',
+      'Green onions or sesame seeds (if you’re feeling fancy)',
+    ],
+    steps: [
+      'Boil water and cook the noodles with the seasoning packets.',
+      'Toss in a handful of frozen veggies for the last 3 minutes.',
+      'Crack an egg into the simmering broth and poach 3 minutes, or soft-boil separately.',
+      'Ladle into big bowls, finish with soy sauce and green onions.',
+    ],
+    tips: [
+      'Dad tip: serve in the biggest bowls you own and hand out chopsticks. Instant restaurant vibes, zero extra effort.',
+    ],
+  },
+];

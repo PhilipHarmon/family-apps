@@ -23,6 +23,7 @@ function seed() {
       note: "To infinity… and movie night! Wyatt's been building the Pizza Planet truck in Lego.",
       watched: false,
       rating: 0,
+      favorite: false,
     },
     {
       _id: sid(2),
@@ -32,6 +33,7 @@ function seed() {
       note: "Pepper promises to sing along to at least two songs. Ballet intermission optional.",
       watched: false,
       rating: 0,
+      favorite: false,
     },
     {
       _id: sid(3),
@@ -41,6 +43,7 @@ function seed() {
       note: "The extra-long Bluey special — bring tissues. Briar's number one request.",
       watched: false,
       rating: 0,
+      favorite: false,
     },
     {
       _id: sid(4),
@@ -50,6 +53,7 @@ function seed() {
       note: "Reese's Pieces required. Crying optional but likely.",
       watched: false,
       rating: 0,
+      favorite: false,
     },
     {
       _id: sid(5),
@@ -59,6 +63,7 @@ function seed() {
       note: "Dad's '80s pick — Great Scott! Time travel before bedtime.",
       watched: false,
       rating: 0,
+      favorite: false,
     },
     {
       _id: sid(6),
@@ -68,6 +73,7 @@ function seed() {
       note: "Goonies never say die — last family movie night, and already a family classic.",
       watched: true,
       rating: 5,
+      favorite: false,
     },
   ];
 }
@@ -130,6 +136,7 @@ export function handleDemoRequest(method, path, body) {
       note: b.note ?? "",
       watched: !!b.watched,
       rating: b.rating ?? 0,
+      favorite: !!b.favorite,
     };
     const next = [movie, ...movies];
     save(next);
@@ -148,7 +155,7 @@ export function handleDemoRequest(method, path, body) {
       // (saveRating sends just { watched, rating }; we must not wipe the title).
       const b = body || {};
       const updated = { ...movies[idx] };
-      for (const key of ["title", "suggestedBy", "kidFriendly", "note", "watched", "rating"]) {
+      for (const key of ["title", "suggestedBy", "kidFriendly", "note", "watched", "rating", "favorite"]) {
         if (b[key] !== undefined) updated[key] = b[key];
       }
       const next = movies.slice();

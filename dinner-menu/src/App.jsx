@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { SEED_RECIPES } from './data/recipes.js';
+import { DAD_RECIPES } from './data/dad-recipes.js';
 import { get, post, put, getFamilyKey, setFamilyKey } from './api.js';
 import { isDemoMode } from './demoMode.js';
 import FamilyKeyPrompt from './FamilyKeyPrompt.jsx';
@@ -102,7 +103,8 @@ function Modal({ title, sub, onClose, children }) {
 }
 
 /* ---------- full recipe view (favorites + notes) ---------- */
-function RecipeModal({ recipe, onClose, onToggleFavorite, onSaveNotes }) {
+/* Pass emergency to render a read-only dad recipe (no favorites/notes). */
+function RecipeModal({ recipe, onClose, onToggleFavorite, onSaveNotes, emergency }) {
   const [notesDraft, setNotesDraft] = useState(recipe.notes || '');
   const [notesState, setNotesState] = useState('idle'); // idle | saving | saved | error
 
@@ -119,12 +121,14 @@ function RecipeModal({ recipe, onClose, onToggleFavorite, onSaveNotes }) {
 
   return (
     <Modal title={`${recipe.emoji} ${recipe.name}`} sub={recipe.time} onClose={onClose}>
-      <div className="favorite-row">
-        <StarButton favorite={recipe.favorite} onToggle={() => onToggleFavorite(recipe.id)} />
-        <span className="favorite-label">
-          {recipe.favorite ? '★ A house favorite' : 'Tap the star to make this a house favorite'}
-        </span>
-      </div>
+      {!emergency && (
+        <div className="favorite-row">
+          <StarButton favorite={recipe.favorite} onToggle={() => onToggleFavorite(recipe.id)} />
+          <span className="favorite-label">
+            {recipe.favorite ? '★ A house favorite' : 'Tap the star to make this a house favorite'}
+          </span>
+        </div>
+      )}
       <h4>Ingredients</h4>
       <ul className="ingredients-list">
         {recipe.ingredients.map((ing) => (
@@ -148,32 +152,41 @@ function RecipeModal({ recipe, onClose, onToggleFavorite, onSaveNotes }) {
         </>
       )}
       <h4>📝 Our notes</h4>
-      {recipe.notes ? (
-        <div className="notes-display">{recipe.notes}</div>
-      ) : (
-        <p className="empty-state" style={{ margin: '0 0 0.5rem' }}>
-          No notes yet — jot down tweaks for next time below.
+      {!emergency && (
+        <>
+          {recipe.notes ? (
+            <div className="notes-display">{recipe.notes}</div>
+          ) : (
+            <p className="empty-state" style={{ margin: '0 0 0.5rem' }}>
+              No notes yet — jot down tweaks for next time below.
+            </p>
+          )}
+          <div className="field">
+            <textarea
+              value={notesDraft}
+              onChange={(e) => setNotesDraft(e.target.value)}
+              placeholder="Changes we'd make next time…"
+              aria-label="Recipe notes"
+            />
+          </div>
+          <div className="notes-actions">
+            <button
+              className="btn btn-primary btn-small"
+              onClick={saveNotes}
+              disabled={notesState === 'saving'}
+            >
+              {notesState === 'saving' ? 'Saving…' : 'Save notes'}
+            </button>
+            {notesState === 'saved' && <span className="notes-saved">✓ Saved</span>}
+            {notesState === 'error' && <span className="notes-error">Couldn't save — try again.</span>}
+          </div>
+        </>
+      )}
+      {emergency && (
+        <p className="empty-state" style={{ margin: '0.25rem 0 0' }}>
+          Emergency recipe — no notes needed. Just cook it and take the credit.
         </p>
       )}
-      <div className="field">
-        <textarea
-          value={notesDraft}
-          onChange={(e) => setNotesDraft(e.target.value)}
-          placeholder="Changes we'd make next time…"
-          aria-label="Recipe notes"
-        />
-      </div>
-      <div className="notes-actions">
-        <button
-          className="btn btn-primary btn-small"
-          onClick={saveNotes}
-          disabled={notesState === 'saving'}
-        >
-          {notesState === 'saving' ? 'Saving…' : 'Save notes'}
-        </button>
-        {notesState === 'saved' && <span className="notes-saved">✓ Saved</span>}
-        {notesState === 'error' && <span className="notes-error">Couldn't save — try again.</span>}
-      </div>
     </Modal>
   );
 }
@@ -367,6 +380,7 @@ export default function App() {
 
   const [assignDay, setAssignDay] = useState(null);
   const [recipeModalId, setRecipeModalId] = useState(null);
+  const [dadModalId, setDadModalId] = useState(null);
   const [renameDay, setRenameDay] = useState(null);
   const [importOpen, setImportOpen] = useState(false);
 
@@ -443,6 +457,20 @@ export default function App() {
 
   const recipeById = (id) => recipes.find((r) => r.id === id);
   const recipeModal = recipeModalId ? recipeById(recipeModalId) : null;
+  const dadModal = dadModalId ? DAD_RECIPES.find((r) => r.id === dadModalId) : null;
+
+  /* Emergency pick: grab a random dad recipe and show it. */
+  const saveMe = () => {
+    const pick = DAD_RECIPES[Math.floor(Math.random() * DAD_RECIPES.length)];
+    setDadModalId(pick.id);
+  };
+
+  const goToDadSection = () => {
+    setView('dad');
+    window.setTimeout(() => {
+      document.getElementById('dad-section')?.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
+  };
 
   /* Favorites float to the top of the library, then alphabetical. */
   const sortedRecipes = useMemo(
@@ -682,6 +710,9 @@ export default function App() {
       <header className="header">
         <h1>🍽️ What's for Dinner?</h1>
         <p>Your friendly weekly dinner planner — no more 6 PM panic.</p>
+        <button type="button" className="dad-duty-btn" onClick={goToDadSection}>
+          🚨 Dad's on dinner duty
+        </button>
       </header>
 
       <nav className="tabs">
@@ -689,6 +720,7 @@ export default function App() {
           ['week', '📅 This Week'],
           ['recipes', '🍳 Recipes'],
           ['grocery', '🛒 Grocery List'],
+          ['dad', '🚨 Dad Mode'],
         ].map(([id, label]) => (
           <button key={id} className={`tab ${view === id ? 'active' : ''}`} onClick={() => setView(id)}>
             {label}
@@ -849,6 +881,37 @@ export default function App() {
             )}
           </div>
         )}
+        {/* ================= DAD MODE ================= */}
+        {view === 'dad' && (
+          <div id="dad-section" className="dad-section">
+            <div className="dad-banner">
+              <h2>🚨 Oh shit, daddy's cooking</h2>
+              <p>
+                It's 5:47 PM, there's no plan, and three kids are circling like sharks.
+                These are stupidly easy, stupidly fast — 20 minutes max, mostly stuff
+                already in your kitchen. You've got this, chef.
+              </p>
+              <button type="button" className="btn dad-pick-btn" onClick={saveMe}>
+                🎲 Save me — pick one
+              </button>
+            </div>
+            <div className="recipe-grid">
+              {DAD_RECIPES.map((r) => (
+                <div
+                  className="recipe-card dad-card"
+                  key={r.id}
+                  onClick={() => setDadModalId(r.id)}
+                >
+                  <div className="emoji">{r.emoji}</div>
+                  <h3>{r.name}</h3>
+                  <span className="recipe-time">{r.time}</span>
+                  {r.tagline && <p className="recipe-tagline">{r.tagline}</p>}
+                  <div className="view-hint">Tap for the full recipe →</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </main>
 
       {/* ================= modals ================= */}
@@ -867,6 +930,14 @@ export default function App() {
           onClose={() => setRecipeModalId(null)}
           onToggleFavorite={toggleFavorite}
           onSaveNotes={saveRecipeNotes}
+        />
+      )}
+      {dadModal && (
+        <RecipeModal
+          key={dadModal.id}
+          recipe={dadModal}
+          emergency
+          onClose={() => setDadModalId(null)}
         />
       )}
       {renameDay && assignments[renameDay] && (

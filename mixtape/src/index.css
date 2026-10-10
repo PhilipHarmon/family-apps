@@ -840,3 +840,275 @@ button:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============ Spotify panel ("Hear this tape") ============ */
+.spotify-panel {
+  margin-top: 1.25rem;
+  padding: 1.1rem 1.15rem;
+  background: linear-gradient(160deg, #14331f 0%, #1d4a2a 60%, #235233 100%);
+  color: #f4f1ea;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+.spotify-panel h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  letter-spacing: 0.01em;
+}
+.spotify-panel .flavor {
+  margin: 0.5rem 0 0.9rem;
+  color: #d9e6dc;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+.spotify-panel .flavor.success a {
+  color: #9df0b6;
+  font-weight: 700;
+}
+.spotify-panel button {
+  background: #1ed760;
+  color: #0d2415;
+  min-height: 44px;
+}
+.spotify-panel button.ghost {
+  background: transparent;
+  color: #d9e6dc;
+  border: 2px solid rgba(217, 230, 220, 0.55);
+}
+.spotify-panel .row-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.spotify-embed {
+  border-radius: 12px;
+  margin: 0.25rem 0 0.75rem;
+  display: block;
+  width: 100%;
+}
+.spotify-matches {
+  list-style: none;
+  margin: 0.25rem 0 0.9rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.spotify-matches .match-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  padding: 0.55rem 0.7rem;
+  min-height: 56px;
+  color: inherit;
+  box-shadow: none;
+}
+.spotify-matches .match-row img {
+  border-radius: 8px;
+  flex: 0 0 auto;
+}
+.spotify-matches .match-row .info {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.spotify-matches .match-row .t {
+  font-weight: 700;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.spotify-matches .match-row .a {
+  font-size: 0.85rem;
+  color: #b9cfbe;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.spotify-matches .match-row .play-ind {
+  flex: 0 0 auto;
+  font-size: 1.1rem;
+  color: #1ed760;
+}
+.spotify-matches .match-row.playing {
+  border-color: #1ed760;
+  background: rgba(30, 215, 96, 0.12);
+}
+.spotify-matches li.unmatched .match-row {
+  opacity: 0.75;
+}
+@media (hover: hover) {
+  .spotify-matches button.match-row:hover {
+    background: rgba(255, 255, 255, 0.14);
+    transform: translateY(-1px);
+  }
+}
+
+/* ============================================================
+   BEAUTIFICATION PASS — bolder, more premium
+   Mobile-first (390px baseline). All hover inside (hover:hover).
+   CSS only — no JSX/structure changes. The .spotify-panel block
+   above is intentionally untouched; the two "preserve" rules
+   below only re-assert its existing look against the global
+   button changes in this section.
+   ============================================================ */
+:root {
+  /* layered shadows: contact + ambient + far-field for real depth */
+  --shadow: 0 1px 2px rgba(126, 53, 23, 0.08),
+    0 10px 28px rgba(126, 53, 23, 0.12),
+    0 28px 56px rgba(126, 53, 23, 0.07);
+  --shadow-lg: 0 2px 4px rgba(126, 53, 23, 0.1),
+    0 18px 44px rgba(126, 53, 23, 0.16),
+    0 44px 88px rgba(126, 53, 23, 0.08);
+}
+
+body {
+  /* faint warm wash at the top for depth; cream base preserved */
+  background:
+    radial-gradient(1100px 480px at 50% -120px, rgba(201, 106, 53, 0.1), transparent 70%),
+    var(--cream);
+}
+
+/* ---------- Oversized header (solid color: emoji-safe) ---------- */
+header.top {
+  margin-bottom: 32px;
+}
+
+header.top h1 {
+  font-size: clamp(2.8rem, 11vw, 4.6rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.02;
+  color: var(--terra-dark);
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.55),
+    0 12px 30px rgba(126, 53, 23, 0.18);
+  text-wrap: balance;
+}
+
+header.top p.tagline {
+  font-size: 1.12rem;
+  margin-top: 8px;
+}
+
+/* decorative terracotta/gold rule under the tagline (pure CSS) */
+header.top::after {
+  content: "";
+  display: block;
+  width: 132px;
+  height: 6px;
+  margin: 20px auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--terra), var(--gold), var(--terra-deep));
+  opacity: 0.9;
+}
+
+/* ---------- Bolder primary buttons ---------- */
+button {
+  min-height: 48px;
+  padding: 12px 28px;
+  font-size: 1.02rem;
+  letter-spacing: 0.01em;
+  background: linear-gradient(135deg, var(--terra) 0%, var(--terra-deep) 100%);
+  box-shadow: 0 8px 20px rgba(201, 106, 53, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+/* re-assert the variants + the separately-designed Spotify panel
+   so the global gradient above never restyles them */
+button.ghost,
+button.danger,
+.side-flip button,
+.track-row button {
+  background: transparent;
+}
+.spotify-panel button {
+  background: #1ed760;
+  box-shadow: none;
+  letter-spacing: 0;
+  font-size: inherit;
+  padding: 10px 22px;
+}
+.spotify-panel button.ghost {
+  background: transparent;
+}
+
+/* ---------- Cards & panels: warm gradient + hairline border ---------- */
+.tape-card,
+.editor-title-row,
+.side-panel,
+.full-tracklist {
+  background: linear-gradient(180deg, #ffffff 0%, #fdf9f1 100%);
+  border: 1px solid rgba(201, 106, 53, 0.12);
+}
+
+.tape-card h3 {
+  font-size: clamp(1.4rem, 4.5vw, 1.6rem);
+  letter-spacing: -0.01em;
+}
+
+/* track rows: a little more definition */
+.track-row {
+  border: 1px solid rgba(201, 106, 53, 0.1);
+}
+
+/* side badge: make it pop */
+.side-badge {
+  box-shadow: 0 4px 10px rgba(201, 106, 53, 0.4);
+}
+
+/* ---------- Empty library: warm and inviting ---------- */
+.empty-library {
+  background: linear-gradient(180deg, #ffffff 0%, #fdf9f1 100%);
+  border: 2px dashed rgba(201, 106, 53, 0.35);
+  padding: 56px 24px;
+}
+
+.empty-library h2 {
+  font-size: clamp(1.6rem, 5.5vw, 2rem);
+}
+
+/* ---------- Viewer title: bigger, balanced (solid: user text may hold emoji) ---------- */
+.viewer h2 {
+  font-size: clamp(2rem, 6.5vw, 3rem);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.cassette-stage {
+  padding: 16px 0;
+}
+
+@media (hover: hover) {
+  /* primary buttons: deeper gradient + lift (variants keep their own hovers) */
+  button:hover {
+    background: linear-gradient(135deg, var(--terra-deep), #93401f);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(201, 106, 53, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  }
+
+  /* tape cards: deeper lift on the new layered shadow */
+  .tape-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg), 0 0 0 3px var(--glow-soft);
+  }
+
+  /* preserve the Spotify panel's own look on hover */
+  .spotify-panel button:hover {
+    background: #1ed760;
+    transform: none;
+    box-shadow: none;
+  }
+  .spotify-panel button.ghost:hover {
+    background: transparent;
+    transform: none;
+    box-shadow: none;
+  }
+}

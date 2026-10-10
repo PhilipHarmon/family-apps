@@ -79,6 +79,7 @@ const Movie = mongoose.model(
     note: { type: String, default: '' },
     watched: { type: Boolean, default: false },
     rating: { type: Number },
+    favorite: { type: Boolean, default: false },
   }),
 );
 

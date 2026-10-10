@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Cassette from "./components/Cassette.jsx";
 import FamilyKeyPrompt from "./components/FamilyKeyPrompt.jsx";
+import SpotifyPanel from "./components/SpotifyPanel.jsx";
 import {
   get,
   post,
@@ -9,6 +10,7 @@ import {
   saveFamilyKey,
   normalizeTape,
 } from "./api.js";
+import { handleSpotifyCallback } from "./spotify.js";
 import { isDemoMode } from "./demoMode.js";
 
 const MIN_PER_TRACK = 3.4; // flavor math for "runtime-ish" text
@@ -249,6 +251,8 @@ function Viewer({ tape, onBack, onDelete }) {
         </div>
       )}
 
+      <SpotifyPanel tape={tape} />
+
       <div className="viewer-actions">
         <button className="ghost" onClick={onBack}>← Back to the shelf</button>
         <button
@@ -273,6 +277,25 @@ export default function App() {
   const [view, setView] = useState({ name: "library" });
   const [status, setStatus] = useState("loading"); // loading | ready | error
   const [error, setError] = useState(null);
+
+  /* Finish a Spotify login if we just came back from accounts.spotify.com
+     with a ?code=. Restores the tape the user was viewing. */
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const result = await handleSpotifyCallback();
+        if (!cancelled && result && !result.error && result.returnTo) {
+          setView({ name: "viewer", id: result.returnTo });
+        }
+      } catch {
+        /* a failed exchange just leaves Spotify disconnected */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   /* A 401 from the API (thrown inside api.js) clears the stored key and fires
      this event — we drop back to the key prompt so the user can re-enter. */

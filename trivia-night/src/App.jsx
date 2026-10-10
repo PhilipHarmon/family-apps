@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import confetti from 'canvas-confetti';
 import { TIERS } from './questions.js';
 import { get, post } from './api.js';
 import FamilyKeyPrompt from './FamilyKeyPrompt.jsx';
@@ -62,6 +63,94 @@ function mapGame(g) {
   };
 }
 
+// Fires a ~2.5-3s fireworks sequence exactly once when the results screen mounts.
+function ResultsFireworks() {
+  useEffect(() => {
+    const timers = [];
+    const burst = (x, delay, particleCount = 60) => {
+      timers.push(
+        setTimeout(() => {
+          confetti({
+            particleCount,
+            spread: 100,
+            startVelocity: 42,
+            origin: { x, y: 0.6 },
+            disableForReducedMotion: true,
+          });
+        }, delay),
+      );
+    };
+    // Opening volley: left, center, right.
+    burst(0.2, 0);
+    burst(0.5, 250, 80);
+    burst(0.8, 500);
+    // Delayed encore volleys.
+    burst(0.35, 1200);
+    burst(0.65, 1500, 80);
+    burst(0.5, 2100, 100);
+    return () => timers.forEach(clearTimeout);
+  }, []);
+  return null;
+}
+
+// "From Movie Night" section for the setup screen: lists the family's favorite
+// movies so each can become a trivia question with one tap. Hides quietly when
+// the fetch fails or there are no favorites (never breaks the setup screen).
+function MovieFavorites({ onPick }) {
+  const [movies, setMovies] = useState(undefined); // undefined = loading/failed -> hidden
+
+  useEffect(() => {
+    let alive = true;
+    get('/movies')
+      .then((list) => {
+        if (!alive) return;
+        const favs = (Array.isArray(list) ? list : []).filter((m) => m && m.favorite === true);
+        setMovies(favs);
+      })
+      .catch(() => {
+        if (alive) setMovies(undefined);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  if (movies === undefined) return null;
+
+  return (
+    <section className="card movie-favorites">
+      <h2>🎬 From Movie Night</h2>
+      {movies.length === 0 ? (
+        <p className="hint" style={{ marginTop: 0 }}>
+          No favorite movies yet — tap the ⭐ on movies in Movie Night and they’ll show up here as ready-made trivia answers.
+        </p>
+      ) : (
+        <>
+          <p className="hint" style={{ marginTop: 0 }}>
+            Your family’s favorite movies, ready to become trivia questions. Pick one, then type the question.
+          </p>
+          <ul className="custom-list">
+            {movies.map((m) => {
+              const title = m.title ?? m.name ?? 'Untitled';
+              return (
+                <li key={m._id || title}>
+                  <div>
+                    <div>{title}</div>
+                    {m.year ? <div className="q-meta">{m.year}</div> : null}
+                  </div>
+                  <button className="btn-ghost btn-small" onClick={() => onPick(title)}>
+                    Make it a question
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
+    </section>
+  );
+}
+
 export default function App() {
   const demoMode = isDemoMode();
   const [dataState, setDataState] = useState('loading'); // loading | ready | error | need-key
@@ -80,6 +169,7 @@ export default function App() {
   const [qIndex, setQIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [scores, setScores] = useState({});
+  const [awarded, setAwarded] = useState([]); // player names already awarded for the current question
   const [saveNotice, setSaveNotice] = useState('');
 
   // Add-your-own form state
@@ -168,15 +258,28 @@ export default function App() {
     setScores(Object.fromEntries(namedPlayers.map((n) => [n, 0])));
     setQIndex(0);
     setRevealed(false);
+    setAwarded([]);
     setSaveNotice('');
     setScreen('game');
   }
 
+  function fireAwardConfetti() {
+    confetti({
+      particleCount: 75,
+      spread: 70,
+      startVelocity: 38,
+      origin: { x: 0.5, y: 0.25 },
+      disableForReducedMotion: true,
+    });
+  }
+
   function awardPoints(name) {
+    if (awarded.includes(name)) return; // no double-awards
     const q = deck[qIndex];
     const pts = TIERS[q.tier].points;
     setScores((prev) => ({ ...prev, [name]: prev[name] + pts }));
-    nextQuestion();
+    setAwarded((prev) => [...prev, name]);
+    fireAwardConfetti();
   }
 
   function nextQuestion() {
@@ -185,6 +288,7 @@ export default function App() {
     } else {
       setQIndex((i) => i + 1);
       setRevealed(false);
+      setAwarded([]);
     }
   }
 
@@ -233,8 +337,20 @@ export default function App() {
     }
   }
 
-  async function importPack() {
-    setImporting(true);
+  // Pre-fill the custom-question form with a Movie Night favorite as the answer,
+  // then scroll to and focus the question input so only the question needs typing.
+  function pickMovieAsQuestion(title) {
+    setNewA(title);
+    requestAnimationFrame(() => {
+      const el = document.getElementById('new-q');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.focus({ preventScroll: true });
+      }
+    });
+  }
+
+  async function importPack() {    setImporting(true);
     setImportError('');
     setImportResult('');
     try {
@@ -431,9 +547,10 @@ export default function App() {
             </div>
           </section>
 
+          <MovieFavorites onPick={pickMovieAsQuestion} />
+
           <section className="card">
-            <h2>Add your own questions</h2>
-            <p className="hint" style={{ marginTop: 0 }}>
+            <h2>Add your own questions</h2>            <p className="hint" style={{ marginTop: 0 }}>
               Stump the family! Your custom questions are saved for everyone and join the question bank.
             </p>
             <form onSubmit={addCustomQuestion}>
@@ -557,18 +674,30 @@ export default function App() {
                   {current.answer}
                 </div>
                 <div className="who-got-it">
-                  <h3>Who got it right?</h3>
+                  <h3>Who got it right? <small className="hint-inline">(tap everyone who earned it!)</small></h3>
                   <div className="award-grid">
-                    {namedPlayers.map((n) => (
-                      <button key={n} className="award-btn" onClick={() => awardPoints(n)}>
-                        {n}<br />
-                        <small>+{TIERS[current.tier].points} pts</small>
-                      </button>
-                    ))}
+                    {namedPlayers.map((n) => {
+                      const got = awarded.includes(n);
+                      return (
+                        <button
+                          key={n}
+                          className={`award-btn${got ? ' awarded' : ''}`}
+                          onClick={() => awardPoints(n)}
+                          disabled={got}
+                          aria-pressed={got}
+                        >
+                          {got ? '✓ ' : ''}{n}<br />
+                          <small>+{TIERS[current.tier].points} pts</small>
+                        </button>
+                      );
+                    })}
                     <button className="nobody-btn" onClick={nextQuestion}>
                       Nobody got it 😅
                     </button>
                   </div>
+                  <button className="btn-primary next-q-btn" onClick={nextQuestion}>
+                    {qIndex + 1 >= deck.length ? 'See the results →' : 'Next question →'}
+                  </button>
                 </div>
               </>
             )}
@@ -591,6 +720,7 @@ export default function App() {
 
       {screen === 'results' && (
         <section className="card results">
+          <ResultsFireworks />
           <span className="trophy" aria-hidden="true">🏆</span>
           <h2>And the winner is…</h2>
           {saveNotice && <p className="hint" style={{ color: '#b3552e' }}>{saveNotice}</p>}

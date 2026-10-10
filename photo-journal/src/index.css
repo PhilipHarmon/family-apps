@@ -736,3 +736,187 @@ h1, h2, h3, .serif {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================
+   BEAUTIFICATION PASS — premium warm editorial
+   Mobile-first (390px baseline). All hover inside (hover:hover).
+   CSS only — no JSX/structure changes. Demo banner + key prompt
+   styling untouched.
+   ============================================================ */
+:root {
+  /* layered shadows: contact + ambient + far-field for real depth */
+  --shadow: 0 1px 2px rgba(126, 53, 23, 0.08),
+    0 10px 28px rgba(126, 53, 23, 0.1),
+    0 28px 56px rgba(126, 53, 23, 0.06);
+  --shadow-lg: 0 2px 4px rgba(126, 53, 23, 0.1),
+    0 16px 40px rgba(126, 53, 23, 0.14),
+    0 40px 80px rgba(126, 53, 23, 0.08);
+}
+
+body {
+  /* faint warm wash at the top for depth; cream base preserved */
+  background:
+    radial-gradient(1100px 480px at 50% -120px, rgba(201, 106, 53, 0.1), transparent 70%),
+    var(--cream);
+}
+
+/* ---------- Oversized editorial header ---------- */
+.header {
+  padding-top: 44px;
+}
+
+/* decorative terracotta rule above the title (pure CSS, no markup change) */
+.header::before {
+  content: "";
+  display: block;
+  width: 76px;
+  height: 6px;
+  margin: 0 auto 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--terracotta), var(--terracotta-dark));
+  opacity: 0.85;
+}
+
+.header h1 {
+  font-size: clamp(2.5rem, 9vw, 3.9rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin-bottom: 8px;
+  text-wrap: balance;
+  /* gradient headline; solid color stays as the fallback */
+  color: var(--terracotta-deep);
+  background: linear-gradient(120deg, var(--terracotta) 10%, var(--terracotta-deep) 75%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header .tagline {
+  font-size: 1.08rem;
+}
+
+/* ---------- Cards: warm gradient + hairline border ---------- */
+.cal-card,
+.feed-card,
+.empty-state {
+  background: linear-gradient(180deg, var(--card) 0%, #fdf8ee 100%);
+  border: 1px solid rgba(201, 106, 53, 0.1);
+}
+
+/* ---------- Streak banner: richer gradient, deeper shadow ---------- */
+.streak-banner {
+  background: linear-gradient(135deg, #d4763f 0%, var(--terracotta) 45%, var(--terracotta-dark) 100%);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* ---------- Chunkier buttons ---------- */
+.btn {
+  min-height: 48px;
+  font-size: 1.02rem;
+  letter-spacing: 0.01em;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--terracotta) 0%, var(--terracotta-dark) 100%);
+  box-shadow: 0 8px 20px rgba(201, 106, 53, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.tabs button {
+  min-height: 44px;
+}
+
+.tabs button.active {
+  background: linear-gradient(135deg, var(--terracotta), var(--terracotta-dark));
+}
+
+.feed-actions button {
+  min-height: 44px;
+}
+
+/* ---------- Calendar: premium feel ---------- */
+.cal-card {
+  padding: 24px;
+}
+
+.cal-nav h2 {
+  font-size: clamp(1.4rem, 4.5vw, 1.7rem);
+  letter-spacing: -0.01em;
+}
+
+.cal-day {
+  font-weight: 600;
+}
+
+.cal-day.today {
+  outline-width: 3px;
+}
+
+/* ---------- Feed: editorial captions ---------- */
+.feed {
+  gap: 28px;
+}
+
+.feed-card img {
+  border-bottom: 1px solid rgba(201, 106, 53, 0.12);
+}
+
+.feed-date {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+
+.feed-caption {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.12rem;
+  line-height: 1.55;
+}
+
+/* ---------- Empty states: warm and inviting ---------- */
+.empty-state {
+  border: 2px dashed rgba(201, 106, 53, 0.35);
+  padding: 56px 28px;
+}
+
+.empty-state .big {
+  font-size: 3.4rem;
+}
+
+.empty-state h3 {
+  font-size: clamp(1.5rem, 5vw, 1.8rem);
+}
+
+/* ---------- Modal: a touch grander ---------- */
+.modal {
+  box-shadow: var(--shadow-lg);
+}
+
+.modal h2 {
+  font-size: clamp(1.5rem, 5vw, 1.75rem);
+  letter-spacing: -0.01em;
+}
+
+@media (hover: hover) {
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--terracotta-dark), #93401f);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(201, 106, 53, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+
+  .tabs button.active:hover {
+    background: linear-gradient(135deg, var(--terracotta-dark), #93401f);
+  }
+
+  .feed-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .cal-day:hover:not(.empty) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow), 0 0 0 3px var(--glow-soft);
+  }
+}
