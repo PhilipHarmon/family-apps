@@ -10,6 +10,8 @@ const triviaRoutes = require('./routes/trivia');
 const mediaRoutes = require('./routes/media');
 const tvRoutes = require('./routes/tv');
 const spotifyRoutes = require('./routes/spotify');
+const storyRoutes = require('./routes/stories');
+const songsRoutes = require('./routes/songs');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -46,6 +48,8 @@ app.use('/api', menuRoutes);
 app.use('/api', triviaRoutes);
 app.use('/api', mediaRoutes);
 app.use('/api', spotifyRoutes);
+app.use('/api', storyRoutes);
+app.use('/api', songsRoutes);
 
 // 404 for unknown API routes.
 app.use('/api', (_req, res) => res.status(404).json({ error: 'Not found' }));

@@ -70,16 +70,16 @@ export const api = {
   list(key) {
     return request('/photos', key)
   },
-  create(key, { date, imageUrl, caption }) {
+  create(key, { date, imageUrl, caption, mediaType }) {
     return request('/photos', key, {
       method: 'POST',
-      body: JSON.stringify({ date, imageUrl, caption }),
+      body: JSON.stringify({ date, imageUrl, caption, mediaType }),
     })
   },
-  update(key, id, { date, imageUrl, caption }) {
+  update(key, id, { date, imageUrl, caption, mediaType }) {
     return request(`/photos/${id}`, key, {
       method: 'PUT',
-      body: JSON.stringify({ date, imageUrl, caption }),
+      body: JSON.stringify({ date, imageUrl, caption, mediaType }),
     })
   },
   remove(key, id) {

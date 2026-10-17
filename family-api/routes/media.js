@@ -62,6 +62,11 @@ router.delete('/tapes/:id', async (req, res, next) => {
 });
 
 // --- Photos (photo-a-day journal) ---
+// mediaType is whitelisted to 'image' | 'video'; anything else falls back to 'image'.
+function cleanMediaType(v) {
+  return v === 'video' ? 'video' : 'image';
+}
+
 router.get('/photos', async (_req, res, next) => {
   try {
     res.json(await Photo.find().sort({ date: -1, _id: -1 }));
@@ -72,8 +77,8 @@ router.get('/photos', async (_req, res, next) => {
 
 router.post('/photos', async (req, res, next) => {
   try {
-    const { date, imageUrl, caption } = req.body || {};
-    const photo = await Photo.create({ date, imageUrl, caption });
+    const { date, imageUrl, caption, mediaType } = req.body || {};
+    const photo = await Photo.create({ date, imageUrl, caption, mediaType: cleanMediaType(mediaType) });
     res.status(201).json(photo);
   } catch (err) {
     next(err);
@@ -82,10 +87,10 @@ router.post('/photos', async (req, res, next) => {
 
 router.put('/photos/:id', async (req, res, next) => {
   try {
-    const { date, imageUrl, caption } = req.body || {};
+    const { date, imageUrl, caption, mediaType } = req.body || {};
     const photo = await Photo.findByIdAndUpdate(
       req.params.id,
-      { date, imageUrl, caption },
+      { date, imageUrl, caption, mediaType: cleanMediaType(mediaType) },
       { new: true },
     );
     if (!photo) return res.status(404).json({ error: 'Photo not found' });

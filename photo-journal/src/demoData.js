@@ -18,36 +18,57 @@ function seedData() {
       date: '2026-10-04',
       imageUrl: 'https://picsum.photos/seed/ballet/600/400',
       caption: 'Ballet class finale — Pepper and Briar nailed the recital warm-up. 🩰',
+      mediaType: 'image',
+    },
+    {
+      _id: newId(),
+      date: '2026-10-04',
+      imageUrl: 'https://picsum.photos/seed/stage/600/400',
+      caption: 'Curtain call! Three very proud parents in the front row.',
+      mediaType: 'image',
+    },
+    {
+      _id: newId(),
+      date: '2026-10-04',
+      // Placeholder clip so demo mode shows the video tile — replace with a real family video.
+      imageUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+      caption: 'The finale twirl, caught on video. 🎬',
+      mediaType: 'video',
     },
     {
       _id: newId(),
       date: '2026-10-02',
       imageUrl: 'https://picsum.photos/seed/lego/600/400',
       caption: "Wyatt's Omaha Beach Lego diorama is coming together, one brick at a time.",
+      mediaType: 'image',
     },
     {
       _id: newId(),
       date: '2026-09-30',
       imageUrl: 'https://picsum.photos/seed/backyard/600/400',
       caption: 'Backyard golden hour — a quick round of tag with the kids before dinner.',
+      mediaType: 'image',
     },
     {
       _id: newId(),
       date: '2026-09-28',
       imageUrl: 'https://picsum.photos/seed/piano/600/400',
       caption: "Pepper's piano practice is starting to sound like real music. 🎹",
+      mediaType: 'image',
     },
     {
       _id: newId(),
       date: '2026-09-26',
       imageUrl: 'https://picsum.photos/seed/kitten/600/400',
       caption: 'Briar insists the kitten needed a Hello Kitty blanket. She is right.',
+      mediaType: 'image',
     },
     {
       _id: newId(),
       date: '2026-09-24',
       imageUrl: 'https://picsum.photos/seed/sunset/600/400',
       caption: 'Sunday sunset, porch swing, nowhere else to be. — Philip & Jessica',
+      mediaType: 'image',
     },
   ];
 }
@@ -99,6 +120,7 @@ export function handleDemoRequest(method, path, body) {
       date: body && body.date,
       imageUrl: body && body.imageUrl,
       caption: body && body.caption,
+      mediaType: body && body.mediaType === 'video' ? 'video' : 'image',
     };
     list.push(doc);
     writeStore(list);
@@ -118,6 +140,7 @@ export function handleDemoRequest(method, path, body) {
       date: body && body.date,
       imageUrl: body && body.imageUrl,
       caption: body && body.caption,
+      mediaType: body && body.mediaType === 'video' ? 'video' : 'image',
     };
     writeStore(list);
     return clone(list[idx]);

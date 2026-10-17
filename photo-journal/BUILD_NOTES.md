@@ -52,3 +52,35 @@ passes; `dist/` output confirmed.
   feedback and `:focus-visible` rings.
 - `prefers-reduced-motion` blanket rule retained and covers every new transition.
 - Demo-mode banner (inline styles) and family-key prompt styling untouched.
+
+---
+
+# Photo Journal v13 — Real-Time Uploads + Multi-Photo Days + Video (2026-10-13)
+
+## What changed
+- **Direct uploads**: new `src/cloudinary.js` uploads straight to Cloudinary (unsigned preset, `auto` resource type) with real progress bars via XMLHttpRequest. 100MB client-side guard with a friendly message.
+- **Day view is now a gallery**: the old one-photo-per-day modal became `DayModal` — a grid of all items for the day, each with its own caption (140 chars), per-item edit/delete. "Add photos / videos" button opens the native picker (camera roll on iPhone), uploads each with progress, then saves to the API.
+- **Video support**: `mediaType: 'image' | 'video'` on Photo docs (backend + frontend). Videos render with `<video controls preload="metadata" playsInline>`; calendar days whose first item is a video show a ▶ tile; multi-item days show a `+N` badge.
+- **Paste-a-URL kept** as a secondary collapsible path for backward compatibility.
+- **Streak logic**: a day counts with ≥1 item (was: exactly one entry per date key). Existing single-photo days carry over untouched — old docs without `mediaType` read as images.
+- **Header**: "One Day, One Photo" → "One Day, Many Memories" (it can hold videos now).
+- **Demo mode** (`?demo=1`): updated to the gallery shape; 2026-10-04 has 2 photos + 1 sample video clip.
+- **render.yaml**: photo-journal service gained `VITE_CLOUDINARY_CLOUD_NAME` + `VITE_CLOUDINARY_UPLOAD_PRESET` (`sync: false` — Philip fills them in the Render dashboard).
+
+## Cloudinary setup for Philip (5 minutes, one time)
+1. Free account at cloudinary.com → dashboard → note the **Cloud name** (top of the dashboard).
+2. Settings (gear) → **Upload** → scroll to *Upload presets* → **Add upload preset**.
+   - Name it `family-journal`. **Signing Mode: Unsigned.** Folder: `photo-journal`.
+   - Leave everything else default → Save.
+3. Render dashboard → **photo-journal** service → Environment → add:
+   - `VITE_CLOUDINARY_CLOUD_NAME` = your cloud name
+   - `VITE_CLOUDINARY_UPLOAD_PRESET` = `family-journal`
+4. Save — Render redeploys the photo-journal frontend. Open the app: the upload button now works.
+   - Until these are set, the app shows a friendly "ask Fred" hint instead of a broken button.
+
+Why unsigned is safe here: an unsigned preset can only upload into your Cloudinary account under the rules you set (folder, file types, size caps) — there is no secret in the app to leak. The family key still gates the family-api.
+
+## Notes / to verify on a real phone
+- iPhone picker behavior (`<input type=file multiple accept="image/*,video/*">`) untested on-device — expect the camera-roll sheet; confirm multi-select works on iOS 26.
+- Large video uploads on cellular: progress bar shows, but Wi-Fi recommended (noted in-app).
+- Free Cloudinary: 25GB storage — plenty for family use; keep an eye on it if beach-day epics pile up.

@@ -39,3 +39,7 @@ None. No new configuration — works with the existing `VITE_API_URL` / `VITE_FA
 - The family-key auth flow is untouched; the `/movies` fetch goes through the same `get()` helper, so a bad key surfaces the normal family-key prompt.
 - `node_modules` is in place; `dist/` contains a fresh production build. Nothing was committed to git — ready for Philip's usual merge/push flow.
 - Note: the family-api still needs the `favorite` field on movies (being updated separately). Until then, the "From Movie Night" section will show the "no favorites yet" hint — it will light up automatically once the API supports it.
+
+## v10 — PWA / Add to Home Screen (2026-10-13)
+- Added public/manifest.webmanifest, app icons (192/512/maskable/apple-touch-icon), and iOS standalone meta tags in index.html.
+- On iPhone: open in Safari → Share → Add to Home Screen for a fullscreen app icon.

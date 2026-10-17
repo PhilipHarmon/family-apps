@@ -1,5 +1,5 @@
 services:
-  # Shared backend API for all five family apps.
+  # Shared backend API for all seven family apps.
   - type: web
     name: family-api
     runtime: node
@@ -62,11 +62,39 @@ services:
         value: https://family-api.onrender.com
       - key: VITE_FAMILY_KEY
         sync: false
+      - key: VITE_CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: VITE_CLOUDINARY_UPLOAD_PRESET
+        sync: false
 
   - type: web
     name: movie-night
     env: static
     rootDir: movie-night
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://family-api.onrender.com
+      - key: VITE_FAMILY_KEY
+        sync: false
+
+  - type: web
+    name: song-book
+    env: static
+    rootDir: song-book
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://family-api.onrender.com
+      - key: VITE_FAMILY_KEY
+        sync: false
+
+  - type: web
+    name: story-book
+    env: static
+    rootDir: story-book
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
     envVars:

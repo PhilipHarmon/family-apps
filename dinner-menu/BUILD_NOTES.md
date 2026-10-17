@@ -38,3 +38,7 @@
 ## Build
 - `npm run build` — clean, no errors. Output in `dist/` (index.html + hashed JS/CSS).
 - No git commit made (per instructions).
+
+## v10 — PWA / Add to Home Screen (2026-10-13)
+- Added public/manifest.webmanifest, app icons (192/512/maskable/apple-touch-icon), and iOS standalone meta tags in index.html.
+- On iPhone: open in Safari → Share → Add to Home Screen for a fullscreen app icon.
