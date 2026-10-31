@@ -1,20 +1,31 @@
 /* ============ Mixtape — design system ============ */
 :root {
-  --cream: #faf7f1;
-  --cream-deep: #f3ecdd;
-  --ink: #3a2c22;
-  --ink-soft: #6b5a4b;
+  --cream: #faf5ec;
+  --cream-deep: #f7e8d3;
+  --ink: #2e1d12;
+  --ink-soft: #8a6f5c;
   --terra: #c96a35;
-  --terra-deep: #b3552e;
+  --terra-deep: #a34a24;
   --terra-dark: #7e3517;
   --gold: #d9a419;
   --gold-deep: #a8760f;
   --shell: #26262e;
   --shell-deep: #17171d;
   --label-paper: #f7f0dd;
-  --radius: 16px;
-  --shadow: 0 10px 30px rgba(126, 53, 23, 0.14);
-  --shadow-soft: 0 4px 14px rgba(126, 53, 23, 0.10);
+  --radius: 12px;
+  --shadow: 0 2px 14px rgba(120, 60, 20, 0.12);
+  --shadow-soft: 0 2px 10px rgba(120, 60, 20, 0.1);
+  /* Brewery Compass theme tokens (v15 sync) */
+  --muted: #8a6f5c;
+  --line: #ecdcc8;
+  --surface: #fffdf8;
+  --page: #faf5ec;
+  --accent: #c96a35;
+  --accent-deep: #7e3517;
+  --accent-soft: #f7e8d3;
+  --header-grad: linear-gradient(135deg, #7e3517 0%, #a34a24 55%, #c96a35 100%);
+  --hero-grad: linear-gradient(160deg, #2e1d12 0%, #7e3517 60%, #c96a35 130%);
+  --shadow-lift: 0 10px 28px rgba(160, 80, 30, 0.22);
 }
 
 * { box-sizing: border-box; }
@@ -1044,7 +1055,7 @@ button.danger,
 .editor-title-row,
 .side-panel,
 .full-tracklist {
-  background: linear-gradient(180deg, #ffffff 0%, #fdf9f1 100%);
+  background: linear-gradient(180deg, #fffdf8 0%, #faf3e6 100%);
   border: 1px solid rgba(201, 106, 53, 0.12);
 }
 
@@ -1065,7 +1076,7 @@ button.danger,
 
 /* ---------- Empty library: warm and inviting ---------- */
 .empty-library {
-  background: linear-gradient(180deg, #ffffff 0%, #fdf9f1 100%);
+  background: linear-gradient(180deg, #fffdf8 0%, #faf3e6 100%);
   border: 2px dashed rgba(201, 106, 53, 0.35);
   padding: 56px 24px;
 }
@@ -1237,4 +1248,26 @@ button.danger,
     transform: none;
     box-shadow: var(--shadow-soft);
   }
+}
+
+/* ============ BREWERY COMPASS THEME SYNC (v15) ============ */
+a { color: var(--accent-deep); }
+
+/* header becomes the Brewery Compass gradient band, cream text */
+header.top {
+  background: var(--header-grad);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2.6rem 1.25rem 2.1rem;
+}
+header.top h1 {
+  color: #fff8ee;
+  text-shadow: 0 2px 12px rgba(46, 29, 18, 0.4);
+}
+header.top p.tagline { color: #ffe9d2; }
+
+@media (hover: hover) {
+  button:hover { background: var(--accent-deep); }
+  /* keep the Spotify panel's brand-green button on hover */
+  .spotify-panel button:hover { background: #1ed760; }
 }

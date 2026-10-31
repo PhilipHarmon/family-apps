@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import "./App.css";
 import { get, post, put, del, getFamilyKey, setFamilyKey, onAuthFailure } from "./api.js";
 import FamilyKeyPrompt from "./FamilyKeyPrompt.jsx";
@@ -11,6 +12,8 @@ import {
   searchMovies,
   discoverMovies,
   getWatchProviders,
+  getMovieTrailer,
+  getTrailerByTitle,
   resolveGenres,
 } from "./tmdb.js";
 
@@ -283,6 +286,136 @@ function Providers({ tmdbId }) {
   );
 }
 
+/* ---------- trailer lightbox ----------
+   Opens from the explicit "▶ Trailer" button (never hover-only, so it
+   works by tap on phones). Fetches the movie's videos from TMDB lazily —
+   by TMDB id when the caller has one (discovery / "For you" cards), or by
+   title search for the family's own list entries, which store no TMDB id.
+   Closes via the ✕ button, a backdrop click, or Escape. When no YouTube
+   trailer/teaser exists (or the lookup fails) it shows a friendly
+   "No trailer available" message instead of a dead embed. */
+function TrailerModal({ title, tmdbId, onClose }) {
+  const [state, setState] = useState("loading"); // loading | done | none | error
+  const [trailer, setTrailer] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const found =
+          tmdbId != null ? await getMovieTrailer(tmdbId) : await getTrailerByTitle(title);
+        if (cancelled) return;
+        if (found && found.key) {
+          setTrailer(found);
+          setState("done");
+        } else {
+          setState("none");
+        }
+      } catch {
+        if (!cancelled) setState("error");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [tmdbId, title]);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="trailer-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label={title ? `Trailer for ${title}` : "Movie trailer"}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="trailer-card">
+        <div className="trailer-head">
+          <h3 className="trailer-title">{title || "Movie trailer"}</h3>
+          <button
+            type="button"
+            className="trailer-close"
+            onClick={onClose}
+            aria-label="Close trailer"
+            autoFocus
+          >
+            ✕
+          </button>
+        </div>
+        {state === "loading" && (
+          <p className="trailer-message" role="status">
+            Finding the trailer… 🍿
+          </p>
+        )}
+        {state === "done" && trailer && (
+          <div className="trailer-frame-wrap">
+            <iframe
+              className="trailer-frame"
+              src={`https://www.youtube-nocookie.com/embed/${encodeURIComponent(trailer.key)}?autoplay=1&rel=0`}
+              title={trailer.name || `${title} trailer`}
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
+            />
+          </div>
+        )}
+        {(state === "none" || state === "error") && (
+          <div className="trailer-message">
+            <p className="trailer-none-emoji" aria-hidden="true">🎞️</p>
+            <p>
+              <strong>No trailer available</strong>
+              {title ? <> for <em>{title}</em></> : null} — TMDB doesn't have a
+              YouTube trailer for this one yet.
+            </p>
+            <button type="button" className="btn primary" onClick={onClose}>
+              Back to the movies
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* Explicit trailer button + its lightbox. The modal is portaled to
+   document.body because the cards' hover transforms would otherwise
+   become the containing block for the fixed-position overlay. */
+function TrailerButton({ title, tmdbId, className = "btn small trailer-btn" }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        type="button"
+        className={className}
+        onClick={() => setOpen(true)}
+        aria-haspopup="dialog"
+        aria-label={title ? `Watch the trailer for ${title}` : "Watch the trailer"}
+      >
+        ▶ Trailer
+      </button>
+      {open &&
+        createPortal(
+          <TrailerModal title={title} tmdbId={tmdbId} onClose={() => setOpen(false)} />,
+          document.body
+        )}
+    </>
+  );
+}
+
 /* ---------- one TMDB result card ---------- */
 function TmdbCard({ r, onAdd, onList }) {
   const year = (r.release_date || "").slice(0, 4);
@@ -304,13 +437,16 @@ function TmdbCard({ r, onAdd, onList }) {
         <p className="tmdb-meta">{year || "Year unknown"} · ⭐ {rating}/10</p>
         {r.overview && <p className="tmdb-overview">{r.overview}</p>}
         <Providers tmdbId={r.id} />
-        {onList ? (
-          <button className="btn small" disabled>✅ On the list</button>
-        ) : (
-          <button className="btn small primary" onClick={() => onAdd(r)}>
-            ➕ Add to list
-          </button>
-        )}
+        <div className="tmdb-actions">
+          <TrailerButton title={r.title} tmdbId={r.id} />
+          {onList ? (
+            <button className="btn small" disabled>✅ On the list</button>
+          ) : (
+            <button className="btn small primary" onClick={() => onAdd(r)}>
+              ➕ Add to list
+            </button>
+          )}
+        </div>
       </div>
     </article>
   );
@@ -989,6 +1125,7 @@ export default function App() {
                     </div>
                     <div className="movie-actions">
                       <Heart on={m.favorite} onToggle={() => toggleFavorite(m.id)} title={m.title} />
+                      {tmdbEnabled && <TrailerButton title={m.title} />}
                       <button className="btn small" onClick={() => setRatingId(m.id)} title="Mark as watched and rate it">
                         ✅ Watched
                       </button>
@@ -1018,6 +1155,7 @@ export default function App() {
                     </div>
                     <div className="movie-actions">
                       <Heart on={m.favorite} onToggle={() => toggleFavorite(m.id)} title={m.title} />
+                      {tmdbEnabled && <TrailerButton title={m.title} />}
                       <button className="linklike" onClick={() => unwatch(m.id)} title="Put it back on the list">
                         ↩ rewatch
                       </button>

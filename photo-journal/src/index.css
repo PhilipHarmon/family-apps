@@ -1,16 +1,27 @@
 /* One Day, One Photo — plain CSS, warm cream + terracotta design language */
 
 :root {
-  --cream: #faf7f1;
-  --cream-dark: #f3ede1;
+  --cream: #faf5ec;
+  --cream-dark: #f7e8d3;
   --terracotta: #c96a35;
-  --terracotta-dark: #b3552e;
+  --terracotta-dark: #a34a24;
   --terracotta-deep: #7e3517;
-  --ink: #3d2f26;
-  --ink-soft: #6b5d51;
-  --card: #fffdf9;
-  --shadow: 0 4px 18px rgba(126, 53, 23, 0.1);
-  --radius: 16px;
+  --ink: #2e1d12;
+  --ink-soft: #8a6f5c;
+  --card: #fffdf8;
+  --shadow: 0 2px 14px rgba(120, 60, 20, 0.12);
+  --radius: 12px;
+  /* Brewery Compass theme tokens (v15 sync) */
+  --muted: #8a6f5c;
+  --line: #ecdcc8;
+  --surface: #fffdf8;
+  --page: #faf5ec;
+  --accent: #c96a35;
+  --accent-deep: #7e3517;
+  --accent-soft: #f7e8d3;
+  --header-grad: linear-gradient(135deg, #7e3517 0%, #a34a24 55%, #c96a35 100%);
+  --hero-grad: linear-gradient(160deg, #2e1d12 0%, #7e3517 60%, #c96a35 130%);
+  --shadow-lift: 0 10px 28px rgba(160, 80, 30, 0.22);
 }
 
 * {
@@ -800,7 +811,7 @@ body {
 .cal-card,
 .feed-card,
 .empty-state {
-  background: linear-gradient(180deg, var(--card) 0%, #fdf8ee 100%);
+  background: linear-gradient(180deg, var(--card) 0%, #faf3e6 100%);
   border: 1px solid rgba(201, 106, 53, 0.1);
 }
 
@@ -1207,4 +1218,28 @@ body {
   color: #a03d36;
   font-size: 0.85rem;
   margin: 4px 0 12px;
+}
+
+/* ============ BREWERY COMPASS THEME SYNC (v15) ============ */
+a { color: var(--accent-deep); }
+
+/* header becomes the Brewery Compass gradient band, cream text.
+   The editorial gradient-text headline is reset to solid cream. */
+.header {
+  background: var(--header-grad);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2.4rem 1.25rem 2rem;
+}
+.header h1 {
+  color: #fff8ee;
+  background: none;
+  -webkit-text-fill-color: #fff8ee;
+  text-shadow: 0 2px 12px rgba(46, 29, 18, 0.35);
+}
+.header .tagline { color: #ffe9d2; }
+.header::before { background: linear-gradient(90deg, var(--accent-soft), #ffd9ad); }
+
+@media (hover: hover) {
+  .btn-primary:hover { background: var(--accent-deep); }
 }

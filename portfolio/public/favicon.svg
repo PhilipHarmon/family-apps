@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#0f0e0c"/>
+  <text x="32" y="41" font-family="Georgia, 'Times New Roman', serif" font-size="25" font-weight="700" fill="#ede4d1" text-anchor="middle">PH</text>
+  <rect x="20" y="48" width="24" height="3.5" rx="1.75" fill="#e09145"/>
+</svg>

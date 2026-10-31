@@ -517,6 +517,17 @@ export default function App() {
         <p>Dream it. Learn it. Play it. 🎸</p>
       </header>
 
+      {demoMode && (
+        <div className="demo-banner">
+          <span>🎵 Demo preview — sample data, saved in this browser only.</span>
+          <button
+            onClick={() => { localStorage.removeItem('demoData:song-book'); window.location.reload(); }}
+          >
+            Reset demo
+          </button>
+        </div>
+      )}
+
       {dataState === 'need-key' && !demoMode && (
         <FamilyKeyPrompt onSave={saveKey} />
       )}

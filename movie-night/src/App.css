@@ -1,16 +1,27 @@
 /* Movie Night — warm cream + terracotta design language */
 :root {
-  --cream: #faf7f1;
-  --cream-deep: #f3ecdf;
+  --cream: #faf5ec;
+  --cream-deep: #f7e8d3;
   --terra: #c96a35;
-  --terra-dark: #b3552e;
+  --terra-dark: #a34a24;
   --terra-deep: #7e3517;
-  --ink: #3d2c22;
-  --ink-soft: #7a6455;
-  --card: #fffdf9;
-  --border: #e9dcc8;
-  --shadow: 0 8px 24px rgba(126, 53, 23, 0.09);
-  --radius: 16px;
+  --ink: #2e1d12;
+  --ink-soft: #8a6f5c;
+  --card: #fffdf8;
+  --border: #ecdcc8;
+  --shadow: 0 2px 14px rgba(120, 60, 20, 0.12);
+  --radius: 12px;
+  /* Brewery Compass theme tokens (v15 sync) */
+  --muted: #8a6f5c;
+  --line: #ecdcc8;
+  --surface: #fffdf8;
+  --page: #faf5ec;
+  --accent: #c96a35;
+  --accent-deep: #7e3517;
+  --accent-soft: #f7e8d3;
+  --header-grad: linear-gradient(135deg, #7e3517 0%, #a34a24 55%, #c96a35 100%);
+  --hero-grad: linear-gradient(160deg, #2e1d12 0%, #7e3517 60%, #c96a35 130%);
+  --shadow-lift: 0 10px 28px rgba(160, 80, 30, 0.22);
 }
 
 * { box-sizing: border-box; }
@@ -32,15 +43,15 @@ h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; color: var(--terra-
 
 /* ---------- hero ---------- */
 .hero {
-  background: linear-gradient(135deg, var(--terra-deep), var(--terra-dark) 55%, var(--terra));
-  color: #fff8ef;
+  background: var(--header-grad);
+  color: #fff8ee;
   padding: 2.4rem 1.2rem 2rem;
   text-align: center;
   border-bottom-left-radius: 28px;
   border-bottom-right-radius: 28px;
   box-shadow: var(--shadow);
 }
-.hero h1 { color: #fff8ef; margin: 0.1rem 0 0.4rem; font-size: 2.6rem; letter-spacing: 0.5px; }
+.hero h1 { color: #fff8ee; margin: 0.1rem 0 0.4rem; font-size: 2.6rem; letter-spacing: 0.5px; }
 .hero-emoji { font-size: 2.6rem; margin: 0; }
 .tagline { margin: 0; opacity: 0.92; font-size: 1.02rem; }
 
@@ -391,7 +402,7 @@ h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; color: var(--terra-
 /* ---------- oversized hero ---------- */
 .hero {
   padding: 3rem 1.25rem 2.6rem;
-  background: linear-gradient(135deg, #5f2410, var(--terra-deep) 40%, var(--terra-dark) 70%, var(--terra));
+  background: var(--header-grad);
 }
 .hero h1 {
   font-size: clamp(2.9rem, 10vw, 4.3rem);
@@ -407,8 +418,8 @@ h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; color: var(--terra-
 
 /* ---------- layered card shadows + subtle gradient ---------- */
 .card {
-  background: linear-gradient(180deg, #fffdf9 0%, #fdf8ee 100%);
-  border: 1px solid #f0e4cf;
+  background: linear-gradient(180deg, #fffdf8 0%, #faf3e6 100%);
+  border: 1px solid var(--line);
   box-shadow:
     0 1px 2px rgba(126, 53, 23, 0.07),
     0 10px 28px rgba(126, 53, 23, 0.10),
@@ -642,4 +653,111 @@ h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; color: var(--terra-
 @media (max-width: 480px) {
   .tmdb-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.8rem; }
   .rail .tmdb-card { min-width: 158px; max-width: 158px; }
+}
+
+/* ============================================================
+   TRAILER PREVIEWS — explicit "▶ Trailer" button + lightbox
+   Tap-first (no hover dependence), 44px targets, 16:9 embed.
+   ============================================================ */
+.tmdb-actions {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+.tmdb-actions .btn.small { margin-top: 0; flex: 1 1 auto; justify-content: center; }
+
+/* prominent trailer button: warm gold, clearly distinct from Add */
+.btn.trailer-btn {
+  background: linear-gradient(135deg, #e8a020, #d18a12);
+  color: #3d2c22;
+  border: 1px solid #c07f0e;
+  box-shadow: 0 3px 10px rgba(232, 160, 32, 0.4);
+  font-weight: 800;
+  white-space: nowrap;
+}
+.btn.trailer-btn:active { transform: scale(0.97); }
+
+.trailer-overlay {
+  position: fixed; inset: 0; z-index: 80;
+  background: rgba(30, 18, 10, 0.82);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.25s ease;
+  backdrop-filter: blur(3px);
+}
+.trailer-card {
+  background: var(--card);
+  border-radius: 20px;
+  border-top: 6px solid #e8a020;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  width: 100%;
+  max-width: 860px;
+  max-height: 94vh;
+  overflow-y: auto;
+  padding: 1.1rem 1.1rem 1.25rem;
+}
+.trailer-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 0.8rem; margin-bottom: 0.8rem;
+}
+.trailer-title {
+  margin: 0.25rem 0 0; font-size: 1.3rem; line-height: 1.25;
+}
+.trailer-close {
+  flex-shrink: 0;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--cream-deep);
+  color: var(--terra-deep);
+  font-size: 1.05rem; font-weight: 700;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.trailer-close:active { transform: scale(0.94); }
+.trailer-frame-wrap {
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.trailer-frame { width: 100%; height: 100%; border: 0; display: block; }
+.trailer-message {
+  text-align: center;
+  color: var(--ink-soft);
+  padding: 1.6rem 1rem;
+  margin: 0;
+}
+.trailer-message .btn { margin-top: 1rem; }
+.trailer-none-emoji { font-size: 2.4rem; margin: 0 0 0.5rem; }
+
+@media (hover: hover) {
+  .btn.trailer-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px rgba(232, 160, 32, 0.3), 0 8px 22px rgba(232, 160, 32, 0.45);
+  }
+  .trailer-close:hover { border-color: var(--terra); }
+}
+
+.btn.trailer-btn:focus-visible,
+.trailer-close:focus-visible {
+  outline: 2px solid var(--terra);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--glow-focus);
+}
+
+@media (max-width: 640px) {
+  .trailer-overlay { padding: 0.6rem; }
+  .trailer-card { padding: 0.9rem 0.9rem 1.05rem; border-radius: 16px; }
+  .trailer-title { font-size: 1.1rem; }
+  /* keep the watchlist action row tappable when the trailer button joins it */
+  .movie-actions { flex-wrap: wrap; justify-content: flex-end; }
+}
+
+/* ============ BREWERY COMPASS THEME SYNC (v15) ============ */
+a { color: var(--accent-deep); }
+
+@media (hover: hover) {
+  .btn.primary:hover:not(:disabled) { background: var(--accent-deep); }
 }

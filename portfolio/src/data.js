@@ -63,42 +63,77 @@ export const experience = [
 
 export const featuredProjects = [
   {
-    name: 'Mindless Musings',
-    kind: 'Personal MERN blog — live on the web',
+    name: 'Brewery Compass',
+    kind: 'NC craft brewery guide — MERN rebuild',
     description:
-      'A full-featured personal blog: markdown editor with formatting toolbar, likes, comments, subscriber welcome emails and new-post alerts, and social sharing. Deployed and live.',
-    tags: ['MongoDB', 'Express', 'React', 'Node.js'],
+      'A MERN guide cataloguing 259 North Carolina breweries and 5,697 beers: an A–Z browser with tap lists (styles, ABV, IBU), a keyless map with rich hover tooltips, and a plan-a-day itinerary builder with drive times.',
+    tags: ['MongoDB', 'Express', 'React', 'Node.js', 'Leaflet'],
     links: [
-      { label: 'Live site', href: 'https://www.mindless-musings.com' },
-      { label: 'GitHub', href: 'https://github.com/PhilipHarmon/personal-blog' },
+      { label: 'Live site', href: 'https://brewery-compass.onrender.com' },
+      { label: 'GitHub', href: 'https://github.com/PhilipHarmon/brewery-compass' },
     ],
-    motif: 'M',
+    motif: 'B',
   },
   {
-    name: 'Porch',
-    kind: 'Facebook-style MERN social app',
+    name: 'Bubble Tracks',
+    kind: 'Pop-Up Video-style music trivia — MERN',
     description:
-      'A social network built from scratch: profiles with cover photos, friend requests, a news feed, wall posts, photo galleries, notifications with an unread badge, and a full admin panel.',
-    tags: ['MongoDB', 'Express', 'React', 'Node.js'],
-    links: [{ label: 'GitHub', href: 'https://github.com/PhilipHarmon/porch' }],
-    motif: 'P',
+      'A VH1 Pop-Up Video-style trivia site: music videos play while researched trivia bubbles pop up, timed to the music. Tap bubbles to pop them, build a queue, shuffle, and get a new pick every day. New songs researched weekly.',
+    tags: ['MongoDB', 'Express', 'React', 'Node.js', 'YouTube API'],
+    links: [
+      { label: 'Live site', href: 'https://bubble-tracks.onrender.com' },
+      { label: 'GitHub', href: 'https://github.com/PhilipHarmon/bubble-tracks' },
+    ],
+    motif: 'T',
+  },
+  {
+    name: 'Story Time',
+    kind: 'Story-book app — part of the family apps',
+    description:
+      'A digital story book for reading together as a family: stories in a simple, kid-friendly reader, built and shipped as part of the family apps.',
+    tags: ['React', 'Vite', 'Express', 'MongoDB'],
+    links: [
+      // PLACEHOLDER: live Story Time URL not yet verified (the bare
+      // story-book.onrender.com name returns 404). Once the live URL is
+      // known, replace '#' below with '<live URL>?demo=1'.
+      { label: 'Demo — coming soon', href: '#' },
+    ],
+    motif: 'S',
+  },
+  {
+    name: 'Song Book',
+    kind: 'Family song book — part of the family apps',
+    description:
+      'A digital song book that keeps the family\u2019s songs in one easy-to-open place, built and shipped as part of the family apps.',
+    tags: ['React', 'Vite', 'Express', 'MongoDB'],
+    links: [
+      // PLACEHOLDER: live Song Book URL not yet verified. Once the live
+      // URL is known, replace '#' below with '<live URL>?demo=1'.
+      { label: 'Demo — coming soon', href: '#' },
+    ],
+    motif: '\u266A',
   },
 ];
 
 export const sprintApps = [
-  { name: 'What\u2019s for Dinner?', blurb: 'Weekly meal planner with auto-generated grocery lists.' },
-  { name: 'Mixtape', blurb: 'Digital mixtape builder — Side A / Side B, with a sacred closer.' },
-  { name: 'Family Trivia Night', blurb: '36-question family gameshow with tiered difficulty.' },
-  { name: 'One Day, One Photo', blurb: 'Photo-a-day journal with streaks and a timeline.' },
-  { name: 'Movie Night', blurb: 'The debate-ender: a picker for family movie night.' },
+  { name: 'What\u2019s for Dinner?', blurb: 'Weekly meal planner with auto-generated grocery lists.', href: 'https://dinner-menu.onrender.com' },
+  { name: 'Mixtape', blurb: 'Digital mixtape builder — Side A / Side B, with a sacred closer.', href: 'https://mixtape.onrender.com' },
+  { name: 'Family Trivia Night', blurb: '36-question family gameshow with tiered difficulty.', href: 'https://trivia-night.onrender.com' },
+  { name: 'One Day, One Photo', blurb: 'Photo-a-day journal with streaks and a timeline.', href: 'https://photo-journal.onrender.com' },
+  { name: 'Movie Night', blurb: 'The debate-ender: a picker for family movie night.', href: 'https://movie-night.onrender.com' },
 ];
 
 export const earlierProjects = [
-  { name: 'Hack-or-Snooze', blurb: 'A Hacker News-style clone.', tags: ['JavaScript'] },
-  { name: 'Meme Generator', blurb: 'A Giphy-style meme generator.', tags: ['JavaScript', 'APIs'] },
-  { name: 'Flask-Blogly', blurb: 'A blog engine built with Flask.', tags: ['Python', 'Flask'] },
-  { name: 'This-Is-Jeopardy', blurb: 'A playable Jeopardy game.', tags: ['JavaScript'] },
-  { name: 'NC-Beer-Map', blurb: 'An interactive map of North Carolina breweries.', tags: ['JavaScript', 'Maps'] },
+  { name: 'Mindless Musings', blurb: 'A full-featured personal MERN blog: markdown editor, likes, comments, subscriber welcome emails and new-post alerts, and social sharing. Live on the web.', tags: ['MongoDB', 'Express', 'React', 'Node.js'], repo: 'https://github.com/PhilipHarmon/personal-blog' },
+  { name: 'Porch', blurb: 'A Facebook-style MERN social app built from scratch: profiles, friend requests, a news feed, wall posts, photo galleries, notifications, and a full admin panel. Live at porch-client.onrender.com.', tags: ['MongoDB', 'Express', 'React', 'Node.js'], repo: 'https://github.com/PhilipHarmon/porch' },
+  { name: 'Hack-or-Snooze', blurb: 'A Hacker News-style clone.', tags: ['JavaScript'], repo: 'https://github.com/PhilipHarmon/Hack-or-Snooze' },
+  { name: 'Meme Generator', blurb: 'A Giphy-style meme generator.', tags: ['JavaScript', 'APIs'], repo: 'https://github.com/PhilipHarmon/Springboard-Meme-Generator' },
+  { name: 'Giphy Party', blurb: 'Search and play with Giphy GIFs.', tags: ['JavaScript', 'APIs'], repo: 'https://github.com/PhilipHarmon/AJAX-Giphy-Party' },
+  { name: 'Color Match', blurb: 'A color-matching game.', tags: ['JavaScript'], repo: 'https://github.com/PhilipHarmon/colorMatchGame' },
+  { name: 'Flask-Blogly', blurb: 'A blog engine built with Flask.', tags: ['Python', 'Flask'], repo: 'https://github.com/PhilipHarmon/flask-blogly' },
+  { name: 'This-Is-Jeopardy', blurb: 'A playable Jeopardy game.', tags: ['JavaScript'], repo: 'https://github.com/PhilipHarmon/This-Is-Jeopardy' },
+  { name: 'NC-Beer-Map', blurb: 'An interactive map of North Carolina breweries.', tags: ['JavaScript', 'Maps'], repo: 'https://github.com/PhilipHarmon/flask-beer' },
+  { name: 'Mars Dashboard', blurb: 'NASA imagery explorer: daily astronomy picture plus a searchable photo gallery.', tags: ['JavaScript', 'APIs', 'MongoDB'], repo: 'https://github.com/PhilipHarmon/daily-martian' },
 ];
 
 export const skills = [

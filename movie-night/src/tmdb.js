@@ -38,6 +38,49 @@ export const discoverMovies = (params) =>
 
 export const getWatchProviders = (tmdbId) => req(`/movie/${tmdbId}/watch/providers`);
 
+export const getMovieVideos = (tmdbId) => req(`/movie/${tmdbId}/videos`);
+
+/* Pick the best playable trailer from a TMDB /videos result list.
+   Only YouTube videos can be embedded. Prefer type "Trailer" (falling back
+   to "Teaser" when a movie has no trailer), and among those prefer the
+   ones TMDB marks official, then the largest size, then the newest.
+   Returns the video object (its `key` is the YouTube video id) or null. */
+export function pickTrailer(videos) {
+  const playable = (Array.isArray(videos) ? videos : []).filter(
+    (v) => v && v.site === "YouTube" && v.key
+  );
+  if (!playable.length) return null;
+  const trailers = playable.filter((v) => v.type === "Trailer");
+  const teasers = playable.filter((v) => v.type === "Teaser");
+  const pool = trailers.length ? trailers : teasers;
+  if (!pool.length) return null;
+  const byPreference = (a, b) =>
+    Number(!!b.official) - Number(!!a.official) ||
+    (b.size || 0) - (a.size || 0) ||
+    String(b.published_at || "").localeCompare(String(a.published_at || ""));
+  return pool.slice().sort(byPreference)[0];
+}
+
+/* Best YouTube trailer for a TMDB movie id, or null when none exists. */
+export async function getMovieTrailer(tmdbId) {
+  if (tmdbId == null || tmdbId === "") return null;
+  const data = await getMovieVideos(tmdbId);
+  return pickTrailer(data.results || []);
+}
+
+/* Best YouTube trailer for a movie known only by title (the family's own
+   list stores no TMDB id): resolve the title to a TMDB match first, then
+   look up that movie's videos. Returns null when there is no match or the
+   match has no trailer. */
+export async function getTrailerByTitle(title) {
+  const clean = (title || "").trim();
+  if (!clean) return null;
+  const data = await searchMovies(clean, 1);
+  const hit = (data.results || [])[0];
+  if (!hit || hit.id == null) return null;
+  return getMovieTrailer(hit.id);
+}
+
 /* ---- tiny localStorage cache: family title -> TMDB match (genre resolution) ----
    The "For you" rail resolves each loved movie's genres once, then reuses
    the cached genre_ids so we only hit the API once per title. */

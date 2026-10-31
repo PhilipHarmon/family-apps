@@ -62,7 +62,13 @@ export default function Projects() {
               <ul className="sprint-list">
                 {sprintApps.map((a) => (
                   <li key={a.name}>
-                    <strong>{a.name}</strong>
+                    {a.href ? (
+                      <a href={a.href} target="_blank" rel="noreferrer noopener" className="text-link">
+                        <strong>{a.name}</strong> <span aria-hidden="true">↗</span>
+                      </a>
+                    ) : (
+                      <strong>{a.name}</strong>
+                    )}
                     <span>{a.blurb}</span>
                   </li>
                 ))}
@@ -93,7 +99,7 @@ export default function Projects() {
                   </span>
                 ))}
               </div>
-              <a href={profile.github} target="_blank" rel="noreferrer noopener" className="text-link">
+              <a href={p.repo || profile.github} target="_blank" rel="noreferrer noopener" className="text-link">
                 GitHub <span aria-hidden="true">↗</span>
               </a>
             </Reveal>
