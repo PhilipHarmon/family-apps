@@ -1,5 +1,18 @@
 const mongoose = require('mongoose');
 
+// Recipe — EXTENDED in the Family Hub v20 stage (2026-11-03).
+// IMPORTANT: this model predates v20 — it is the Dinner Menu app's
+// recipe library (name/time/ingredients/steps/tip/favorite/notes),
+// and the Dinner Menu app depends on those exact fields. v20 does
+// NOT replace it: it adds the Hub cookbook fields alongside, and
+// routes/menu.js keeps the two vocabularies in sync:
+//   title        <-> name (same value; `title` is the Hub name for it)
+//   instructions <-> steps joined/split on newlines
+// New Hub fields are all optional so every legacy Dinner Menu
+// document stays valid untouched. `difficulty` is a small enum:
+// 'Easy' | 'Medium' | 'Hard' ('' / absent = unset) — chosen over
+// free text so the Hub can badge/filter consistently.
+const RECIPE_DIFFICULTIES = ['Easy', 'Medium', 'Hard'];
 const Recipe = mongoose.model(
   'Recipe',
   new mongoose.Schema(
@@ -11,6 +24,15 @@ const Recipe = mongoose.model(
       tip: { type: String, default: '' },
       favorite: { type: Boolean, default: false },
       notes: { type: String, default: '' },
+      // --- v20 Hub cookbook fields (all optional) ---
+      sourceUrl: { type: String, default: '' },
+      sourceName: { type: String, default: '' },
+      prepMinutes: { type: Number },
+      cookMinutes: { type: Number },
+      difficulty: { type: String, enum: [...RECIPE_DIFFICULTIES, ''], default: '' },
+      description: { type: String, default: '' },
+      instructions: { type: String, default: '' },
+      imageUrl: { type: String, default: '' },
     },
     { timestamps: true },
   ),
@@ -205,4 +227,4 @@ const SEED_STORY = {
   "title": "The Dragon Who Lost His Roar"
 };
 
-module.exports = { Recipe, Week, Tape, Question, Game, Photo, Movie, TvRoom, Song, Story, SEED_STORY };
+module.exports = { Recipe, Week, Tape, Question, Game, Photo, Movie, TvRoom, Song, Story, SEED_STORY, RECIPE_DIFFICULTIES };
