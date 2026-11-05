@@ -102,3 +102,17 @@ services:
         value: https://family-api.onrender.com
       - key: VITE_FAMILY_KEY
         sync: false
+
+  # Adventure Builder joined the suite 2026-11-04 (build a mission at
+  # home, run it from a phone — state syncs through family-api).
+  - type: web
+    name: adventure-builder
+    env: static
+    rootDir: adventure-builder
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://family-api.onrender.com
+      - key: VITE_FAMILY_KEY
+        sync: false

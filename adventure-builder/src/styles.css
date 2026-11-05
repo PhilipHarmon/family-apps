@@ -1,0 +1,385 @@
+/* Adventure Builder — warm expedition theme, phone-first.
+   Palette: deep terracotta #7e3517, terracotta #c96a35, cream #fff8f0. */
+
+:root {
+  --terra-dark: #7e3517;
+  --terra: #c96a35;
+  --terra-mid: #a34a24;
+  --cream: #fff8f0;
+  --parchment: #fff3df;
+  --sand: #ffe9d2;
+  --ink: #2e1d12;
+  --muted: #6b4a33;
+  --line: #e8d5bd;
+  --green: #2e6b4f;
+  --gold: #d18f2a;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1, h2, h3, .story-title {
+  font-family: Georgia, "Book Antiqua", Palatino, serif;
+  color: var(--terra-dark);
+}
+
+.wrap {
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px 16px 40px;
+}
+
+/* ---------- header / footer ---------- */
+
+.app-header { text-align: center; padding: 10px 0 4px; }
+.app-header h1 { font-size: 2rem; margin: 0; }
+.tagline { margin: 2px 0 0; color: var(--muted); }
+
+.app-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 36px;
+  border-top: 1px dashed var(--line);
+  padding-top: 12px;
+}
+
+.screen-title { font-size: 1.55rem; margin: 14px 0 6px; }
+.hint { color: var(--muted); font-size: 0.95rem; }
+
+/* ---------- sync badge + family-key prompt (suite additions) ---------- */
+
+.sync-line { margin: 8px 0 0; }
+.sync-badge {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+}
+.sync-badge.ok { background: #eef6f1; color: var(--green); border-color: var(--green); }
+.sync-badge.off { background: #fdeeda; color: var(--terra-mid); border-color: var(--gold); }
+
+.key-overlay {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0;
+}
+.key-card {
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  padding: 24px 22px;
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(126, 53, 23, 0.08);
+}
+.key-card .key-emoji { font-size: 2.4rem; }
+.key-card h2 { font-size: 1.7rem; margin: 6px 0 8px; }
+.key-card form { text-align: left; margin-top: 8px; }
+.key-card label { font-weight: 700; display: block; margin-bottom: 6px; }
+.key-card input {
+  font: inherit;
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 12px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--cream);
+  color: var(--ink);
+}
+.key-card .btn { width: 100%; }
+
+/* ---------- buttons ---------- */
+
+.btn {
+  font: inherit;
+  font-weight: 600;
+  min-height: 52px;
+  padding: 10px 18px;
+  border-radius: 14px;
+  border: 2px solid var(--terra-mid);
+  background: #fff;
+  color: var(--terra-dark);
+  cursor: pointer;
+}
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { background: var(--terra); border-color: var(--terra-dark); color: #fff; }
+.btn-ghost { border-color: transparent; background: transparent; color: var(--muted); }
+.btn-big { font-size: 1.1rem; min-height: 60px; }
+.btn-hero { width: 100%; font-size: 1.2rem; min-height: 64px; margin: 16px 0 6px; }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; align-items: center; }
+.btn-row.center { justify-content: center; }
+
+/* ---------- avatars ---------- */
+
+.avatar {
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  box-shadow: inset 0 -3px 6px rgba(0,0,0,0.25);
+}
+
+/* ---------- who's coming ---------- */
+
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+}
+.person-chip {
+  font: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px;
+  min-height: 128px;
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  cursor: pointer;
+  color: var(--ink);
+}
+.person-chip.on { border-color: var(--terra); background: var(--sand); }
+.person-name { font-weight: 700; font-size: 1.1rem; }
+.person-band { font-size: 0.82rem; color: var(--muted); }
+.person-check { font-size: 1.15rem; }
+
+.add-person {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-top: 10px;
+}
+.add-person h3 { margin: 0 0 10px; font-size: 1.05rem; }
+.add-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.add-row input, .add-row select {
+  font: inherit;
+  min-height: 52px;
+  padding: 8px 12px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--cream);
+  color: var(--ink);
+}
+.add-row input { flex: 1 1 180px; }
+.add-row select { flex: 0 1 auto; }
+
+/* ---------- pick chips ---------- */
+
+.chip-group { border: none; padding: 0; margin: 18px 0 4px; }
+.chip-group legend {
+  font-family: Georgia, "Book Antiqua", serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--terra-dark);
+  padding: 0;
+  margin-bottom: 8px;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font: inherit;
+  font-weight: 600;
+  min-height: 56px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 2px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+}
+.chip.on { background: var(--terra); border-color: var(--terra-dark); color: #fff; }
+
+/* ---------- option cards ---------- */
+
+.option-card {
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  padding: 18px;
+  margin: 16px 0;
+  box-shadow: 0 3px 10px rgba(126, 53, 23, 0.08);
+}
+.kind-banner {
+  display: inline-block;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin: 0 0 8px;
+  color: #fff;
+}
+.kind-a .kind-banner { background: var(--green); }
+.kind-b .kind-banner { background: var(--terra); }
+.kind-c .kind-banner { background: var(--terra-dark); }
+.option-card h3 { margin: 2px 0 6px; font-size: 1.4rem; }
+.pitch { margin: 0 0 10px; }
+.rough-note { font-size: 0.85rem; color: var(--muted); margin: 6px 0 0; }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.badge {
+  background: var(--sand);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.badge-warm { background: #fdeeda; border-color: var(--gold); }
+
+/* ---------- briefing / storybook ---------- */
+
+.storybook {
+  background: var(--parchment);
+  border: 2px solid var(--terra);
+  border-radius: 20px;
+  padding: 22px 20px;
+  margin-top: 16px;
+  box-shadow: 0 4px 14px rgba(126, 53, 23, 0.12);
+}
+.kicker {
+  text-align: center;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: var(--terra-mid);
+  margin: 0;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+.story-title { text-align: center; font-size: 1.8rem; margin: 8px 0 10px; }
+.storybook .badge-row { justify-content: center; }
+.place-note { text-align: center; color: var(--muted); font-size: 0.92rem; }
+.story { font-size: 1.08rem; }
+.storybook h3 {
+  margin: 22px 0 8px;
+  font-size: 1.25rem;
+  border-bottom: 2px dashed var(--line);
+  padding-bottom: 4px;
+}
+.storybook h4 { margin: 14px 0 4px; font-size: 1.05rem; color: var(--terra-mid); }
+
+.roles { display: flex; flex-direction: column; gap: 10px; }
+.role-card {
+  display: flex;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 12px;
+  align-items: flex-start;
+}
+.role-head { margin: 0; }
+.role-task { margin: 2px 0 0; color: var(--muted); font-size: 0.95rem; }
+
+.steps li { margin: 6px 0; }
+.hunt-print { list-style: none; padding: 0; margin: 4px 0; }
+.hunt-print li { margin: 7px 0; font-size: 1.02rem; }
+.hunt-print .box { color: var(--terra-mid); margin-right: 4px; }
+.bring li { margin: 4px 0; }
+.sign-off { text-align: center; font-style: italic; color: var(--muted); margin-top: 20px; }
+
+/* ---------- live mode ---------- */
+
+.crew-strip { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.crew-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px 4px 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.progress-wrap {
+  height: 16px;
+  background: var(--sand);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.progress-bar { height: 100%; background: var(--green); transition: width 0.3s ease; }
+.progress-label { font-weight: 700; margin: 6px 0 0; }
+
+.hunt-group-title { font-size: 1.15rem; margin: 20px 0 8px; }
+.hunt-live { display: flex; flex-direction: column; gap: 8px; }
+.hunt-row {
+  font: inherit;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  min-height: 60px;
+  padding: 10px 14px;
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  cursor: pointer;
+  color: var(--ink);
+}
+.hunt-row.on { border-color: var(--green); background: #eef6f1; }
+.hunt-check { font-size: 1.4rem; flex: none; }
+
+/* ---------- home: resume + log ---------- */
+
+.resume-card {
+  background: var(--sand);
+  border: 2px solid var(--gold);
+  border-radius: 18px;
+  padding: 14px 18px;
+  margin-top: 16px;
+}
+.resume-card h2 { margin: 0 0 4px; font-size: 1.2rem; }
+
+.log-section { margin-top: 28px; }
+.log-list { list-style: none; padding: 0; margin: 0; }
+.log-entry {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin: 8px 0;
+}
+.log-date { font-size: 0.8rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.log-title { font-weight: 700; }
+.log-who { font-size: 0.9rem; color: var(--muted); }
+
+/* ---------- done screen ---------- */
+
+.done-screen { text-align: center; padding-top: 30px; }
+.done-emoji { font-size: 4rem; margin: 0; }
+.done-screen .btn-row { justify-content: center; }
+
+/* ---------- print: mission sheet only ---------- */
+
+@media print {
+  body { background: #fff; }
+  .app-header, .app-footer, .no-print, .btn-row { display: none !important; }
+  .wrap { max-width: none; padding: 0; }
+  .storybook { border: none; box-shadow: none; border-radius: 0; margin: 0; background: #fff; }
+}

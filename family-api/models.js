@@ -227,4 +227,33 @@ const SEED_STORY = {
   "title": "The Dragon Who Lost His Roar"
 };
 
-module.exports = { Recipe, Week, Tape, Question, Game, Photo, Movie, TvRoom, Song, Story, SEED_STORY, RECIPE_DIFFICULTIES };
+// Adventure Builder shared state — added 2026-11-04 when Adventure
+// Builder joined the family-apps suite. ONE document holds the whole
+// family's adventure state, mirroring how the Week model holds the
+// single shared dinner week (routes/menu.js): the people list built
+// in the app, who was picked last time, each person's last role (so
+// roles rotate), the cards recently shown (so rerolls don't repeat),
+// the mission currently in progress, and the adventure log.
+// The generated content (briefings, roles, hunt lists) is stored
+// verbatim as plain objects — the generator lives in the client;
+// this API only keeps the family's state in sync across devices.
+const Adventure = mongoose.model(
+  'Adventure',
+  new mongoose.Schema(
+    {
+      customPeople: { type: [Object], default: [] },
+      selectedIds: {
+        type: [String],
+        default: ['philip', 'jessica', 'wyatt', 'pepper', 'briar'],
+      },
+      lastRoles: { type: Object, default: {} },
+      recent: { type: Object, default: { A: [], B: [], C: [] } },
+      // The active mission: { briefing, checked: [item texts], startedAt }.
+      activeMission: { type: Object, default: null },
+      log: { type: [Object], default: [] },
+    },
+    { timestamps: true },
+  ),
+);
+
+module.exports = { Recipe, Week, Tape, Question, Game, Photo, Movie, TvRoom, Song, Story, Adventure, SEED_STORY, RECIPE_DIFFICULTIES };
