@@ -1,0 +1,1 @@
+{"dependencies":{"cors":"^2.8.5","dotenv":"^16.4.5","express":"^4.21.2","mongoose":"^8.8.0"},"description":"Shared backend API for Philip's five family web apps","license":"MIT","main":"server.js","name":"family-apps-server","scripts":{"start":"node server.js"},"type":"commonjs","version":"1.0.0"}
