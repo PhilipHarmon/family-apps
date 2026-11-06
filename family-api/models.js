@@ -33,19 +33,95 @@ const Recipe = mongoose.model(
       description: { type: String, default: '' },
       instructions: { type: String, default: '' },
       imageUrl: { type: String, default: '' },
+      // --- Dinner System Phase 1 (2026-11-06): checkbox-filter tags.
+      // Lowercase slugs ('crockpot', 'one-pot', ...), family-editable,
+      // deliberately NOT an enum — routes/menu.js normalises on write.
+      tags: { type: [String], default: [] },
     },
     { timestamps: true },
   ),
 );
 
+// Week — DATED from Dinner System Phase 1 (2026-11-06).
+// Before Phase 1 this was a single undated document overwritten in
+// place forever ({ days } only, no timestamps). Now one document per
+// week, keyed by `weekStart` (the Sunday, 'YYYY-MM-DD', unique).
+// Legacy documents written before the change have NO weekStart field
+// at all: routes/menu.js keeps serving one as "the current plan" until
+// scripts/migrate-dated-weeks.js stamps it, so the What's For Dinner
+// app never sees a forked plan. `days` keeps its exact legacy shape —
+// { sun…sat: null | {kind:'recipe',recipeId,...} | {kind:'custom',
+// name,note,...} } — with assignedBy/assignedAt as additive opaque
+// fields the Hub bridge stamps (§4.2 of the spec); legacy readers
+// ignore them.
 const Week = mongoose.model(
   'Week',
-  new mongoose.Schema({
-    days: {
-      type: Object,
-      default: { mon: null, tue: null, wed: null, thu: null, fri: null, sat: null, sun: null },
+  new mongoose.Schema(
+    {
+      weekStart: { type: String, unique: true }, // 'YYYY-MM-DD' (a Sunday); absent on the one legacy doc
+      days: {
+        type: Object,
+        default: { sun: null, mon: null, tue: null, wed: null, thu: null, fri: null, sat: null },
+      },
+      suggestionSetId: { type: mongoose.Schema.Types.ObjectId, ref: 'SuggestionSet', default: null },
     },
-  }),
+    { timestamps: true },
+  ),
+);
+
+// SuggestionSet — Fred's weekly dinner suggestions, posted as data
+// (Dinner System Phase 1). A SEPARATE model from Week on purpose
+// (spec §3.2): a Week means "what we're eating" and is read by the
+// apps and the favorites archive; a set is candidates — most are
+// never cooked — plus metadata (suggested day, Fred's note, theme,
+// estimated total) that has no meaning on a Week. One set per
+// weekStart; re-posting for the same week closes (supersedes) the old
+// set and replaces it — picks already made live in the Week and are
+// untouched. `status` flips to 'closed' on supersede; a set whose
+// week has begun simply stops being "the open set" (see
+// GET /suggestion-sets/open).
+const suggestionItemSchema = new mongoose.Schema(
+  {
+    recipeId: { type: mongoose.Schema.Types.ObjectId, ref: 'Recipe', required: true },
+    suggestedDay: {
+      type: String,
+      enum: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', null],
+      default: null,
+    },
+    note: { type: String, default: '' },
+  },
+  { _id: false },
+);
+const SuggestionSet = mongoose.model(
+  'SuggestionSet',
+  new mongoose.Schema(
+    {
+      weekStart: { type: String, required: true, index: true }, // 'YYYY-MM-DD' (a Sunday); at most one OPEN set per weekStart — enforced in routes/menu.js so superseded sets can stay as 'closed' history
+      status: { type: String, enum: ['open', 'closed'], default: 'open' },
+      createdBy: { type: String, default: 'fred' },
+      theme: { type: String, default: '' },
+      estimatedTotal: { type: Number },
+      items: { type: [suggestionItemSchema], default: [] },
+    },
+    { timestamps: true },
+  ),
+);
+
+// PantryStaples — singleton ({ staples: [normalised names] }) holding
+// the shopping consolidation engine's exclusion list (spec §3.4/§8).
+// routes/menu.js creates it with Fred's seed list on first access,
+// following the Week getOrCreate precedent; the family edits it via
+// PUT /pantry-staples. Staple matching is whole-name equality on the
+// normalised ingredient name — a staple never swallows a longer name
+// ('pepper' does not exclude 'bell pepper').
+const PantryStaples = mongoose.model(
+  'PantryStaples',
+  new mongoose.Schema(
+    {
+      staples: { type: [String], default: [] },
+    },
+    { timestamps: true },
+  ),
 );
 
 const TrackSchema = new mongoose.Schema(
@@ -256,4 +332,4 @@ const Adventure = mongoose.model(
   ),
 );
 
-module.exports = { Recipe, Week, Tape, Question, Game, Photo, Movie, TvRoom, Song, Story, Adventure, SEED_STORY, RECIPE_DIFFICULTIES };
+module.exports = { Recipe, Week, SuggestionSet, PantryStaples, Tape, Question, Game, Photo, Movie, TvRoom, Song, Story, Adventure, SEED_STORY, RECIPE_DIFFICULTIES };
