@@ -5,6 +5,7 @@ export const profile = {
   location: 'Raleigh, North Carolina',
   tagline: 'Software developer & builder.',
   email: 'phharmon@outlook.com',
+  emails: ['phharmon@outlook.com', 'philip.harmon@stolenhourssoftware.com'],
   phone: '919-986-9553',
   phoneHref: 'tel:+19199869553',
   linkedin: 'https://www.linkedin.com/in/philip-harmon',
@@ -14,6 +15,18 @@ export const profile = {
 };
 
 export const experience = [
+  {
+    role: 'Founder and CEO',
+    company: 'Stolen Hours Software',
+    place: 'Raleigh, NC',
+    dates: '2026 – Present',
+    points: [
+      'Founded a family software studio; every product is designed, built, and shipped in the hours after the day job and bedtime stories — "Built after bedtime"',
+      'Shipped products include The Fridge Door (the family\u2019s private home base), Bubble Tracks, Brewery Compass, and Wyatt\u2019s War Room',
+      'Full-stack JavaScript development — MongoDB, Express, React, and Node.js — with every product deployed and live on Render',
+      'Owns the full cycle: product design, development, deployment, and ongoing iteration',
+    ],
+  },
   {
     role: 'CXPC Dispatch',
     company: 'FedEx',
@@ -63,6 +76,18 @@ export const experience = [
 
 export const featuredProjects = [
   {
+    name: 'The Fridge Door',
+    kind: 'The family\u2019s private home base — MERN, evolved from Porch',
+    description:
+      'A private home base for one family: wall posts, a shared calendar, and dinner planning that flows from weekly suggestions to menus to grocery lists — plus a storybooks shelf, kid-safe accounts with PIN sign-in, and circle-based permissions so everyone sees only what\u2019s theirs.',
+    tags: ['MongoDB', 'Express', 'React', 'Node.js'],
+    links: [
+      { label: 'Live site', href: 'https://fridge-door.net' },
+      { label: 'GitHub', href: 'https://github.com/PhilipHarmon/porch' },
+    ],
+    motif: 'F',
+  },
+  {
     name: 'Brewery Compass',
     kind: 'NC craft brewery guide — MERN rebuild',
     description:
@@ -78,7 +103,7 @@ export const featuredProjects = [
     name: 'Bubble Tracks',
     kind: 'Pop-Up Video-style music trivia — MERN',
     description:
-      'A VH1 Pop-Up Video-style trivia site: music videos play while researched trivia bubbles pop up, timed to the music. Tap bubbles to pop them, build a queue, shuffle, and get a new pick every day. New songs researched weekly.',
+      'A VH1 Pop-Up Video-style trivia site with a library of 635 songs: music videos play while researched trivia bubbles pop up, timed to the music. Tap bubbles to pop them, build a queue, shuffle, and get a new pick every day. New songs researched weekly.',
     tags: ['MongoDB', 'Express', 'React', 'Node.js', 'YouTube API'],
     links: [
       { label: 'Live site', href: 'https://bubble-tracks.onrender.com' },
@@ -87,16 +112,25 @@ export const featuredProjects = [
     motif: 'T',
   },
   {
+    name: 'Wyatt\u2019s War Room',
+    kind: 'Interactive WWII atlas for his son — offline PWA',
+    description:
+      'A WWII atlas built for a ten-year-old general: seven battle cards from D-Day to VE Day with Omaha Beach as the deep dive, a theater passport that stamps each stop, stop-motion story cards, and Lego accuracy notes. A fully offline PWA — service-worker cached, no accounts, no backend.',
+    tags: ['React', 'Vite', 'PWA'],
+    links: [
+      { label: 'Live site', href: 'https://war-room-f7fi.onrender.com' },
+      { label: 'GitHub', href: 'https://github.com/PhilipHarmon/war-room' },
+    ],
+    motif: 'W',
+  },
+  {
     name: 'Story Time',
     kind: 'Story-book app — part of the family apps',
     description:
       'A digital story book for reading together as a family: stories in a simple, kid-friendly reader, built and shipped as part of the family apps.',
     tags: ['React', 'Vite', 'Express', 'MongoDB'],
     links: [
-      // PLACEHOLDER: live Story Time URL not yet verified (the bare
-      // story-book.onrender.com name returns 404). Once the live URL is
-      // known, replace '#' below with '<live URL>?demo=1'.
-      { label: 'Demo — coming soon', href: '#' },
+      { label: 'Live demo', href: 'https://story-book-hbrh.onrender.com?demo=1' },
     ],
     motif: 'S',
   },
@@ -107,25 +141,22 @@ export const featuredProjects = [
       'A digital song book that keeps the family\u2019s songs in one easy-to-open place, built and shipped as part of the family apps.',
     tags: ['React', 'Vite', 'Express', 'MongoDB'],
     links: [
-      // PLACEHOLDER: live Song Book URL not yet verified. Once the live
-      // URL is known, replace '#' below with '<live URL>?demo=1'.
-      { label: 'Demo — coming soon', href: '#' },
+      { label: 'Live demo', href: 'https://song-book-sjz1.onrender.com?demo=1' },
     ],
     motif: '\u266A',
   },
 ];
 
 export const sprintApps = [
-  { name: 'What\u2019s for Dinner?', blurb: 'Weekly meal planner with auto-generated grocery lists.', href: 'https://dinner-menu.onrender.com' },
-  { name: 'Mixtape', blurb: 'Digital mixtape builder — Side A / Side B, with a sacred closer.', href: 'https://mixtape.onrender.com' },
-  { name: 'Family Trivia Night', blurb: '36-question family gameshow with tiered difficulty.', href: 'https://trivia-night.onrender.com' },
-  { name: 'One Day, One Photo', blurb: 'Photo-a-day journal with streaks and a timeline.', href: 'https://photo-journal.onrender.com' },
-  { name: 'Movie Night', blurb: 'The debate-ender: a picker for family movie night.', href: 'https://movie-night.onrender.com' },
+  { name: 'What\u2019s for Dinner?', blurb: 'Weekly meal planner with auto-generated grocery lists.', href: 'https://dinner-menu-k07g.onrender.com?demo=1' },
+  { name: 'Mixtape', blurb: 'Digital mixtape builder — Side A / Side B, with a sacred closer.', href: 'https://mixtape-hti1.onrender.com?demo=1' },
+  { name: 'Family Trivia Night', blurb: '36-question family gameshow with tiered difficulty.', href: 'https://trivia-night-f6zi.onrender.com?demo=1' },
+  { name: 'One Day, One Photo', blurb: 'Photo-a-day journal with streaks and a timeline.', href: 'https://photo-journal-t8z4.onrender.com?demo=1' },
+  { name: 'Movie Night', blurb: 'The debate-ender: a picker for family movie night.', href: 'https://movie-night-juay.onrender.com?demo=1' },
 ];
 
 export const earlierProjects = [
   { name: 'Mindless Musings', blurb: 'A full-featured personal MERN blog: markdown editor, likes, comments, subscriber welcome emails and new-post alerts, and social sharing. Live on the web.', tags: ['MongoDB', 'Express', 'React', 'Node.js'], repo: 'https://github.com/PhilipHarmon/personal-blog' },
-  { name: 'Porch', blurb: 'A Facebook-style MERN social app built from scratch: profiles, friend requests, a news feed, wall posts, photo galleries, notifications, and a full admin panel. Live at porch-client.onrender.com.', tags: ['MongoDB', 'Express', 'React', 'Node.js'], repo: 'https://github.com/PhilipHarmon/porch' },
   { name: 'Hack-or-Snooze', blurb: 'A Hacker News-style clone.', tags: ['JavaScript'], repo: 'https://github.com/PhilipHarmon/Hack-or-Snooze' },
   { name: 'Meme Generator', blurb: 'A Giphy-style meme generator.', tags: ['JavaScript', 'APIs'], repo: 'https://github.com/PhilipHarmon/Springboard-Meme-Generator' },
   { name: 'Giphy Party', blurb: 'Search and play with Giphy GIFs.', tags: ['JavaScript', 'APIs'], repo: 'https://github.com/PhilipHarmon/AJAX-Giphy-Party' },

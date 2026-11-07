@@ -9,13 +9,17 @@ function Icon({ d }) {
   );
 }
 
+const emailIcon = 'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm18 3-10 6L2 7';
+
+const emailChannels = profile.emails.map((addr, i) => ({
+  label: i === 0 ? 'Email' : 'Email (Stolen Hours)',
+  value: addr,
+  href: `mailto:${addr}`,
+  d: emailIcon,
+}));
+
 const channels = [
-  {
-    label: 'Email',
-    value: profile.email,
-    href: `mailto:${profile.email}`,
-    d: 'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm18 3-10 6L2 7',
-  },
+  ...emailChannels,
   {
     label: 'Phone',
     value: profile.phone,
