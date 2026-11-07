@@ -1,0 +1,314 @@
+{
+ "weekStart": "2026-11-08",
+ "theme": "The Week 8 plan, in the Hub — crockpots, one-pots & Friday pizza bagels",
+ "estimatedTotal": 69,
+ "createdBy": "fred",
+ "items": [
+  {
+   "name": "Crockpot BBQ Pulled Chicken Sliders",
+   "time": "15 min prep, 4-5 hrs LOW",
+   "ingredients": [
+    "2 lb boneless chicken breasts or thighs",
+    "1 bottle (18 oz) BBQ sauce",
+    "1 onion, sliced",
+    "1 tsp garlic powder",
+    "1 bag (14 oz) coleslaw mix",
+    "1/3 cup mayonnaise",
+    "1 tbsp apple cider vinegar",
+    "1 tsp sugar",
+    "Dill pickle chips",
+    "12 slider buns"
+   ],
+   "steps": [
+    "Layer onion, chicken and BBQ sauce in the crockpot with the garlic powder; cook LOW 4-5 hrs.",
+    "Shred the chicken in the pot and stir through the sauce.",
+    "Toss the coleslaw mix with mayo, vinegar, sugar and a pinch of salt.",
+    "Pile chicken on slider buns; top with slaw and pickle chips."
+   ],
+   "tip": "The slaw on top is the whole ballgame — make it while the chicken cooks.",
+   "prepMinutes": 15,
+   "cookMinutes": 270,
+   "difficulty": "Easy",
+   "tags": [
+    "crockpot",
+    "kid-favorite"
+   ],
+   "estimatedCost": 11,
+   "note": "Sunday crockpot — shred it in the pot, slaw goes on top.",
+   "suggestedDay": "sun"
+  },
+  {
+   "name": "One-Pot Creamy Sausage Tortellini",
+   "time": "25 min",
+   "ingredients": [
+    "1 lb mild Italian sausage",
+    "1 onion, diced",
+    "1 bell pepper, diced",
+    "3 garlic cloves, minced",
+    "1 can (14.5 oz) diced tomatoes",
+    "2 cups chicken broth",
+    "1 tsp Italian seasoning",
+    "20 oz refrigerated cheese tortellini",
+    "3/4 cup heavy cream",
+    "5 oz fresh baby spinach",
+    "1/2 cup Parmesan"
+   ],
+   "steps": [
+    "Brown sausage with onion and bell pepper 6-7 min; drain.",
+    "Add garlic, tomatoes, broth and seasoning; bring to a boil.",
+    "Simmer tortellini 4-5 min until tender.",
+    "Stir in cream, wilt in the spinach, shower with Parmesan."
+   ],
+   "tip": "The spinach wilts down to almost nothing — use the whole bag.",
+   "prepMinutes": 10,
+   "cookMinutes": 15,
+   "difficulty": "Easy",
+   "tags": [
+    "one-pot",
+    "pasta",
+    "30-min"
+   ],
+   "estimatedCost": 11,
+   "note": "One pot, 25 minutes — spinach wilts in at the very end.",
+   "suggestedDay": "mon"
+  },
+  {
+   "name": "Quick Ham & Cheese Strombolis",
+   "time": "30 min",
+   "ingredients": [
+    "1 can (13.8 oz) refrigerated pizza dough",
+    "8 oz sliced deli ham",
+    "6-8 slices provolone",
+    "1 bell pepper, thin strips",
+    "1/2 onion, thin strips",
+    "2 cups fresh baby spinach",
+    "1 egg, beaten",
+    "1 tsp Italian seasoning",
+    "1 cup marinara, for dunking",
+    "1 bag salad kit, for serving"
+   ],
+   "steps": [
+    "Saute pepper, onion and spinach until just wilted; cool a couple of minutes.",
+    "Layer ham, provolone and vegetables down the middle of the dough; fold and pinch shut, seam-side down.",
+    "Egg wash, Italian seasoning on top, 3 slits.",
+    "Bake 425F 14-16 min; rest 5 min and slice. Serve with warm marinara and the salad."
+   ],
+   "tip": "Let the sauteed filling cool a couple of minutes so the dough doesn't go soggy.",
+   "prepMinutes": 15,
+   "cookMinutes": 15,
+   "difficulty": "Easy",
+   "tags": [
+    "30-min",
+    "kid-favorite"
+   ],
+   "estimatedCost": 9,
+   "note": "Tuesday quick fix — deli ham and cheese, rolled and baked.",
+   "suggestedDay": "tue"
+  },
+  {
+   "name": "Crockpot Black Bean & Sweet Potato Chili",
+   "time": "15 min prep, 5-6 hrs LOW",
+   "ingredients": [
+    "2 medium sweet potatoes, 1/2-inch cubes",
+    "2 cans (15 oz) black beans, drained",
+    "1 can (14.5 oz) diced tomatoes",
+    "1 1/2 cups frozen corn",
+    "1 bell pepper, diced",
+    "1 onion, diced",
+    "3 garlic cloves, minced",
+    "1 1/2 cups chicken broth",
+    "2 tsp chili powder",
+    "1 tsp cumin",
+    "1 tsp smoked paprika",
+    "1 cup shredded cheddar, for topping",
+    "Sour cream, for topping"
+   ],
+   "steps": [
+    "Add everything except the toppings to the crockpot with 1 tsp salt.",
+    "Cook LOW 5-6 hrs (or HIGH 3 hrs), until the sweet potatoes are tender.",
+    "Set out cheddar and sour cream; everyone tops their own bowl."
+   ],
+   "tip": "Meatless and proud of it — nobody misses the meat with the toppings bar.",
+   "prepMinutes": 15,
+   "cookMinutes": 330,
+   "difficulty": "Easy",
+   "tags": [
+    "crockpot",
+    "soup-stew",
+    "vegetarian",
+    "freezer-friendly"
+   ],
+   "estimatedCost": 8,
+   "note": "Meatless crockpot — sweet potato and black beans carry it.",
+   "suggestedDay": "wed"
+  },
+  {
+   "name": "One-Pot Beef & Broccoli Lo Mein",
+   "time": "30 min",
+   "ingredients": [
+    "1 lb ground beef",
+    "16 oz lo mein noodles (or spaghetti)",
+    "4 cups broccoli florets",
+    "2 carrots, matchsticks",
+    "1 bell pepper, thin strips",
+    "3 garlic cloves, minced",
+    "1/3 cup soy sauce",
+    "2 tbsp brown sugar",
+    "1 tbsp sesame oil",
+    "1 tsp ground ginger",
+    "1/2 cup beef broth",
+    "4 green onions, sliced"
+   ],
+   "steps": [
+    "Brown the ground beef 6-7 min; drain.",
+    "Add garlic and ginger, then 3 cups water, beef broth, soy sauce and brown sugar; boil.",
+    "Simmer the dry noodles covered 6-7 min, stirring twice.",
+    "Stir in broccoli, carrots and bell pepper 3-4 min; finish with sesame oil and green onions."
+   ],
+   "tip": "Spaghetti works fine if Aldi is out of lo mein noodles.",
+   "prepMinutes": 10,
+   "cookMinutes": 20,
+   "difficulty": "Easy",
+   "tags": [
+    "one-pot",
+    "30-min"
+   ],
+   "estimatedCost": 11,
+   "note": "Takeout energy at home — broccoli and carrots in the noodles.",
+   "suggestedDay": "thu"
+  },
+  {
+   "name": "Quick Pizza Bagel Bar",
+   "time": "20 min",
+   "ingredients": [
+    "12 bagels, split",
+    "1 1/2 cups marinara or pizza sauce",
+    "2 cups shredded mozzarella",
+    "5 oz pepperoni slices",
+    "1 bell pepper, diced small",
+    "2 cups fresh baby spinach leaves",
+    "8 oz mushrooms, sliced"
+   ],
+   "steps": [
+    "Lay bagel halves cut-side up on two sheet pans; heat oven to 425F.",
+    "Sauce each half to the edges.",
+    "Set out mozzarella, pepperoni, bell pepper, spinach and mushrooms bar-style.",
+    "Bake 8-10 min until bubbly and crisp at the edges."
+   ],
+   "tip": "Sauce to the edge on every bagel — no dry bites.",
+   "prepMinutes": 10,
+   "cookMinutes": 10,
+   "difficulty": "Easy",
+   "tags": [
+    "kid-favorite",
+    "30-min"
+   ],
+   "estimatedCost": 8,
+   "note": "Friday build-your-own — everybody tops their own bagels.",
+   "suggestedDay": "fri"
+  },
+  {
+   "name": "One-Pot Mild Chicken & Sausage Jambalaya",
+   "time": "45 min",
+   "ingredients": [
+    "12 oz smoked sausage or kielbasa, coins",
+    "1 lb boneless chicken, bite-size pieces",
+    "1 onion, diced",
+    "2 bell peppers, diced",
+    "2 celery stalks, diced",
+    "3 garlic cloves, minced",
+    "1 can (14.5 oz) diced tomatoes",
+    "1 1/2 cups long-grain white rice",
+    "2 1/2 cups chicken broth",
+    "1 cup frozen corn",
+    "1 cup frozen peas",
+    "1 tsp paprika",
+    "1 tsp garlic powder",
+    "1 tsp onion powder",
+    "1/2 tsp dried thyme",
+    "1/2 tsp dried oregano",
+    "3 green onions, sliced"
+   ],
+   "steps": [
+    "Brown the sausage, then sear the chicken in the same pot; set both aside.",
+    "Soften onion, bell peppers and celery in the drippings; add garlic and all the mild spices.",
+    "Stir in rice, tomatoes, broth and corn; simmer covered 18-20 min, no peeking.",
+    "Fold the meats back in with the peas; rest 5 min, fluff, top with green onions."
+   ],
+   "tip": "No peeking while the rice cooks — the steam is doing the work. Hot sauce at the table for the grown-ups.",
+   "prepMinutes": 15,
+   "cookMinutes": 30,
+   "difficulty": "Easy",
+   "tags": [
+    "one-pot"
+   ],
+   "estimatedCost": 11,
+   "note": "Saturday one-pot — mild for the kids, peppers and celery in the base.",
+   "suggestedDay": "sat"
+  },
+  {
+   "name": "Black Bean & Corn Burritos",
+   "time": "~25 min",
+   "ingredients": [
+    "Rice",
+    "Black beans",
+    "Corn",
+    "Onion",
+    "Salsa",
+    "Cumin",
+    "Chili powder",
+    "Flour tortillas",
+    "Shredded cheese",
+    "Sour cream"
+   ],
+   "steps": [
+    "Cook the rice.",
+    "Sauté a diced onion until soft.",
+    "Add drained beans and corn, plus half the salsa and a shake of cumin and chili powder. Heat through.",
+    "Warm the tortillas so they don’t crack.",
+    "Fill with rice, the bean mix, cheese, and sour cream; roll up."
+   ],
+   "tip": "Optional: crisp the rolled burritos in a dry skillet until golden on each side.",
+   "prepMinutes": 10,
+   "cookMinutes": 15,
+   "difficulty": "Easy",
+   "tags": [
+    "vegetarian",
+    "30-min"
+   ],
+   "estimatedCost": 7,
+   "note": "Spare: a saved-for-later favorite — cheap, meatless, 25 minutes.",
+   "suggestedDay": null
+  },
+  {
+   "name": "Honey Garlic Chicken Breast",
+   "time": "~20 min",
+   "ingredients": [
+    "Chicken breasts",
+    "Honey",
+    "Soy sauce",
+    "Garlic",
+    "Rice",
+    "Broccoli",
+    "Oil"
+   ],
+   "steps": [
+    "Thaw the chicken and cut it into bite-size pieces.",
+    "Sear in an oiled skillet for 5–6 minutes.",
+    "Stir together ⅓ cup honey, ¼ cup soy sauce, and 4 minced garlic cloves.",
+    "Pour the sauce over the chicken and simmer 5 minutes, until glossy.",
+    "Serve over rice with steamed broccoli."
+   ],
+   "tip": "Don’t overcook the breast — that’s the whole game.",
+   "prepMinutes": 5,
+   "cookMinutes": 15,
+   "difficulty": "Easy",
+   "tags": [
+    "30-min"
+   ],
+   "estimatedCost": 9,
+   "note": "Spare: the other saved-for-later favorite — glossy honey garlic over rice.",
+   "suggestedDay": null
+  }
+ ]
+}

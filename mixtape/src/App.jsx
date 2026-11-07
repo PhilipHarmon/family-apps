@@ -471,6 +471,7 @@ export default function App() {
 
       <footer className="foot">
         Rule #1 of mixtape club: Side B always ends with a killer closer. No exceptions.
+        <p className="shs-credit">⌛ Built by <a href="https://stolenhourssoftware.github.io" target="_blank" rel="noreferrer">Stolen Hours Software</a> — built after bedtime.</p>
       </footer>
     </div>
   );

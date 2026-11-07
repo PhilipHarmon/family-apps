@@ -1172,6 +1172,7 @@ export default function App() {
 
         <footer className="footer">
           <p>May your popcorn be buttery and your debates be short. 🧈</p>
+          <p className="shs-credit">⌛ Built by <a href="https://stolenhourssoftware.github.io" target="_blank" rel="noreferrer">Stolen Hours Software</a> — built after bedtime.</p>
         </footer>
       </main>
 

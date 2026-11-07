@@ -1243,3 +1243,9 @@ a { color: var(--accent-deep); }
 @media (hover: hover) {
   .btn-primary:hover { background: var(--accent-deep); }
 }
+
+/* ---- Stolen Hours Software credit ---- */
+.shs-credit { text-align: center; font-size: 0.8rem; color: var(--ink-soft); }
+p.shs-credit { margin: 6px 0 0; }
+footer.shs-credit { margin-top: 28px; padding-bottom: 24px; }
+.shs-credit a { color: inherit; }

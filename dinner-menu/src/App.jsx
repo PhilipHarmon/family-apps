@@ -914,6 +914,8 @@ export default function App() {
         )}
       </main>
 
+      <footer className="shs-credit">⌛ Built by <a href="https://stolenhourssoftware.github.io" target="_blank" rel="noreferrer">Stolen Hours Software</a> — built after bedtime.</footer>
+
       {/* ================= modals ================= */}
       {assignDay && (
         <AssignModal

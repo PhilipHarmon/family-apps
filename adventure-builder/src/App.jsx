@@ -287,6 +287,7 @@ export default function App() {
         <FamilyKeyPrompt onSave={saveKey} />
         <footer className="app-footer">
           <p>Adventure Builder — build it at home, run it from your phone. 🧭</p>
+          <p className="shs-credit">⌛ Built by <a href="https://stolenhourssoftware.github.io" target="_blank" rel="noreferrer">Stolen Hours Software</a> — built after bedtime.</p>
         </footer>
       </div>
     );
@@ -307,6 +308,7 @@ export default function App() {
         </main>
         <footer className="app-footer">
           <p>Adventure Builder — build it at home, run it from your phone. 🧭</p>
+          <p className="shs-credit">⌛ Built by <a href="https://stolenhourssoftware.github.io" target="_blank" rel="noreferrer">Stolen Hours Software</a> — built after bedtime.</p>
         </footer>
       </div>
     );
@@ -530,6 +532,7 @@ export default function App() {
 
       <footer className="app-footer">
         <p>Adventure Builder — build it at home, run it from your phone. Synced for the Harmon crew. 🧭</p>
+        <p className="shs-credit">⌛ Built by <a href="https://stolenhourssoftware.github.io" target="_blank" rel="noreferrer">Stolen Hours Software</a> — built after bedtime.</p>
       </footer>
     </div>
   );

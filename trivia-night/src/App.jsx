@@ -509,6 +509,7 @@ export default function App() {
         <FamilyKeyPrompt onSave={saveKey} />
         <footer className="footer">
           Made with ❤️ for the loudest, smartest family on the block.
+          <p className="shs-credit">⌛ Built by <a href="https://stolenhourssoftware.github.io" target="_blank" rel="noreferrer">Stolen Hours Software</a> — built after bedtime.</p>
         </footer>
       </div>
     );
@@ -527,6 +528,7 @@ export default function App() {
         </section>
         <footer className="footer">
           Made with ❤️ for the loudest, smartest family on the block.
+          <p className="shs-credit">⌛ Built by <a href="https://stolenhourssoftware.github.io" target="_blank" rel="noreferrer">Stolen Hours Software</a> — built after bedtime.</p>
         </footer>
       </div>
     );
@@ -548,6 +550,7 @@ export default function App() {
         </section>
         <footer className="footer">
           Made with ❤️ for the loudest, smartest family on the block.
+          <p className="shs-credit">⌛ Built by <a href="https://stolenhourssoftware.github.io" target="_blank" rel="noreferrer">Stolen Hours Software</a> — built after bedtime.</p>
         </footer>
       </div>
     );
@@ -898,6 +901,7 @@ export default function App() {
 
       <footer className="footer">
         Made with ❤️ for the loudest, smartest family on the block.
+        <p className="shs-credit">⌛ Built by <a href="https://stolenhourssoftware.github.io" target="_blank" rel="noreferrer">Stolen Hours Software</a> — built after bedtime.</p>
       </footer>
     </div>
   );

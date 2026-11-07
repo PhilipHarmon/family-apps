@@ -484,3 +484,9 @@ input[type="range"] { width: 100%; accent-color: var(--accent); min-height: 44px
   .song-row:hover { border-color: var(--faint); }
   .style-chip:hover { border-color: var(--faint); }
 }
+
+/* ---- Stolen Hours Software credit ---- */
+.shs-credit { text-align: center; font-size: 0.8rem; color: var(--faint); }
+p.shs-credit { margin: 6px 0 0; }
+footer.shs-credit { margin-top: 28px; padding-bottom: 24px; }
+.shs-credit a { color: inherit; }

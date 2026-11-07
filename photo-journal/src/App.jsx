@@ -367,6 +367,7 @@ export default function App() {
 
       <footer className="footer">
         Made with love, one day at a time. 💛
+        <p className="shs-credit">⌛ Built by <a href="https://stolenhourssoftware.github.io" target="_blank" rel="noreferrer">Stolen Hours Software</a> — built after bedtime.</p>
       </footer>
     </div>
   )

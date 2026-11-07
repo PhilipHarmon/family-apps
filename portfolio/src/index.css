@@ -1028,3 +1028,9 @@ img { max-width: 100%; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .hero-scroll span, .studying-dot { animation: none; }
 }
+
+/* ---- Stolen Hours Software credit ---- */
+.shs-credit { text-align: center; font-size: 0.8rem; color: var(--faint); }
+p.shs-credit { margin: 6px 0 0; }
+footer.shs-credit { margin-top: 28px; padding-bottom: 24px; }
+.shs-credit a { color: inherit; }
