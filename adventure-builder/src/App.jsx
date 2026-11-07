@@ -16,6 +16,7 @@ import { isDemoMode } from './demoMode.js';
 import Avatar from './components/Avatar.jsx';
 import Briefing from './components/Briefing.jsx';
 import Live from './components/Live.jsx';
+import { StorybookFlow, StorybookShelf, StorybookReader } from './components/Storybook.jsx';
 
 const CARD_KINDS = {
   A: { banner: '⚡ Right Now, Free', cls: 'kind-a' },
@@ -86,6 +87,8 @@ export default function App() {
   const [briefing, setBriefing] = useState(null);
   const [newName, setNewName] = useState('');
   const [newBand, setNewBand] = useState('mid');
+  const [completed, setCompleted] = useState(null); // last finished mission, for the storybook flow
+  const [reading, setReading] = useState(null); // book open in the reader overlay
 
   const demoMode = isDemoMode();
   const storeRef = useRef(store);
@@ -248,6 +251,16 @@ export default function App() {
   };
 
   const completeMission = () => {
+    // Snapshot the finished mission before `active` clears — the
+    // storybook flow builds the book from exactly this payload.
+    if (store.active) {
+      setCompleted({
+        briefing: store.active.briefing,
+        checked: [...store.active.checked],
+        startedAt: store.active.startedAt,
+        completedAt: new Date().toISOString(),
+      });
+    }
     setStore((s) => {
       if (!s.active) return s;
       const entry = {
@@ -331,6 +344,9 @@ export default function App() {
 
           <button type="button" className="btn btn-primary btn-hero" onClick={() => setView('who')}>
             🧭 Plan a new adventure
+          </button>
+          <button type="button" className="btn btn-hero sb-entry" onClick={() => setView('storybooks')}>
+            📚 My Storybooks
           </button>
 
           <section className="log-section">
@@ -478,6 +494,11 @@ export default function App() {
             Another one for the Adventure Log. Somewhere out there, a squirrel is telling the others about you.
           </p>
           <div className="btn-row center">
+            {completed && (
+              <button type="button" className="btn btn-primary btn-big" onClick={() => setView('storybook')}>
+                📖 Make our storybook
+              </button>
+            )}
             <button type="button" className="btn btn-primary btn-big" onClick={() => setView('home')}>
             🏠 Back home
             </button>
@@ -486,6 +507,25 @@ export default function App() {
             </button>
           </div>
         </main>
+      )}
+
+      {view === 'storybook' && completed && (
+        <main>
+          <StorybookFlow mission={completed} onClose={() => setView('done')} />
+        </main>
+      )}
+
+      {view === 'storybooks' && (
+        <main>
+          <StorybookShelf onOpen={(book) => setReading(book)} />
+          <div className="btn-row">
+            <button type="button" className="btn btn-ghost" onClick={() => setView('home')}>← Home</button>
+          </div>
+        </main>
+      )}
+
+      {reading && (
+        <StorybookReader book={reading} onClose={() => setReading(null)} />
       )}
 
       <footer className="app-footer">

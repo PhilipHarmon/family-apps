@@ -49,7 +49,51 @@ function saveStore(state) {
   }
 }
 
+const BOOKS_KEY = 'demoData:adventure-builder:storybooks';
+
+function loadBooks() {
+  try {
+    const raw = localStorage.getItem(BOOKS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {
+    // fall through to an empty shelf
+  }
+  return [];
+}
+
+function saveBooks(books) {
+  try {
+    localStorage.setItem(BOOKS_KEY, JSON.stringify(books));
+  } catch {
+    // storage unavailable — demo books last for the session only
+  }
+}
+
 export function handleDemoRequest(method, path, body) {
+  if (path === '/storybooks') {
+    const books = loadBooks();
+    if (method === 'GET') {
+      return clone(books.map(({ pages: _pages, ...light }) => light));
+    }
+    if (method === 'POST') {
+      const book = { ...(body || {}), _id: `demo-${Date.now()}`, createdAt: new Date().toISOString() };
+      saveBooks([book, ...books]);
+      return clone(book);
+    }
+  }
+  if (path.startsWith('/storybooks/')) {
+    const id = path.slice('/storybooks/'.length);
+    const books = loadBooks();
+    const found = books.find((b) => b._id === id || b.id === id);
+    if (method === 'GET' && found) return clone(found);
+    if (method === 'DELETE' && found) {
+      saveBooks(books.filter((b) => b !== found));
+      return { deleted: true };
+    }
+    const err = new Error('Storybook not found');
+    err.status = 404;
+    throw err;
+  }
   if (path === '/adventures/state') {
     const state = loadStore();
     if (method === 'GET') return clone(state);
