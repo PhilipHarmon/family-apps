@@ -13,6 +13,7 @@ const spotifyRoutes = require('./routes/spotify');
 const storyRoutes = require('./routes/stories');
 const songsRoutes = require('./routes/songs');
 const adventureRoutes = require('./routes/adventures');
+const firstReadersRoutes = require('./routes/firstReaders');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -44,6 +45,7 @@ app.get('/api/health', (_req, res) => res.json({ ok: true }));
 app.use('/api', tvRoutes);
 
 // Everything else under /api requires the shared family key.
+app.use('/api', firstReadersRoutes);
 app.use('/api', requireKey);
 app.use('/api', menuRoutes);
 app.use('/api', triviaRoutes);
