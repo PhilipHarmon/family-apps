@@ -332,4 +332,58 @@ const Adventure = mongoose.model(
   ),
 );
 
-module.exports = { Recipe, Week, SuggestionSet, PantryStaples, Tape, Question, Game, Photo, Movie, TvRoom, Song, Story, Adventure, SEED_STORY, RECIPE_DIFFICULTIES };
+// Mission Storybook — added 2026-11-06 (built on the Dinner Phase 1
+// train). One document per FINISHED book: Adventure Builder's story
+// assembler (adventure-builder/src/lib/storybook.js) turns a completed
+// mission into a fixed page array, and the book is stored verbatim —
+// reopening a book never regenerates it (scope standing rule). Books
+// are deliberately NOT kept in the Adventure state doc: its log is
+// capped at 200 entries and a book is keepsake content, not state.
+// `pages` follows the shared page contract both readers (Adventure
+// Builder + the future Hub shelf) render:
+//   { type: 'cover'|'call'|'quest'|'completion'|'photos',
+//     illustration: scene key, title?, lines: [read-aloud sentences],
+//     items?: [found item names], photos?: [media refs] }
+// `date` is the adventure day ('YYYY-MM-DD', same convention as
+// Photo.date); `coverIllustration` mirrors the cover page's scene key
+// so list views don't need the page array.
+const storybookCrewSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    role: { type: String, default: '' },
+  },
+  { _id: false },
+);
+const storybookPageSchema = new mongoose.Schema(
+  {
+    type: {
+      type: String,
+      enum: ['cover', 'call', 'quest', 'completion', 'photos'],
+      required: true,
+    },
+    illustration: { type: String, default: '' },
+    title: { type: String, default: '' },
+    lines: { type: [String], default: [] },
+    items: { type: [String], default: [] },
+    photos: { type: [String], default: [] },
+  },
+  { _id: false },
+);
+const Storybook = mongoose.model(
+  'Storybook',
+  new mongoose.Schema(
+    {
+      title: { type: String, required: true },
+      place: { type: String, default: '' },
+      date: { type: String }, // 'YYYY-MM-DD' — the day of the adventure
+      setting: { type: String, default: '' },
+      coverIllustration: { type: String, default: '' },
+      crew: { type: [storybookCrewSchema], default: [] },
+      pages: { type: [storybookPageSchema], default: [] },
+      createdBy: { type: String, default: '' },
+    },
+    { timestamps: true },
+  ),
+);
+
+module.exports = { Recipe, Week, SuggestionSet, PantryStaples, Tape, Question, Game, Photo, Movie, TvRoom, Song, Story, Adventure, Storybook, SEED_STORY, RECIPE_DIFFICULTIES };
