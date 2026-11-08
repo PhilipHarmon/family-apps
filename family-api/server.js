@@ -14,6 +14,7 @@ const storyRoutes = require('./routes/stories');
 const songsRoutes = require('./routes/songs');
 const adventureRoutes = require('./routes/adventures');
 const storybookRoutes = require('./routes/storybooks');
+const radioRoutes = require('./routes/radio');
 const firstReadersRoutes = require('./routes/firstReaders');
 
 const app = express();
@@ -56,6 +57,7 @@ app.use('/api', storyRoutes);
 app.use('/api', songsRoutes);
 app.use('/api', adventureRoutes);
 app.use('/api', storybookRoutes);
+app.use('/api', radioRoutes);
 
 // 404 for unknown API routes.
 app.use('/api', (_req, res) => res.status(404).json({ error: 'Not found' }));

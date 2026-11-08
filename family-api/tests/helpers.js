@@ -31,6 +31,7 @@ async function boot() {
   app.use(express.json());
   app.use('/api', require('../middleware/requireKey'));
   app.use('/api', require('../routes/menu'));
+  app.use('/api', require('../routes/radio'));
   app.use((err, _req, res, _next) => {
     const status = err && err.name === 'ValidationError' ? 400 : 500;
     res.status(status).json({ error: err.message || 'Server error' });
@@ -50,11 +51,13 @@ async function shutdown(ctx) {
 
 async function reset() {
   const { Recipe, Week, SuggestionSet, PantryStaples } = require('../models');
+  const { RadioEpisode } = require('../models/RadioEpisode');
   await Promise.all([
     Recipe.deleteMany({}),
     Week.deleteMany({}),
     SuggestionSet.deleteMany({}),
     PantryStaples.deleteMany({}),
+    RadioEpisode.deleteMany({}),
   ]);
 }
 
